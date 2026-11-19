@@ -1,0 +1,41 @@
+IndentWidth: 2
+UseTab: Never
+TabWidth: 2
+ColumnLimit: 120
+
+BreakAfterReturnType: None
+BreakTemplateDeclarations: Yes
+
+AlignAfterOpenBracket: true
+AlignConsecutiveAssignments:
+  Enabled: true
+  AcrossEmptyLines: false
+  AcrossComments: true
+  AlignCompound: false
+  PadOperators: true
+BinPackArguments: false
+BinPackParameters: false
+AllowAllArgumentsOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: false
+PointerAlignment: Left
+
+PenaltyBreakAssignment: 1000000
+PenaltyBreakBeforeFirstCallParameter: 1000000
+PenaltyBreakOpenParenthesis: 1000000
+PenaltyReturnTypeOnItsOwnLine: 1000000
+
+NamespaceIndentation: All
+
+SortIncludes: true
+IncludeCategories:
+  # Standard-library-style, single-component headers
+  - Regex: "^<[a-z][a-z0-9_]*>$"
+    Priority: 1
+
+  # Third-party angle-bracket headers
+  - Regex: "^<.*>$"
+    Priority: 2
+
+  # Project headers
+  - Regex: '^".*"$'
+    Priority: 3
