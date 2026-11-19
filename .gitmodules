@@ -1,18 +1,24 @@
 [submodule "external/SDL"]
 	path = external/SDL
 	url = https://github.com/libsdl-org/SDL.git
+	shallow = true
 [submodule "external/SDL_image"]
 	path = external/SDL_image
 	url = https://github.com/libsdl-org/SDL_image.git
+	shallow = true
 [submodule "external/SDL_mixer"]
 	path = external/SDL_mixer
 	url = https://github.com/libsdl-org/SDL_mixer.git
+	shallow = true
 [submodule "external/SDL_ttf"]
 	path = external/SDL_ttf
 	url = https://github.com/libsdl-org/SDL_ttf.git
+	shallow = true
 [submodule "external/spdlog"]
 	path = external/spdlog
 	url = https://github.com/gabime/spdlog.git
+	shallow = true
 [submodule "external/googletest"]
 	path = external/googletest
 	url = https://github.com/google/googletest.git
+	shallow = true

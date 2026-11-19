@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.31)
-project(application LANGUAGES CXX)
+project(phosphor LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -25,11 +25,15 @@ set(SDLTTF_PLUTOSVG             OFF CACHE BOOL "" FORCE)
 
 # SDL_image configuration
 set(SDLIMAGE_VENDORED           ON  CACHE BOOL "" FORCE)
+set(SDLIMAGE_BACKEND_STB        ON  CACHE BOOL "" FORCE)
 set(SDLIMAGE_PNG                ON  CACHE BOOL "" FORCE)
+set(SDLIMAGE_PNG_LIBPNG         OFF CACHE BOOL "" FORCE)
 set(SDLIMAGE_AVIF               OFF CACHE BOOL "" FORCE)
+set(SDLIMAGE_ANI                OFF CACHE BOOL "" FORCE)
 set(SDLIMAGE_BMP                OFF CACHE BOOL "" FORCE)
 set(SDLIMAGE_GIF                OFF CACHE BOOL "" FORCE)
 set(SDLIMAGE_JPG                OFF CACHE BOOL "" FORCE)
+set(SDLIMAGE_JPX                OFF CACHE BOOL "" FORCE)
 set(SDLIMAGE_TIF                OFF CACHE BOOL "" FORCE)
 set(SDLIMAGE_WEBP               OFF CACHE BOOL "" FORCE)
 set(SDLIMAGE_LBM                OFF CACHE BOOL "" FORCE)

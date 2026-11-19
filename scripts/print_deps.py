@@ -3,11 +3,10 @@
 """
 Prints the version of each dependency in the external directory, along with
 its remote URL.
-
-TODO: I think this will currently break if the commit is not tagged. We should
-      probably handle that case and print the commit hash instead.
 """
 
+import argparse
+import json
 import subprocess
 from os import listdir
 from pathlib import Path
@@ -25,27 +24,18 @@ def git(*args: str, cwd: Path) -> str:
             .stdout.decode("utf-8")
             .strip()
         )
-    except:
+    except (subprocess.CalledProcessError, OSError):
         return "N/A"
 
 
-def print_row(*args: tuple[str, int]) -> None:
-    print(f"| {' | '.join(f'{arg[0]:<{arg[1]}}' for arg in args)} |")
+def print_text(deps: list[tuple[str, str, str, str]]) -> None:
+    for dep, version, commit, remote in deps:
+        print(f"{dep}\t{version}\t{commit}\t{remote}")
 
 
-def main() -> None:
-    root_dir = Path(__file__).parent.parent / "external"
-
-    deps: list[tuple[str, str, str, str]] = []
-
-    for dependency in listdir(root_dir):
-        dependency_root = root_dir / dependency
-
-        version = git("describe", "--tags", "--exact-match", cwd=dependency_root)
-        commit = git("rev-parse", "--short", "HEAD", cwd=dependency_root)
-        remote = git("remote", "get-url", "origin", cwd=dependency_root)
-
-        deps.append((dependency, version, commit, remote))
+def print_markdown(deps: list[tuple[str, str, str, str]]) -> None:
+    def print_row(*args: tuple[str, int]) -> None:
+        print(f"| {' | '.join(f'{arg[0]:<{arg[1]}}' for arg in args)} |")
 
     dl = max(len(dep[0]) for dep in deps)
     vl = max(len(dep[1]) for dep in deps)
@@ -57,6 +47,64 @@ def main() -> None:
 
     for dep, version, commit, remote in deps:
         print_row((dep, dl), (version, vl), (commit, cl), (remote, rl))
+
+
+def print_json(deps: list[tuple[str, str, str, str]]) -> None:
+    print(
+        json.dumps(
+            [
+                {
+                    "dependency": dep,
+                    "version": version,
+                    "commit": commit,
+                    "remote": remote,
+                }
+                for dep, version, commit, remote in deps
+            ],
+            indent=2,
+        )
+    )
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(
+        description="Print the version of each dependency in the external directory."
+    )
+    parser.add_argument(
+        "-f",
+        "--format",
+        help="Specify the output format",
+        choices=["text", "md", "json"],
+        default="text",
+    )
+
+    args = parser.parse_args()
+
+    root_dir = Path(__file__).parent.parent / "external"
+
+    deps: list[tuple[str, str, str, str]] = []
+
+    for dependency in sorted(listdir(root_dir)):
+        dependency_root = root_dir / dependency
+
+        commit = git("rev-parse", "--short", "HEAD", cwd=dependency_root)
+        version = git("describe", "--tags", "--exact-match", cwd=dependency_root)
+        remote = git("remote", "get-url", "origin", cwd=dependency_root)
+
+        if version == "N/A":
+            version = commit
+
+        deps.append((dependency, version, commit, remote))
+
+    match args.format:
+        case "text":
+            print_text(deps)
+        case "md":
+            print_markdown(deps)
+        case "json":
+            print_json(deps)
+        case _:
+            raise ValueError(f"Unsupported format: {args.format}")
 
 
 if __name__ == "__main__":
