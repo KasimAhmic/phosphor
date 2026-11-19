@@ -19,7 +19,7 @@ struct AppState {
 SDL_AppResult SDL_AppInit(void** appstate, int argc, char** argv) {
   *appstate = nullptr;
 
-  SDL_SetAppMetadata("com.user.application", "Application", "1.0.0");
+  SDL_SetAppMetadata("com.ahmic.phosphor", "Phosphor", "1.0.0");
 
   if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO)) {
     spdlog::error("SDL_Init failed: {}", SDL_GetError());

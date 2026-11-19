@@ -15,7 +15,7 @@ Application::~Application() {
 }
 
 void Application::init() {
-  if (this->window = SDL_CreateWindow("Application", 1600, 900, SDL_WINDOW_HIDDEN); !this->window) {
+  if (this->window = SDL_CreateWindow("Phosphor", 1600, 900, SDL_WINDOW_HIDDEN); !this->window) {
     throw std::runtime_error("Failed to create SDL window: " + std::string(SDL_GetError()));
   }
 
