@@ -2,6 +2,8 @@
 
 #include <SDL3/SDL.h>
 
+#include "nes.hpp"
+
 class Application {
 public:
   explicit Application();
@@ -13,6 +15,8 @@ public:
   SDL_AppResult handle_event(const SDL_Event& event);
 
 private:
-  SDL_Window* window;
-  SDL_Renderer* renderer;
+  SDL_Window* _window;
+  SDL_Renderer* _renderer;
+
+  NES _nes;
 };

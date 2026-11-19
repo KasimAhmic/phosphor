@@ -72,11 +72,10 @@ add_subdirectory(external/spdlog    EXCLUDE_FROM_ALL)
 add_executable(${PROJECT_NAME}
   src/main.cpp
   src/application.cpp
-  src/instruction.hpp
-  src/cpu.hpp
   src/cpu.cpp
-  src/addressing_mode.hpp
-  src/opcode.hpp
+  src/apu.cpp
+  src/ppu.cpp
+  src/nes.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}

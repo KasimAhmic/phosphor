@@ -11,7 +11,7 @@ struct OpCode {
   AddressingMode mode;
 };
 
-constexpr auto opcodes = [] {
+inline constexpr auto opcodes = [] {
   std::array<OpCode, 256> table{};
 
   table[0x69] = {Instruction::ADC, AddressingMode::Immediate};
