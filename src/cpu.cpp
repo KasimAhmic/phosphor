@@ -876,7 +876,23 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::RTI::Implied: {
-    break;
+    (void)this->read(this->_registers.pc);
+    (void)this->read(0x0100 | this->_registers.sp++);
+
+    const std::uint8_t p    = this->read(0x0100 | this->_registers.sp++);
+    const std::uint8_t low  = this->read(0x0100 | this->_registers.sp++);
+    const std::uint8_t high = this->read(0x0100 | this->_registers.sp);
+
+    this->_registers.pc = (high << 8) | low;
+
+    this->_registers.set_carry(p & 0x01);
+    this->_registers.set_zero(p & 0x02);
+    this->_registers.set_interrupt_disable(p & 0x04);
+    this->_registers.set_decimal_mode(p & 0x08);
+    this->_registers.set_overflow(p & 0x40);
+    this->_registers.set_negative(p & 0x80);
+
+    RETURN_CYCLE_COUNT(6);
   }
 
   case OpCode::RTS::Implied: {
