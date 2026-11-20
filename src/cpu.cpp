@@ -131,7 +131,17 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::ASL::Accumulator: {
-    break;
+    (void)this->read(this->_registers.pc);
+
+    const std::uint8_t carry = this->_registers.a & 0x80;
+
+    this->_registers.a <<= 1;
+
+    this->_registers.set_carry(carry);
+    this->_registers.set_zero(this->_registers.a == 0);
+    this->_registers.set_negative(false);
+
+    RETURN_CYCLE_COUNT(2);
   }
 
   case OpCode::ASL::ZeroPage: {
