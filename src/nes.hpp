@@ -2,6 +2,8 @@
 
 #include <filesystem>
 #include <span>
+#include <cstdint>
+#include <vector>
 
 #include "apu.hpp"
 #include "cpu.hpp"

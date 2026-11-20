@@ -47,283 +47,283 @@ std::int8_t CPU::step() {
     break;
   }
 
-  case 0x65: {
+  case OpCode::ADC::ZeroPage: {
     break;
   }
 
-  case 0x75: {
+  case OpCode::ADC::ZeroPageX: {
     break;
   }
 
-  case 0x6D: {
+  case OpCode::ADC::Absolute: {
     break;
   }
 
-  case 0x7D: {
+  case OpCode::ADC::AbsoluteX: {
     break;
   }
 
-  case 0x79: {
+  case OpCode::ADC::AbsoluteY: {
     break;
   }
 
-  case 0x61: {
+  case OpCode::ADC::IndexedIndirect: {
     break;
   }
 
-  case 0x71: {
+  case OpCode::ADC::IndirectIndexed: {
     break;
   }
 
-  case 0x29: {
+  case OpCode::AND::Immediate: {
     break;
   }
 
-  case 0x25: {
+  case OpCode::AND::ZeroPage: {
     break;
   }
 
-  case 0x35: {
+  case OpCode::AND::ZeroPageX: {
     break;
   }
 
-  case 0x2D: {
+  case OpCode::AND::Absolute: {
     break;
   }
 
-  case 0x3D: {
+  case OpCode::AND::AbsoluteX: {
     break;
   }
 
-  case 0x39: {
+  case OpCode::AND::AbsoluteY: {
     break;
   }
 
-  case 0x21: {
+  case OpCode::AND::IndexedIndirect: {
     break;
   }
 
-  case 0x31: {
+  case OpCode::AND::IndirectIndexed: {
     break;
   }
 
-  case 0x0A: {
+  case OpCode::ASL::Accumulator: {
     break;
   }
 
-  case 0x06: {
+  case OpCode::ASL::ZeroPage: {
     break;
   }
 
-  case 0x16: {
+  case OpCode::ASL::ZeroPageX: {
     break;
   }
 
-  case 0x0E: {
+  case OpCode::ASL::Absolute: {
     break;
   }
 
-  case 0x1E: {
+  case OpCode::ASL::AbsoluteX: {
     break;
   }
 
-  case 0x90: {
+  case OpCode::BCC::Relative: {
     break;
   }
 
-  case 0xB0: {
+  case OpCode::BCS::Relative: {
     break;
   }
 
-  case 0xF0: {
+  case OpCode::BEQ::Relative: {
     break;
   }
 
-  case 0x24: {
+  case OpCode::BIT::ZeroPage: {
     break;
   }
 
-  case 0x2C: {
+  case OpCode::BIT::Absolute: {
     break;
   }
 
-  case 0x30: {
+  case OpCode::BMI::Relative: {
     break;
   }
 
-  case 0xD0: {
+  case OpCode::BNE::Relative: {
     break;
   }
 
-  case 0x10: {
+  case OpCode::BPL::Relative: {
     break;
   }
 
-  case 0x00: {
+  case OpCode::BRK::Implied: {
     break;
   }
 
-  case 0x50: {
+  case OpCode::BVC::Relative: {
     break;
   }
 
-  case 0x70: {
+  case OpCode::BVS::Relative: {
     break;
   }
 
-  case 0x18: {
+  case OpCode::CLC::Implied: {
     break;
   }
 
-  case 0xD8: {
+  case OpCode::CLD::Implied: {
     break;
   }
 
-  case 0x58: {
+  case OpCode::CLI::Implied: {
     break;
   }
 
-  case 0xB8: {
+  case OpCode::CLV::Implied: {
     break;
   }
 
-  case 0xC9: {
+  case OpCode::CMP::Immediate: {
     break;
   }
 
-  case 0xC5: {
+  case OpCode::CMP::ZeroPage: {
     break;
   }
 
-  case 0xD5: {
+  case OpCode::CMP::ZeroPageX: {
     break;
   }
 
-  case 0xCD: {
+  case OpCode::CMP::Absolute: {
     break;
   }
 
-  case 0xDD: {
+  case OpCode::CMP::AbsoluteX: {
     break;
   }
 
-  case 0xD9: {
+  case OpCode::CMP::AbsoluteY: {
     break;
   }
 
-  case 0xC1: {
+  case OpCode::CMP::IndexedIndirect: {
     break;
   }
 
-  case 0xD1: {
+  case OpCode::CMP::IndirectIndexed: {
     break;
   }
 
-  case 0xE0: {
+  case OpCode::CPX::Immediate: {
     break;
   }
 
-  case 0xE4: {
+  case OpCode::CPX::ZeroPage: {
     break;
   }
 
-  case 0xEC: {
+  case OpCode::CPX::Absolute: {
     break;
   }
 
-  case 0xC0: {
+  case OpCode::CPY::Immediate: {
     break;
   }
 
-  case 0xC4: {
+  case OpCode::CPY::ZeroPage: {
     break;
   }
 
-  case 0xCC: {
+  case OpCode::CPY::Absolute: {
     break;
   }
 
-  case 0xC6: {
+  case OpCode::DEC::ZeroPage: {
     break;
   }
 
-  case 0xD6: {
+  case OpCode::DEC::ZeroPageX: {
     break;
   }
 
-  case 0xCE: {
+  case OpCode::DEC::Absolute: {
     break;
   }
 
-  case 0xDE: {
+  case OpCode::DEC::AbsoluteX: {
     break;
   }
 
-  case 0xCA: {
+  case OpCode::DEX::Implied: {
     break;
   }
 
-  case 0x88: {
+  case OpCode::DEY::Implied: {
     break;
   }
 
-  case 0x49: {
+  case OpCode::EOR::Immediate: {
     break;
   }
 
-  case 0x45: {
+  case OpCode::EOR::ZeroPage: {
     break;
   }
 
-  case 0x55: {
+  case OpCode::EOR::ZeroPageX: {
     break;
   }
 
-  case 0x4D: {
+  case OpCode::EOR::Absolute: {
     break;
   }
 
-  case 0x5D: {
+  case OpCode::EOR::AbsoluteX: {
     break;
   }
 
-  case 0x59: {
+  case OpCode::EOR::AbsoluteY: {
     break;
   }
 
-  case 0x41: {
+  case OpCode::EOR::IndexedIndirect: {
     break;
   }
 
-  case 0x51: {
+  case OpCode::EOR::IndirectIndexed: {
     break;
   }
 
-  case 0xE6: {
+  case OpCode::INC::ZeroPage: {
     break;
   }
 
-  case 0xF6: {
+  case OpCode::INC::ZeroPageX: {
     break;
   }
 
-  case 0xEE: {
+  case OpCode::INC::Absolute: {
     break;
   }
 
-  case 0xFE: {
+  case OpCode::INC::AbsoluteX: {
     break;
   }
 
-  case 0xE8: {
+  case OpCode::INX::Implied: {
     break;
   }
 
-  case 0xC8: {
+  case OpCode::INY::Implied: {
     break;
   }
 
-  case 0x4C: {
+  case OpCode::JMP::Absolute: {
     const auto low  = this->read(_registers.pc++);
     const auto high = this->read(_registers.pc++);
 
@@ -333,11 +333,11 @@ std::int8_t CPU::step() {
     return 3;
   }
 
-  case 0x6C: {
+  case OpCode::JMP::Indirect: {
     break;
   }
 
-  case 0x20: {
+  case OpCode::JSR::Absolute: {
     const auto low = this->read(_registers.pc++);
     (void)this->read(0x0100 | this->_registers.sp);
     const auto return_addr = this->_registers.pc;
@@ -354,39 +354,39 @@ std::int8_t CPU::step() {
     return 6;
   }
 
-  case 0xA9: {
+  case OpCode::LDA::Immediate: {
     break;
   }
 
-  case 0xA5: {
+  case OpCode::LDA::ZeroPage: {
     break;
   }
 
-  case 0xB5: {
+  case OpCode::LDA::ZeroPageX: {
     break;
   }
 
-  case 0xAD: {
+  case OpCode::LDA::Absolute: {
     break;
   }
 
-  case 0xBD: {
+  case OpCode::LDA::AbsoluteX: {
     break;
   }
 
-  case 0xB9: {
+  case OpCode::LDA::AbsoluteY: {
     break;
   }
 
-  case 0xA1: {
+  case OpCode::LDA::IndexedIndirect: {
     break;
   }
 
-  case 0xB1: {
+  case OpCode::LDA::IndirectIndexed: {
     break;
   }
 
-  case 0xA2: {
+  case OpCode::LDX::Immediate: {
     this->_registers.x = this->read(_registers.pc++);
 
     if (this->_registers.x == 0) {
@@ -400,235 +400,235 @@ std::int8_t CPU::step() {
     return 2;
   }
 
-  case 0xA6: {
+  case OpCode::LDX::ZeroPage: {
     break;
   }
 
-  case 0xB6: {
+  case OpCode::LDX::ZeroPageY: {
     break;
   }
 
-  case 0xAE: {
+  case OpCode::LDX::Absolute: {
     break;
   }
 
-  case 0xBE: {
+  case OpCode::LDX::AbsoluteY: {
     break;
   }
 
-  case 0xA0: {
+  case OpCode::LDY::Immediate: {
     break;
   }
 
-  case 0xA4: {
+  case OpCode::LDY::ZeroPage: {
     break;
   }
 
-  case 0xB4: {
+  case OpCode::LDY::ZeroPageX: {
     break;
   }
 
-  case 0xAC: {
+  case OpCode::LDY::Absolute: {
     break;
   }
 
-  case 0xBC: {
+  case OpCode::LDY::AbsoluteX: {
     break;
   }
 
-  case 0x4A: {
+  case OpCode::LSR::Accumulator: {
     break;
   }
 
-  case 0x46: {
+  case OpCode::LSR::ZeroPage: {
     break;
   }
 
-  case 0x56: {
+  case OpCode::LSR::ZeroPageX: {
     break;
   }
 
-  case 0x4E: {
+  case OpCode::LSR::Absolute: {
     break;
   }
 
-  case 0x5E: {
+  case OpCode::LSR::AbsoluteX: {
     break;
   }
 
-  case 0xEA: {
+  case OpCode::NOP::Implied: {
     break;
   }
 
-  case 0x09: {
+  case OpCode::ORA::Immediate: {
     break;
   }
 
-  case 0x05: {
+  case OpCode::ORA::ZeroPage: {
     break;
   }
 
-  case 0x15: {
+  case OpCode::ORA::ZeroPageX: {
     break;
   }
 
-  case 0x0D: {
+  case OpCode::ORA::Absolute: {
     break;
   }
 
-  case 0x1D: {
+  case OpCode::ORA::AbsoluteX: {
     break;
   }
 
-  case 0x19: {
+  case OpCode::ORA::AbsoluteY: {
     break;
   }
 
-  case 0x01: {
+  case OpCode::ORA::IndexedIndirect: {
     break;
   }
 
-  case 0x11: {
+  case OpCode::ORA::IndirectIndexed: {
     break;
   }
 
-  case 0x48: {
+  case OpCode::PHA::Implied: {
     break;
   }
 
-  case 0x08: {
+  case OpCode::PHP::Implied: {
     break;
   }
 
-  case 0x68: {
+  case OpCode::PLA::Implied: {
     break;
   }
 
-  case 0x28: {
+  case OpCode::PLP::Implied: {
     break;
   }
 
-  case 0x2A: {
+  case OpCode::ROL::Accumulator: {
     break;
   }
 
-  case 0x26: {
+  case OpCode::ROL::ZeroPage: {
     break;
   }
 
-  case 0x36: {
+  case OpCode::ROL::ZeroPageX: {
     break;
   }
 
-  case 0x2E: {
+  case OpCode::ROL::Absolute: {
     break;
   }
 
-  case 0x3E: {
+  case OpCode::ROL::AbsoluteX: {
     break;
   }
 
-  case 0x6A: {
+  case OpCode::ROR::Accumulator: {
     break;
   }
 
-  case 0x66: {
+  case OpCode::ROR::ZeroPage: {
     break;
   }
 
-  case 0x76: {
+  case OpCode::ROR::ZeroPageX: {
     break;
   }
 
-  case 0x6E: {
+  case OpCode::ROR::Absolute: {
     break;
   }
 
-  case 0x7E: {
+  case OpCode::ROR::AbsoluteX: {
     break;
   }
 
-  case 0x40: {
+  case OpCode::RTI::Implied: {
     break;
   }
 
-  case 0x60: {
+  case OpCode::RTS::Implied: {
     break;
   }
 
-  case 0xE9: {
+  case OpCode::SBC::Immediate: {
     break;
   }
 
-  case 0xE5: {
+  case OpCode::SBC::ZeroPage: {
     break;
   }
 
-  case 0xF5: {
+  case OpCode::SBC::ZeroPageX: {
     break;
   }
 
-  case 0xED: {
+  case OpCode::SBC::Absolute: {
     break;
   }
 
-  case 0xFD: {
+  case OpCode::SBC::AbsoluteX: {
     break;
   }
 
-  case 0xF9: {
+  case OpCode::SBC::AbsoluteY: {
     break;
   }
 
-  case 0xE1: {
+  case OpCode::SBC::IndexedIndirect: {
     break;
   }
 
-  case 0xF1: {
+  case OpCode::SBC::IndirectIndexed: {
     break;
   }
 
-  case 0x38: {
+  case OpCode::SEC::Implied: {
     break;
   }
 
-  case 0xF8: {
+  case OpCode::SED::Implied: {
     break;
   }
 
-  case 0x78: {
+  case OpCode::SEI::Implied: {
     break;
   }
 
-  case 0x85: {
+  case OpCode::STA::ZeroPage: {
     break;
   }
 
-  case 0x95: {
+  case OpCode::STA::ZeroPageX: {
     break;
   }
 
-  case 0x8D: {
+  case OpCode::STA::Absolute: {
     break;
   }
 
-  case 0x9D: {
+  case OpCode::STA::AbsoluteX: {
     break;
   }
 
-  case 0x99: {
+  case OpCode::STA::AbsoluteY: {
     break;
   }
 
-  case 0x81: {
+  case OpCode::STA::IndexedIndirect: {
     break;
   }
 
-  case 0x91: {
+  case OpCode::STA::IndirectIndexed: {
     break;
   }
 
-  case 0x86: {
+  case OpCode::STX::ZeroPage: {
     const auto addr     = this->_memory[this->_registers.pc++];
     this->_memory[addr] = this->_registers.x;
     this->_cycle_count += 3;
@@ -636,47 +636,47 @@ std::int8_t CPU::step() {
     return 3;
   }
 
-  case 0x96: {
+  case OpCode::STX::ZeroPageY: {
     break;
   }
 
-  case 0x8E: {
+  case OpCode::STX::Absolute: {
     break;
   }
 
-  case 0x84: {
+  case OpCode::STY::ZeroPage: {
     break;
   }
 
-  case 0x94: {
+  case OpCode::STY::ZeroPageX: {
     break;
   }
 
-  case 0x8C: {
+  case OpCode::STY::Absolute: {
     break;
   }
 
-  case 0xAA: {
+  case OpCode::TAX::Implied: {
     break;
   }
 
-  case 0xA8: {
+  case OpCode::TAY::Implied: {
     break;
   }
 
-  case 0xBA: {
+  case OpCode::TSX::Implied: {
     break;
   }
 
-  case 0x8A: {
+  case OpCode::TXA::Implied: {
     break;
   }
 
-  case 0x9A: {
+  case OpCode::TXS::Implied: {
     break;
   }
 
-  case 0x98: {
+  case OpCode::TYA::Implied: {
     break;
   }
   }
