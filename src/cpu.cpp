@@ -481,7 +481,9 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::NOP::Implied: {
-    break;
+    this->_cycle_count += 2;
+
+    return 2;
   }
 
   case OpCode::ORA::Immediate: {
