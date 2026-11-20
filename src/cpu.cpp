@@ -139,7 +139,7 @@ std::int8_t CPU::step() {
 
     this->_registers.set_carry(carry);
     this->_registers.set_zero(this->_registers.a == 0);
-    this->_registers.set_negative(false);
+    this->_registers.set_negative(this->_registers.a & 0x80);
 
     RETURN_CYCLE_COUNT(2);
   }
