@@ -194,7 +194,9 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::CLC::Implied: {
-    break;
+    this->_registers.set_carry(false);
+
+    return 2;
   }
 
   case OpCode::CLD::Implied: {
