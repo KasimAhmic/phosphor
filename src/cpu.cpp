@@ -5,6 +5,12 @@
 #include "cpu.hpp"
 #include "opcode.hpp"
 
+#define RETURN_CYCLE_COUNT(count)                                                                                      \
+  do {                                                                                                                 \
+    this->_cycle_count += (count);                                                                                     \
+    return (count);                                                                                                    \
+  } while (0)
+
 CPU::CPU(std::array<std::uint8_t, 65536> mem) : _registers(), _cycle_count(0), _memory(mem) {}
 
 CPU::~CPU() {}
@@ -141,20 +147,16 @@ std::int8_t CPU::step() {
         (void)this->read(intermediate);
 
         this->_registers.pc = intermediate;
-        this->_cycle_count += 4;
 
-        return 4;
+        RETURN_CYCLE_COUNT(4);
       }
 
       this->_registers.pc = target;
-      this->_cycle_count += 3;
 
-      return 3;
+      RETURN_CYCLE_COUNT(3);
     }
 
-    this->_cycle_count += 2;
-
-    return 2;
+    RETURN_CYCLE_COUNT(2);
   }
 
   case OpCode::BCS::Relative: {
@@ -171,20 +173,16 @@ std::int8_t CPU::step() {
         (void)this->read(intermediate);
 
         this->_registers.pc = intermediate;
-        this->_cycle_count += 4;
 
-        return 4;
+        RETURN_CYCLE_COUNT(4);
       }
 
       this->_registers.pc = target;
-      this->_cycle_count += 3;
 
-      return 3;
+      RETURN_CYCLE_COUNT(3);
     }
 
-    this->_cycle_count += 2;
-
-    return 2;
+    RETURN_CYCLE_COUNT(2);
   }
 
   case OpCode::BEQ::Relative: {
@@ -201,20 +199,16 @@ std::int8_t CPU::step() {
         (void)this->read(intermediate);
 
         this->_registers.pc = intermediate;
-        this->_cycle_count += 4;
 
-        return 4;
+        RETURN_CYCLE_COUNT(4);
       }
 
       this->_registers.pc = target;
-      this->_cycle_count += 3;
 
-      return 3;
+      RETURN_CYCLE_COUNT(3);
     }
 
-    this->_cycle_count += 2;
-
-    return 2;
+    RETURN_CYCLE_COUNT(2);
   }
 
   case OpCode::BIT::ZeroPage: {
@@ -239,20 +233,16 @@ std::int8_t CPU::step() {
         (void)this->read(intermediate);
 
         this->_registers.pc = intermediate;
-        this->_cycle_count += 4;
 
-        return 4;
+        RETURN_CYCLE_COUNT(4);
       }
 
       this->_registers.pc = target;
-      this->_cycle_count += 3;
 
-      return 3;
+      RETURN_CYCLE_COUNT(3);
     }
 
-    this->_cycle_count += 2;
-
-    return 2;
+    RETURN_CYCLE_COUNT(2);
   }
 
   case OpCode::BNE::Relative: {
@@ -269,20 +259,16 @@ std::int8_t CPU::step() {
         (void)this->read(intermediate);
 
         this->_registers.pc = intermediate;
-        this->_cycle_count += 4;
 
-        return 4;
+        RETURN_CYCLE_COUNT(4);
       }
 
       this->_registers.pc = target;
-      this->_cycle_count += 3;
 
-      return 3;
+      RETURN_CYCLE_COUNT(3);
     }
 
-    this->_cycle_count += 2;
-
-    return 2;
+    RETURN_CYCLE_COUNT(2);
   }
 
   case OpCode::BPL::Relative: {
@@ -299,20 +285,16 @@ std::int8_t CPU::step() {
         (void)this->read(intermediate);
 
         this->_registers.pc = intermediate;
-        this->_cycle_count += 4;
 
-        return 4;
+        RETURN_CYCLE_COUNT(4);
       }
 
       this->_registers.pc = target;
-      this->_cycle_count += 3;
 
-      return 3;
+      RETURN_CYCLE_COUNT(3);
     }
 
-    this->_cycle_count += 2;
-
-    return 2;
+    RETURN_CYCLE_COUNT(2);
   }
 
   case OpCode::BRK::Implied: {
@@ -333,20 +315,16 @@ std::int8_t CPU::step() {
         (void)this->read(intermediate);
 
         this->_registers.pc = intermediate;
-        this->_cycle_count += 4;
 
-        return 4;
+        RETURN_CYCLE_COUNT(4);
       }
 
       this->_registers.pc = target;
-      this->_cycle_count += 3;
 
-      return 3;
+      RETURN_CYCLE_COUNT(3);
     }
 
-    this->_cycle_count += 2;
-
-    return 2;
+    RETURN_CYCLE_COUNT(2);
   }
 
   case OpCode::BVS::Relative: {
@@ -363,20 +341,16 @@ std::int8_t CPU::step() {
         (void)this->read(intermediate);
 
         this->_registers.pc = intermediate;
-        this->_cycle_count += 4;
 
-        return 4;
+        RETURN_CYCLE_COUNT(4);
       }
 
       this->_registers.pc = target;
-      this->_cycle_count += 3;
 
-      return 3;
+      RETURN_CYCLE_COUNT(3);
     }
 
-    this->_cycle_count += 2;
-
-    return 2;
+    RETURN_CYCLE_COUNT(2);
   }
 
   case OpCode::CLC::Implied: {
@@ -539,9 +513,8 @@ std::int8_t CPU::step() {
     const auto high = this->read(_registers.pc++);
 
     this->_registers.pc = static_cast<std::uint16_t>(low | (high << 8));
-    this->_cycle_count += 3;
 
-    return 3;
+    RETURN_CYCLE_COUNT(3);
   }
 
   case OpCode::JMP::Indirect: {
@@ -560,13 +533,16 @@ std::int8_t CPU::step() {
 
     this->_registers.pc = static_cast<std::uint16_t>(low | (high << 8));
 
-    this->_cycle_count += 6;
-
-    return 6;
+    RETURN_CYCLE_COUNT(6);
   }
 
   case OpCode::LDA::Immediate: {
-    break;
+    this->_registers.a = this->read(_registers.pc++);
+
+    this->_registers.set_zero(this->_registers.a == 0);
+    this->_registers.set_negative((this->_registers.a & 0x80) != 0);
+
+    RETURN_CYCLE_COUNT(2);
   }
 
   case OpCode::LDA::ZeroPage: {
@@ -600,15 +576,10 @@ std::int8_t CPU::step() {
   case OpCode::LDX::Immediate: {
     this->_registers.x = this->read(_registers.pc++);
 
-    if (this->_registers.x == 0) {
-      this->_registers.p |= 0x02;
-    } else {
-      this->_registers.p &= ~0x02;
-    }
+    this->_registers.set_zero(this->_registers.x == 0);
+    this->_registers.set_negative((this->_registers.x & 0x80) != 0);
 
-    this->_cycle_count += 2;
-
-    return 2;
+    RETURN_CYCLE_COUNT(2);
   }
 
   case OpCode::LDX::ZeroPage: {
@@ -804,9 +775,7 @@ std::int8_t CPU::step() {
   case OpCode::SEC::Implied: {
     this->_registers.set_carry(true);
 
-    this->_cycle_count += 2;
-
-    return 2;
+    RETURN_CYCLE_COUNT(2);
   }
 
   case OpCode::SED::Implied: {
@@ -848,9 +817,8 @@ std::int8_t CPU::step() {
   case OpCode::STX::ZeroPage: {
     const auto addr     = this->_memory[this->_registers.pc++];
     this->_memory[addr] = this->_registers.x;
-    this->_cycle_count += 3;
 
-    return 3;
+    RETURN_CYCLE_COUNT(3);
   }
 
   case OpCode::STX::ZeroPageY: {
