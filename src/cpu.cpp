@@ -799,7 +799,9 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::SED::Implied: {
-    break;
+    this->_registers.set_decimal_mode(true);
+
+    RETURN_CYCLE_COUNT(2);
   }
 
   case OpCode::SEI::Implied: {
