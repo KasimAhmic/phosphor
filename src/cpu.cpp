@@ -48,7 +48,19 @@ std::int8_t CPU::step() {
   switch (opcode) {
 
   case OpCode::ADC::Immediate: {
-    break;
+    const std::uint8_t value = this->read(this->_registers.pc++);
+    const std::uint8_t a     = this->_registers.a;
+
+    const std::uint16_t result = a + value + this->_registers.is_carry_set();
+
+    this->_registers.a = static_cast<std::uint8_t>(result);
+
+    this->_registers.set_carry(result > 0xFF);
+    this->_registers.set_zero(this->_registers.a == 0);
+    this->_registers.set_overflow((this->_registers.a ^ a) & (this->_registers.a ^ value) & 0x80);
+    this->_registers.set_negative(this->_registers.a & 0x80);
+
+    RETURN_CYCLE_COUNT(2);
   }
 
   case OpCode::ADC::ZeroPage: {
