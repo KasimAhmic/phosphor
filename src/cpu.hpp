@@ -9,6 +9,7 @@ public:
   ~CPU();
 
   struct Registers {
+
     std::uint16_t pc;
     std::uint8_t a;
     std::uint8_t x;
@@ -16,14 +17,29 @@ public:
     std::uint8_t p;
     std::uint8_t sp;
 
-    bool is_carry_set() const { return p >> 0 & 1; }
-    bool is_zero_set() const { return p >> 1 & 1; }
-    bool is_interrupt_disable_set() const { return p >> 2 & 1; }
-    bool is_decimal_mode_set() const { return p >> 3 & 1; }
-    bool is_break_command_set() const { return p >> 4 & 1; }
-    bool is_unused_set() const { return p >> 5 & 1; }
-    bool is_overflow_set() const { return p >> 6 & 1; }
-    bool is_negative_set() const { return p >> 7 & 1; }
+    bool is_carry_set() const { return p & 0x01; }
+    void set_carry(bool value) { value ? p |= 0x01 : p &= ~0x01; }
+
+    bool is_zero_set() const { return p & 0x02; }
+    void set_zero(bool value) { value ? p |= 0x02 : p &= ~0x02; }
+
+    bool is_interrupt_disable_set() const { return p & 0x04; }
+    void set_interrupt_disable(bool value) { value ? p |= 0x04 : p &= ~0x04; }
+
+    bool is_decimal_mode_set() const { return p & 0x08; }
+    void set_decimal_mode(bool value) { value ? p |= 0x08 : p &= ~0x08; }
+
+    bool is_break_command_set() const { return p & 0x10; }
+    void set_break_command(bool value) { value ? p |= 0x10 : p &= ~0x10; }
+
+    bool is_unused_set() const { return p & 0x20; }
+    void set_unused(bool value) { value ? p |= 0x20 : p &= ~0x20; }
+
+    bool is_overflow_set() const { return p & 0x40; }
+    void set_overflow(bool value) { value ? p |= 0x40 : p &= ~0x40; }
+
+    bool is_negative_set() const { return p & 0x80; }
+    void set_negative(bool value) { value ? p |= 0x80 : p &= ~0x80; }
 
     bool operator==(const Registers&) const = default;
   };

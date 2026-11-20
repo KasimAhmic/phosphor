@@ -6,6 +6,14 @@
 #include "instruction.hpp"
 
 namespace OpCode {
+
+  /**
+   * TODO: Technically, the Instruction and the AddressingMode are encoded in the namespace and the name of the OpCode's
+   * themselves, so I may not even need to store them here. That said, storing them like this makes it easier to work
+   * with OpCodes programmatically should that need arise. Long term, I should investigate whether I need Instruction
+   * and AddressingMode here at all, or if I can get away with just the code.
+   *
+   */
   struct Definition {
     std::uint8_t code;
     Instruction instruction;
