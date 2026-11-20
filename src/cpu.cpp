@@ -567,7 +567,14 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::INY::Implied: {
-    break;
+    (void)this->read(this->_registers.pc);
+
+    this->_registers.y++;
+
+    this->_registers.set_zero(this->_registers.y == 0);
+    this->_registers.set_negative(this->_registers.y & 0x80);
+
+    RETURN_CYCLE_COUNT(2);
   }
 
   case OpCode::JMP::Absolute: {
