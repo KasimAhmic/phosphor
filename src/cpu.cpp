@@ -384,7 +384,9 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::CLV::Implied: {
-    break;
+    this->_registers.set_overflow(false);
+
+    RETURN_CYCLE_COUNT(2);
   }
 
   case OpCode::CMP::Immediate: {
