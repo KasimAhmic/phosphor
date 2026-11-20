@@ -862,7 +862,7 @@ std::int8_t CPU::step() {
 
     this->_registers.a = static_cast<std::uint8_t>(result);
 
-    this->_registers.set_carry(~(result < 0x00));
+    this->_registers.set_carry(result >= 0x00);
     this->_registers.set_zero(this->_registers.a == 0);
     this->_registers.set_overflow((result ^ a) & (result ^ ~value) & 0x80);
     this->_registers.set_negative(this->_registers.a & 0x80);
