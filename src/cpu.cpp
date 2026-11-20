@@ -1,4 +1,6 @@
 #include "cpu.hpp"
+#include <ostream>
+#include <print>
 #include "opcode.hpp"
 
 #define RETURN_CYCLE_COUNT(count)                                                                                      \
@@ -726,7 +728,12 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::PLP::Implied: {
-    break;
+    (void)this->read(this->_registers.pc);
+    (void)this->read(0x0100 | this->_registers.sp++);
+
+    this->_registers.p = (this->read(0x0100 | this->_registers.sp) & ~0x10) | 0x20;
+
+    RETURN_CYCLE_COUNT(4);
   }
 
   case OpCode::ROL::Accumulator: {
