@@ -96,6 +96,7 @@ TEST(CPU, NESTest) {
         .sp = static_cast<std::uint8_t>(hex(6)),
     };
 
+    const std::uint64_t actual_cycles   = cpu.get_cycle_count();
     const std::uint64_t expected_cycles = std::stoull(match[7].str());
 
     SCOPED_TRACE("Innovation #" + std::to_string(instruction + 1) + ": " + line);
@@ -106,15 +107,12 @@ TEST(CPU, NESTest) {
     EXPECT_EQ(actual.y, expected.y) << "Y register mismatch";
     EXPECT_EQ(actual.p, expected.p) << "Processor status mismatch";
     EXPECT_EQ(actual.sp, expected.sp) << "Stack pointer mismatch";
-    EXPECT_EQ(cpu.get_cycle_count(), expected_cycles) << "Cycle count mismatch";
-
-    if (actual != expected || cpu.get_cycle_count() != expected_cycles) {
-      break;
-    }
+    EXPECT_EQ(actual_cycles, expected_cycles) << "Cycle count mismatch";
 
     if (cpu.step() == -1) {
       FAIL() << "Unhandled opcode encountered at instruction #" << instruction + 1;
     }
+
     ++instruction;
   }
 }

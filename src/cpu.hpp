@@ -39,7 +39,9 @@ public:
   Registers get_registers() const { return this->_registers; }
 
 private:
-  std::uint8_t read(std::uint16_t addr) { return _memory[addr]; }
+  std::uint8_t read(std::uint16_t addr);
+  void write(std::uint16_t addr, std::uint8_t value);
+  void tick();
 
   Registers _registers;
   std::uint64_t _cycle_count;

@@ -3,6 +3,7 @@
 #include <format>
 #include <string>
 #include "cpu.hpp"
+#include "opcode.hpp"
 
 CPU::CPU(std::array<std::uint8_t, 65536> mem) : _registers(), _cycle_count(0), _memory(mem) {}
 
@@ -19,12 +20,30 @@ void CPU::reset() {
   this->_cycle_count = 7;
 }
 
+std::uint8_t CPU::read(std::uint16_t addr) {
+  const std::uint8_t value = _memory[addr];
+
+  this->tick();
+
+  return value;
+}
+
+void CPU::write(std::uint16_t addr, std::uint8_t value) {
+  _memory[addr] = value;
+
+  this->tick();
+}
+
+void CPU::tick() {
+  // TODO: For cycle accurate emulation, will do later
+}
+
 std::int8_t CPU::step() {
   const auto opcode = this->read(this->_registers.pc++);
 
   switch (opcode) {
 
-  case 0x69: {
+  case OpCode::ADC::Immediate: {
     break;
   }
 
