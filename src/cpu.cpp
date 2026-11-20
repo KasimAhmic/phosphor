@@ -526,8 +526,8 @@ std::int8_t CPU::step() {
     (void)this->read(0x0100 | this->_registers.sp);
     const auto return_addr = this->_registers.pc;
 
-    this->_memory[0x0100 | this->_registers.sp--] = static_cast<std::uint8_t>(return_addr >> 8);
-    this->_memory[0x0100 | this->_registers.sp--] = static_cast<std::uint8_t>(return_addr & 0xFF);
+    this->write(0x0100 | this->_registers.sp--, static_cast<std::uint8_t>(return_addr >> 8));
+    this->write(0x0100 | this->_registers.sp--, static_cast<std::uint8_t>(return_addr & 0xFF));
 
     const auto high = this->read(_registers.pc++);
 
@@ -787,15 +787,33 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::STA::ZeroPage: {
-    break;
+    const std::uint8_t addr = this->read(this->_registers.pc++);
+
+    this->write(addr, this->_registers.a);
+
+    RETURN_CYCLE_COUNT(3);
   }
 
   case OpCode::STA::ZeroPageX: {
-    break;
+    const std::uint8_t addr = this->read(this->_registers.pc++);
+
+    (void)this->read(addr);
+
+    const std::uint8_t final_addr = static_cast<std::uint8_t>(addr + this->_registers.x);
+
+    this->write(final_addr, this->_registers.a);
+
+    RETURN_CYCLE_COUNT(4);
   }
 
   case OpCode::STA::Absolute: {
-    break;
+    const std::uint8_t low   = this->read(this->_registers.pc++);
+    const std::uint8_t high  = this->read(this->_registers.pc++);
+    const std::uint16_t addr = (high << 8) | low;
+
+    this->write(addr, this->_registers.a);
+
+    RETURN_CYCLE_COUNT(4);
   }
 
   case OpCode::STA::AbsoluteX: {
@@ -815,8 +833,8 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::STX::ZeroPage: {
-    const auto addr     = this->_memory[this->_registers.pc++];
-    this->_memory[addr] = this->_registers.x;
+    const auto addr = this->read(this->_registers.pc++);
+    this->write(addr, this->_registers.x);
 
     RETURN_CYCLE_COUNT(3);
   }
