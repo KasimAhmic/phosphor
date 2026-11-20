@@ -1011,7 +1011,14 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::TAX::Implied: {
-    break;
+    (void)this->read(this->_registers.pc);
+
+    this->_registers.x = this->_registers.a;
+
+    this->_registers.set_zero(this->_registers.x == 0);
+    this->_registers.set_negative(this->_registers.x & 0x80);
+
+    RETURN_CYCLE_COUNT(2);
   }
 
   case OpCode::TAY::Implied: {
