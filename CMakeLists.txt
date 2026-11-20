@@ -69,17 +69,27 @@ add_subdirectory(external/SDL_mixer EXCLUDE_FROM_ALL)
 add_subdirectory(external/SDL_ttf   EXCLUDE_FROM_ALL)
 add_subdirectory(external/spdlog    EXCLUDE_FROM_ALL)
 
-add_executable(${PROJECT_NAME}
-  src/main.cpp
-  src/application.cpp
+add_library(libnes
   src/cpu.cpp
   src/apu.cpp
   src/ppu.cpp
   src/nes.cpp
+  src/bus.cpp
+)
+
+target_include_directories(libnes
+    PUBLIC
+      "${CMAKE_CURRENT_SOURCE_DIR}/src"
+)
+
+add_executable(${PROJECT_NAME}
+  src/main.cpp
+  src/application.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}
   PRIVATE
+    libnes
     SDL3::SDL3
     SDL3_image::SDL3_image
     SDL3_mixer::SDL3_mixer
@@ -94,12 +104,14 @@ if (BUILD_TESTING)
 
   add_executable(${PROJECT_NAME}_tests
       tests/test_main.cpp
+      tests/nestest.cpp
   )
 
   target_link_libraries(${PROJECT_NAME}_tests
     PRIVATE
       GTest::gtest
       spdlog::spdlog
+      libnes
   )
 
   include(GoogleTest)

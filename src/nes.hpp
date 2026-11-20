@@ -1,5 +1,6 @@
 #pragma once
 
+#include <filesystem>
 #include <span>
 
 #include "apu.hpp"
@@ -11,8 +12,9 @@ public:
   NES();
   ~NES();
 
-  void load_rom(const std::span<const std::byte> rom);
+  std::vector<std::uint8_t> load_rom(const std::filesystem::path& path);
   void reset();
+  void test();
 
 private:
   CPU _cpu;
