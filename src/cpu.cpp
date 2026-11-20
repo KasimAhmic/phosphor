@@ -746,7 +746,18 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::RTS::Implied: {
-    break;
+    (void)this->read(this->_registers.pc);
+
+    (void)this->read(0x0100 | this->_registers.sp++);
+
+    const std::uint8_t low  = this->read(0x0100 | this->_registers.sp++);
+    const std::uint8_t high = this->read(0x0100 | this->_registers.sp);
+
+    this->_registers.pc = (high << 8) | low;
+
+    (void)this->read(this->_registers.pc++);
+
+    RETURN_CYCLE_COUNT(6);
   }
 
   case OpCode::SBC::Immediate: {
