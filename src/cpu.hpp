@@ -18,27 +18,35 @@ public:
     std::uint8_t sp;
 
     bool is_carry_set() const { return p & 0x01; }
+    bool is_carry_clear() const { return !is_carry_set(); }
     void set_carry(bool value) { value ? p |= 0x01 : p &= ~0x01; }
 
     bool is_zero_set() const { return p & 0x02; }
+    bool is_zero_clear() const { return !is_zero_set(); }
     void set_zero(bool value) { value ? p |= 0x02 : p &= ~0x02; }
 
     bool is_interrupt_disable_set() const { return p & 0x04; }
+    bool is_interrupt_disable_clear() const { return !is_interrupt_disable_set(); }
     void set_interrupt_disable(bool value) { value ? p |= 0x04 : p &= ~0x04; }
 
     bool is_decimal_mode_set() const { return p & 0x08; }
+    bool is_decimal_mode_clear() const { return !is_decimal_mode_set(); }
     void set_decimal_mode(bool value) { value ? p |= 0x08 : p &= ~0x08; }
 
     bool is_break_command_set() const { return p & 0x10; }
+    bool is_break_command_clear() const { return !is_break_command_set(); }
     void set_break_command(bool value) { value ? p |= 0x10 : p &= ~0x10; }
 
     bool is_unused_set() const { return p & 0x20; }
+    bool is_unused_clear() const { return !is_unused_set(); }
     void set_unused(bool value) { value ? p |= 0x20 : p &= ~0x20; }
 
     bool is_overflow_set() const { return p & 0x40; }
+    bool is_overflow_clear() const { return !is_overflow_set(); }
     void set_overflow(bool value) { value ? p |= 0x40 : p &= ~0x40; }
 
     bool is_negative_set() const { return p & 0x80; }
+    bool is_negative_clear() const { return !is_negative_set(); }
     void set_negative(bool value) { value ? p |= 0x80 : p &= ~0x80; }
 
     bool operator==(const Registers&) const = default;
