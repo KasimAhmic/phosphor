@@ -1061,7 +1061,11 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::TXS::Implied: {
-    break;
+    (void)this->read(this->_registers.pc);
+
+    this->_registers.sp = this->_registers.x;
+
+    RETURN_CYCLE_COUNT(2);
   }
 
   case OpCode::TYA::Implied: {
