@@ -698,7 +698,11 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::PHA::Implied: {
-    break;
+    (void)this->read(this->_registers.pc);
+
+    this->write(0x0100 | this->_registers.sp--, this->_registers.a);
+
+    RETURN_CYCLE_COUNT(3);
   }
 
   case OpCode::PHP::Implied: {
