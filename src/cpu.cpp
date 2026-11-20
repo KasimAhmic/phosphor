@@ -212,7 +212,16 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::BIT::ZeroPage: {
-    break;
+    const std::uint8_t addr  = this->read(this->_registers.pc++);
+    const std::uint8_t value = this->read(addr);
+
+    const std::uint8_t result = this->_registers.a & value;
+
+    this->_registers.set_zero(result == 0);
+    this->_registers.set_overflow(value & 0x40);
+    this->_registers.set_negative(value & 0x80);
+
+    RETURN_CYCLE_COUNT(3);
   }
 
   case OpCode::BIT::Absolute: {
