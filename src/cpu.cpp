@@ -216,7 +216,7 @@ std::int8_t CPU::step() {
   case OpCode::BMI::Relative: {
     const std::int8_t offset = static_cast<std::int8_t>(this->read(this->_registers.pc++));
 
-    if (!this->_registers.is_negative_set()) {
+    if (this->_registers.is_negative_set()) {
       return 2;
     }
 
