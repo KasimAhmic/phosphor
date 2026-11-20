@@ -8,8 +8,8 @@
 #include "cpu.hpp"
 
 TEST(CPU, NESTest) {
-  std::ifstream rom_file("D:\\Documents\\GitHub\\phosphor\\tests\\nestest.nes", std::ios::binary | std::ios::ate);
-  std::ifstream log_file("D:\\Documents\\GitHub\\phosphor\\tests\\nestest.log");
+  std::ifstream rom_file("../tests/nestest.nes", std::ios::binary | std::ios::ate);
+  std::ifstream log_file("../tests/nestest.log");
 
   if (!rom_file) {
     FAIL() << "Failed to open nestest.nes: " << std::error_code(errno, std::generic_category()).message();
@@ -99,7 +99,7 @@ TEST(CPU, NESTest) {
     const std::uint64_t actual_cycles   = cpu.get_cycle_count();
     const std::uint64_t expected_cycles = std::stoull(match[7].str());
 
-    SCOPED_TRACE("Innovation #" + std::to_string(instruction + 1) + ": " + line);
+    SCOPED_TRACE("Line #" + std::to_string(instruction + 1) + ": " + line);
 
     ASSERT_EQ(actual.pc, expected.pc) << "PC mismatch";
     ASSERT_EQ(actual.a, expected.a) << "Accumulator mismatch";
@@ -122,7 +122,7 @@ TEST(CPU, NESTest) {
     ASSERT_EQ(actual_cycles, expected_cycles) << "Cycle count mismatch";
 
     if (cpu.step() == -1) {
-      FAIL() << "Unhandled opcode encountered at instruction #" << instruction + 1;
+      FAIL() << "Unhandled opcode encountered at line #" << instruction + 1;
     }
 
     ++instruction;
