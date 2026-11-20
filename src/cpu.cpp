@@ -480,7 +480,14 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::EOR::Immediate: {
-    break;
+    const std::uint8_t value = this->read(this->_registers.pc++);
+
+    this->_registers.a ^= value;
+
+    this->_registers.set_zero(this->_registers.a == 0);
+    this->_registers.set_negative(this->_registers.a & 0x80);
+
+    RETURN_CYCLE_COUNT(2);
   }
 
   case OpCode::EOR::ZeroPage: {
