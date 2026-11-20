@@ -105,7 +105,19 @@ TEST(CPU, NESTest) {
     ASSERT_EQ(actual.a, expected.a) << "Accumulator mismatch";
     ASSERT_EQ(actual.x, expected.x) << "X register mismatch";
     ASSERT_EQ(actual.y, expected.y) << "Y register mismatch";
+
+    ASSERT_EQ(actual.is_carry_set(), expected.is_carry_set()) << "Carry flag mismatch";
+    ASSERT_EQ(actual.is_zero_set(), expected.is_zero_set()) << "Zero flag mismatch";
+    ASSERT_EQ(actual.is_interrupt_disable_set(), expected.is_interrupt_disable_set())
+        << "Interrupt Disable flag mismatch";
+    ASSERT_EQ(actual.is_decimal_mode_set(), expected.is_decimal_mode_set()) << "Decimal Mode flag mismatch";
+    ASSERT_EQ(actual.is_break_command_set(), expected.is_break_command_set()) << "Break Command flag mismatch";
+    ASSERT_EQ(actual.is_unused_set(), expected.is_unused_set()) << "Unused flag mismatch";
+    ASSERT_EQ(actual.is_overflow_set(), expected.is_overflow_set()) << "Overflow flag mismatch";
+    ASSERT_EQ(actual.is_negative_set(), expected.is_negative_set()) << "Negative flag mismatch";
+
     ASSERT_EQ(actual.p, expected.p) << "Processor status mismatch";
+
     ASSERT_EQ(actual.sp, expected.sp) << "Stack pointer mismatch";
     ASSERT_EQ(actual_cycles, expected_cycles) << "Cycle count mismatch";
 
