@@ -803,7 +803,9 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::SEI::Implied: {
-    break;
+    this->_registers.set_interrupt_disable(true);
+
+    RETURN_CYCLE_COUNT(2);
   }
 
   case OpCode::STA::ZeroPage: {
