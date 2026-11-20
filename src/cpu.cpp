@@ -132,7 +132,29 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::BCS::Relative: {
-    break;
+    const std::int8_t offset = static_cast<std::int8_t>(this->read(this->_registers.pc++));
+
+    if (!this->_registers.is_carry_set()) {
+      return 2;
+    }
+
+    const std::uint16_t target = static_cast<std::int32_t>(this->_registers.pc) + offset;
+
+    (void)this->read(this->_registers.pc);
+
+    if ((this->_registers.pc & 0xFF00) != (target & 0xFF00)) {
+      const std::uint16_t intermediate = (this->_registers.pc & 0xFF00) | (target & 0x00FF);
+
+      (void)this->read(intermediate);
+
+      this->_registers.pc = intermediate;
+
+      return 4;
+    }
+
+    this->_registers.pc = target;
+
+    return 3;
   }
 
   case OpCode::BEQ::Relative: {
