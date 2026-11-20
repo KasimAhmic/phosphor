@@ -681,7 +681,17 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::LDX::Absolute: {
-    break;
+    const std::uint8_t low  = this->read(_registers.pc++);
+    const std::uint8_t high = this->read(_registers.pc++);
+
+    const std::uint16_t addr = (high << 8) | low;
+
+    this->_registers.x = this->read(addr);
+
+    this->_registers.set_zero(this->_registers.x == 0);
+    this->_registers.set_negative(this->_registers.x & 0x80);
+
+    RETURN_CYCLE_COUNT(4);
   }
 
   case OpCode::LDX::AbsoluteY: {
