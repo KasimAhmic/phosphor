@@ -615,7 +615,11 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::SEC::Implied: {
-    break;
+    this->_registers.set_carry(true);
+
+    this->_cycle_count += 2;
+
+    return 2;
   }
 
   case OpCode::SED::Implied: {
