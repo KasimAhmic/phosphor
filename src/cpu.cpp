@@ -141,14 +141,18 @@ std::int8_t CPU::step() {
         (void)this->read(intermediate);
 
         this->_registers.pc = intermediate;
+        this->_cycle_count += 4;
 
         return 4;
       }
 
       this->_registers.pc = target;
+      this->_cycle_count += 3;
 
       return 3;
     }
+
+    this->_cycle_count += 2;
 
     return 2;
   }
@@ -167,14 +171,18 @@ std::int8_t CPU::step() {
         (void)this->read(intermediate);
 
         this->_registers.pc = intermediate;
+        this->_cycle_count += 4;
 
         return 4;
       }
 
       this->_registers.pc = target;
+      this->_cycle_count += 3;
 
       return 3;
     }
+
+    this->_cycle_count += 2;
 
     return 2;
   }
@@ -193,14 +201,18 @@ std::int8_t CPU::step() {
         (void)this->read(intermediate);
 
         this->_registers.pc = intermediate;
+        this->_cycle_count += 4;
 
         return 4;
       }
 
       this->_registers.pc = target;
+      this->_cycle_count += 3;
 
       return 3;
     }
+
+    this->_cycle_count += 2;
 
     return 2;
   }
@@ -227,14 +239,18 @@ std::int8_t CPU::step() {
         (void)this->read(intermediate);
 
         this->_registers.pc = intermediate;
+        this->_cycle_count += 4;
 
         return 4;
       }
 
       this->_registers.pc = target;
+      this->_cycle_count += 3;
 
       return 3;
     }
+
+    this->_cycle_count += 2;
 
     return 2;
   }
@@ -253,14 +269,18 @@ std::int8_t CPU::step() {
         (void)this->read(intermediate);
 
         this->_registers.pc = intermediate;
+        this->_cycle_count += 4;
 
         return 4;
       }
 
       this->_registers.pc = target;
+      this->_cycle_count += 3;
 
       return 3;
     }
+
+    this->_cycle_count += 2;
 
     return 2;
   }
@@ -279,14 +299,18 @@ std::int8_t CPU::step() {
         (void)this->read(intermediate);
 
         this->_registers.pc = intermediate;
+        this->_cycle_count += 4;
 
         return 4;
       }
 
       this->_registers.pc = target;
+      this->_cycle_count += 3;
 
       return 3;
     }
+
+    this->_cycle_count += 2;
 
     return 2;
   }
@@ -309,14 +333,18 @@ std::int8_t CPU::step() {
         (void)this->read(intermediate);
 
         this->_registers.pc = intermediate;
+        this->_cycle_count += 4;
 
         return 4;
       }
 
       this->_registers.pc = target;
+      this->_cycle_count += 3;
 
       return 3;
     }
+
+    this->_cycle_count += 2;
 
     return 2;
   }
@@ -335,20 +363,25 @@ std::int8_t CPU::step() {
         (void)this->read(intermediate);
 
         this->_registers.pc = intermediate;
+        this->_cycle_count += 4;
 
         return 4;
       }
 
       this->_registers.pc = target;
+      this->_cycle_count += 3;
 
       return 3;
     }
+
+    this->_cycle_count += 2;
 
     return 2;
   }
 
   case OpCode::CLC::Implied: {
     this->_registers.set_carry(false);
+    this->_cycle_count += 2;
 
     return 2;
   }
