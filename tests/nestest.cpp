@@ -101,13 +101,13 @@ TEST(CPU, NESTest) {
 
     SCOPED_TRACE("Innovation #" + std::to_string(instruction + 1) + ": " + line);
 
-    EXPECT_EQ(actual.pc, expected.pc) << "PC mismatch";
-    EXPECT_EQ(actual.a, expected.a) << "Accumulator mismatch";
-    EXPECT_EQ(actual.x, expected.x) << "X register mismatch";
-    EXPECT_EQ(actual.y, expected.y) << "Y register mismatch";
-    EXPECT_EQ(actual.p, expected.p) << "Processor status mismatch";
-    EXPECT_EQ(actual.sp, expected.sp) << "Stack pointer mismatch";
-    EXPECT_EQ(actual_cycles, expected_cycles) << "Cycle count mismatch";
+    ASSERT_EQ(actual.pc, expected.pc) << "PC mismatch";
+    ASSERT_EQ(actual.a, expected.a) << "Accumulator mismatch";
+    ASSERT_EQ(actual.x, expected.x) << "X register mismatch";
+    ASSERT_EQ(actual.y, expected.y) << "Y register mismatch";
+    ASSERT_EQ(actual.p, expected.p) << "Processor status mismatch";
+    ASSERT_EQ(actual.sp, expected.sp) << "Stack pointer mismatch";
+    ASSERT_EQ(actual_cycles, expected_cycles) << "Cycle count mismatch";
 
     if (cpu.step() == -1) {
       FAIL() << "Unhandled opcode encountered at instruction #" << instruction + 1;
