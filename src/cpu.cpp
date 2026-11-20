@@ -367,13 +367,14 @@ std::int8_t CPU::step() {
 
   case OpCode::CLC::Implied: {
     this->_registers.set_carry(false);
-    this->_cycle_count += 2;
 
-    return 2;
+    RETURN_CYCLE_COUNT(2);
   }
 
   case OpCode::CLD::Implied: {
-    break;
+    this->_registers.set_decimal_mode(false);
+
+    RETURN_CYCLE_COUNT(2);
   }
 
   case OpCode::CLI::Implied: {
