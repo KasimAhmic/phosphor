@@ -161,81 +161,15 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::BCC::Relative: {
-    const std::int8_t offset = static_cast<std::int8_t>(this->read(this->_registers.pc++));
-
-    if (this->_registers.is_carry_clear()) {
-      const std::uint16_t target = static_cast<std::int32_t>(this->_registers.pc) + offset;
-
-      (void)this->read(this->_registers.pc);
-
-      if ((this->_registers.pc & 0xFF00) != (target & 0xFF00)) {
-        const std::uint16_t intermediate = (this->_registers.pc & 0xFF00) | (target & 0x00FF);
-
-        (void)this->read(intermediate);
-
-        this->_registers.pc = target;
-
-        RETURN_CYCLE_COUNT(4);
-      }
-
-      this->_registers.pc = target;
-
-      RETURN_CYCLE_COUNT(3);
-    }
-
-    RETURN_CYCLE_COUNT(2);
+    return this->branch_if(this->_registers.is_carry_clear());
   }
 
   case OpCode::BCS::Relative: {
-    const std::int8_t offset = static_cast<std::int8_t>(this->read(this->_registers.pc++));
-
-    if (this->_registers.is_carry_set()) {
-      const std::uint16_t target = static_cast<std::int32_t>(this->_registers.pc) + offset;
-
-      (void)this->read(this->_registers.pc);
-
-      if ((this->_registers.pc & 0xFF00) != (target & 0xFF00)) {
-        const std::uint16_t intermediate = (this->_registers.pc & 0xFF00) | (target & 0x00FF);
-
-        (void)this->read(intermediate);
-
-        this->_registers.pc = target;
-
-        RETURN_CYCLE_COUNT(4);
-      }
-
-      this->_registers.pc = target;
-
-      RETURN_CYCLE_COUNT(3);
-    }
-
-    RETURN_CYCLE_COUNT(2);
+    return this->branch_if(this->_registers.is_carry_set());
   }
 
   case OpCode::BEQ::Relative: {
-    const std::int8_t offset = static_cast<std::int8_t>(this->read(this->_registers.pc++));
-
-    if (this->_registers.is_zero_set()) {
-      const std::uint16_t target = static_cast<std::int32_t>(this->_registers.pc) + offset;
-
-      (void)this->read(this->_registers.pc);
-
-      if ((this->_registers.pc & 0xFF00) != (target & 0xFF00)) {
-        const std::uint16_t intermediate = (this->_registers.pc & 0xFF00) | (target & 0x00FF);
-
-        (void)this->read(intermediate);
-
-        this->_registers.pc = target;
-
-        RETURN_CYCLE_COUNT(4);
-      }
-
-      this->_registers.pc = target;
-
-      RETURN_CYCLE_COUNT(3);
-    }
-
-    RETURN_CYCLE_COUNT(2);
+    return this->branch_if(this->_registers.is_zero_set());
   }
 
   case OpCode::BIT::ZeroPage: {
@@ -256,81 +190,15 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::BMI::Relative: {
-    const std::int8_t offset = static_cast<std::int8_t>(this->read(this->_registers.pc++));
-
-    if (this->_registers.is_negative_set()) {
-      const std::uint16_t target = static_cast<std::int32_t>(this->_registers.pc) + offset;
-
-      (void)this->read(this->_registers.pc);
-
-      if ((this->_registers.pc & 0xFF00) != (target & 0xFF00)) {
-        const std::uint16_t intermediate = (this->_registers.pc & 0xFF00) | (target & 0x00FF);
-
-        (void)this->read(intermediate);
-
-        this->_registers.pc = target;
-
-        RETURN_CYCLE_COUNT(4);
-      }
-
-      this->_registers.pc = target;
-
-      RETURN_CYCLE_COUNT(3);
-    }
-
-    RETURN_CYCLE_COUNT(2);
+    return this->branch_if(this->_registers.is_negative_set());
   }
 
   case OpCode::BNE::Relative: {
-    const std::int8_t offset = static_cast<std::int8_t>(this->read(this->_registers.pc++));
-
-    if (this->_registers.is_zero_clear()) {
-      const std::uint16_t target = static_cast<std::int32_t>(this->_registers.pc) + offset;
-
-      (void)this->read(this->_registers.pc);
-
-      if ((this->_registers.pc & 0xFF00) != (target & 0xFF00)) {
-        const std::uint16_t intermediate = (this->_registers.pc & 0xFF00) | (target & 0x00FF);
-
-        (void)this->read(intermediate);
-
-        this->_registers.pc = target;
-
-        RETURN_CYCLE_COUNT(4);
-      }
-
-      this->_registers.pc = target;
-
-      RETURN_CYCLE_COUNT(3);
-    }
-
-    RETURN_CYCLE_COUNT(2);
+    return this->branch_if(this->_registers.is_zero_clear());
   }
 
   case OpCode::BPL::Relative: {
-    const std::int8_t offset = static_cast<std::int8_t>(this->read(this->_registers.pc++));
-
-    if (this->_registers.is_negative_clear()) {
-      const std::uint16_t target = static_cast<std::int32_t>(this->_registers.pc) + offset;
-
-      (void)this->read(this->_registers.pc);
-
-      if ((this->_registers.pc & 0xFF00) != (target & 0xFF00)) {
-        const std::uint16_t intermediate = (this->_registers.pc & 0xFF00) | (target & 0x00FF);
-
-        (void)this->read(intermediate);
-
-        this->_registers.pc = target;
-
-        RETURN_CYCLE_COUNT(4);
-      }
-
-      this->_registers.pc = target;
-
-      RETURN_CYCLE_COUNT(3);
-    }
-
-    RETURN_CYCLE_COUNT(2);
+    return this->branch_if(this->_registers.is_negative_clear());
   }
 
   case OpCode::BRK::Implied: {
@@ -338,55 +206,11 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::BVC::Relative: {
-    const std::int8_t offset = static_cast<std::int8_t>(this->read(this->_registers.pc++));
-
-    if (this->_registers.is_overflow_clear()) {
-      const std::uint16_t target = static_cast<std::int32_t>(this->_registers.pc) + offset;
-
-      (void)this->read(this->_registers.pc);
-
-      if ((this->_registers.pc & 0xFF00) != (target & 0xFF00)) {
-        const std::uint16_t intermediate = (this->_registers.pc & 0xFF00) | (target & 0x00FF);
-
-        (void)this->read(intermediate);
-
-        this->_registers.pc = target;
-
-        RETURN_CYCLE_COUNT(4);
-      }
-
-      this->_registers.pc = target;
-
-      RETURN_CYCLE_COUNT(3);
-    }
-
-    RETURN_CYCLE_COUNT(2);
+    return this->branch_if(this->_registers.is_overflow_clear());
   }
 
   case OpCode::BVS::Relative: {
-    const std::int8_t offset = static_cast<std::int8_t>(this->read(this->_registers.pc++));
-
-    if (this->_registers.is_overflow_set()) {
-      const std::uint16_t target = static_cast<std::int32_t>(this->_registers.pc) + offset;
-
-      (void)this->read(this->_registers.pc);
-
-      if ((this->_registers.pc & 0xFF00) != (target & 0xFF00)) {
-        const std::uint16_t intermediate = (this->_registers.pc & 0xFF00) | (target & 0x00FF);
-
-        (void)this->read(intermediate);
-
-        this->_registers.pc = target;
-
-        RETURN_CYCLE_COUNT(4);
-      }
-
-      this->_registers.pc = target;
-
-      RETURN_CYCLE_COUNT(3);
-    }
-
-    RETURN_CYCLE_COUNT(2);
+    return this->branch_if(this->_registers.is_overflow_set());
   }
 
   case OpCode::CLC::Implied: {
@@ -912,13 +736,7 @@ std::int8_t CPU::step() {
     const std::uint8_t high = this->read(0x0100 | this->_registers.sp);
 
     this->_registers.pc = (high << 8) | low;
-
-    this->_registers.set_carry(p & 0x01);
-    this->_registers.set_zero(p & 0x02);
-    this->_registers.set_interrupt_disable(p & 0x04);
-    this->_registers.set_decimal_mode(p & 0x08);
-    this->_registers.set_overflow(p & 0x40);
-    this->_registers.set_negative(p & 0x80);
+    this->_registers.p  = (p & ~0x10) | 0x20;
 
     RETURN_CYCLE_COUNT(6);
   }
@@ -1152,4 +970,30 @@ std::int8_t CPU::step() {
   }
 
   return -1;
+}
+
+std::uint8_t CPU::branch_if(bool condition) {
+  const std::int8_t offset = static_cast<std::int8_t>(this->read(this->_registers.pc++));
+
+  if (condition) {
+    const std::uint16_t target = static_cast<std::int32_t>(this->_registers.pc) + offset;
+
+    (void)this->read(this->_registers.pc);
+
+    if ((this->_registers.pc & 0xFF00) != (target & 0xFF00)) {
+      const std::uint16_t intermediate = (this->_registers.pc & 0xFF00) | (target & 0x00FF);
+
+      (void)this->read(intermediate);
+
+      this->_registers.pc = target;
+
+      RETURN_CYCLE_COUNT(4);
+    }
+
+    this->_registers.pc = target;
+
+    RETURN_CYCLE_COUNT(3);
+  }
+
+  RETURN_CYCLE_COUNT(2);
 }
