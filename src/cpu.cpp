@@ -20,6 +20,8 @@ void CPU::reset() {
   this->_total_cycle_count = 7;
 }
 
+// TODO: Look into implementing read methods that handle zero page wrapping and word reads for convenience
+
 std::uint8_t CPU::read(std::uint16_t addr) {
   const std::uint8_t value = _memory[addr];
 
@@ -916,6 +918,18 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::STA::IndexedIndirect: {
+    const std::uint8_t ptr = this->read(this->_registers.pc++);
+    (void)this->read(ptr);
+
+    const std::uint8_t indexed_ptr = static_cast<std::uint8_t>(ptr + this->_registers.x);
+
+    const std::uint8_t low  = this->read(indexed_ptr);
+    const std::uint8_t high = this->read(static_cast<std::uint8_t>(indexed_ptr + 1));
+
+    const std::uint16_t target_addr = static_cast<std::uint16_t>((high << 8) | low);
+
+    this->write(target_addr, this->_registers.a);
+
     break;
   }
 
