@@ -117,8 +117,7 @@ namespace OpCode {
   } // namespace CLV
 
   namespace CMP {
-    inline constexpr Definition Immediate = {0xC9, Instruction::CMP, AddressingMode::Immediate};
-
+    inline constexpr Definition Immediate       = {0xC9, Instruction::CMP, AddressingMode::Immediate};
     inline constexpr Definition ZeroPage        = {0xC5, Instruction::CMP, AddressingMode::ZeroPage};
     inline constexpr Definition ZeroPageX       = {0xD5, Instruction::CMP, AddressingMode::ZeroPageX};
     inline constexpr Definition Absolute        = {0xCD, Instruction::CMP, AddressingMode::Absolute};
