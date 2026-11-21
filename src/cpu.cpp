@@ -173,7 +173,7 @@ std::int8_t CPU::step() {
 
         (void)this->read(intermediate);
 
-        this->_registers.pc = intermediate;
+        this->_registers.pc = target;
 
         RETURN_CYCLE_COUNT(4);
       }
@@ -199,7 +199,7 @@ std::int8_t CPU::step() {
 
         (void)this->read(intermediate);
 
-        this->_registers.pc = intermediate;
+        this->_registers.pc = target;
 
         RETURN_CYCLE_COUNT(4);
       }
@@ -225,7 +225,7 @@ std::int8_t CPU::step() {
 
         (void)this->read(intermediate);
 
-        this->_registers.pc = intermediate;
+        this->_registers.pc = target;
 
         RETURN_CYCLE_COUNT(4);
       }
@@ -268,7 +268,7 @@ std::int8_t CPU::step() {
 
         (void)this->read(intermediate);
 
-        this->_registers.pc = intermediate;
+        this->_registers.pc = target;
 
         RETURN_CYCLE_COUNT(4);
       }
@@ -294,7 +294,7 @@ std::int8_t CPU::step() {
 
         (void)this->read(intermediate);
 
-        this->_registers.pc = intermediate;
+        this->_registers.pc = target;
 
         RETURN_CYCLE_COUNT(4);
       }
@@ -320,7 +320,7 @@ std::int8_t CPU::step() {
 
         (void)this->read(intermediate);
 
-        this->_registers.pc = intermediate;
+        this->_registers.pc = target;
 
         RETURN_CYCLE_COUNT(4);
       }
@@ -350,7 +350,7 @@ std::int8_t CPU::step() {
 
         (void)this->read(intermediate);
 
-        this->_registers.pc = intermediate;
+        this->_registers.pc = target;
 
         RETURN_CYCLE_COUNT(4);
       }
@@ -376,7 +376,7 @@ std::int8_t CPU::step() {
 
         (void)this->read(intermediate);
 
-        this->_registers.pc = intermediate;
+        this->_registers.pc = target;
 
         RETURN_CYCLE_COUNT(4);
       }
