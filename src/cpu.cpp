@@ -390,24 +390,32 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::CLC::Implied: {
+    (void)this->read(this->_registers.pc);
+
     this->_registers.set_carry(false);
 
     RETURN_CYCLE_COUNT(2);
   }
 
   case OpCode::CLD::Implied: {
+    (void)this->read(this->_registers.pc);
+
     this->_registers.set_decimal_mode(false);
 
     RETURN_CYCLE_COUNT(2);
   }
 
   case OpCode::CLI::Implied: {
+    (void)this->read(this->_registers.pc);
+
     this->_registers.set_interrupt_disable(false);
 
     RETURN_CYCLE_COUNT(2);
   }
 
   case OpCode::CLV::Implied: {
+    (void)this->read(this->_registers.pc);
+
     this->_registers.set_overflow(false);
 
     RETURN_CYCLE_COUNT(2);
@@ -774,9 +782,9 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::NOP::Implied: {
-    this->_cycle_count += 2;
+    (void)this->read(this->_registers.pc);
 
-    return 2;
+    RETURN_CYCLE_COUNT(2);
   }
 
   case OpCode::ORA::Immediate: {
@@ -977,18 +985,24 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::SEC::Implied: {
+    (void)this->read(this->_registers.pc);
+
     this->_registers.set_carry(true);
 
     RETURN_CYCLE_COUNT(2);
   }
 
   case OpCode::SED::Implied: {
+    (void)this->read(this->_registers.pc);
+
     this->_registers.set_decimal_mode(true);
 
     RETURN_CYCLE_COUNT(2);
   }
 
   case OpCode::SEI::Implied: {
+    (void)this->read(this->_registers.pc);
+
     this->_registers.set_interrupt_disable(true);
 
     RETURN_CYCLE_COUNT(2);
