@@ -369,6 +369,11 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::EOR::ZeroPage: {
+    const std::uint8_t addr  = this->read(this->_registers.pc++);
+    const std::uint8_t value = this->read(addr);
+
+    this->bitwise_eor(value);
+
     break;
   }
 
