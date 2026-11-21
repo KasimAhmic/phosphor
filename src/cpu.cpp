@@ -151,8 +151,10 @@ std::int8_t CPU::step() {
     const std::uint8_t ptr = this->read(this->_registers.pc++);
     (void)this->read(ptr);
 
-    const std::uint8_t low   = this->read(ptr);
-    const std::uint8_t high  = this->read(static_cast<std::uint8_t>(ptr + 1));
+    const std::uint8_t indexed_ptr = static_cast<std::uint8_t>(ptr + this->_registers.x);
+
+    const std::uint8_t low   = this->read(indexed_ptr);
+    const std::uint8_t high  = this->read(static_cast<std::uint8_t>(indexed_ptr + 1));
     const std::uint16_t addr = static_cast<std::uint16_t>((high << 8) | low);
 
     const std::uint8_t value = this->read(addr);
@@ -161,6 +163,8 @@ std::int8_t CPU::step() {
 
     this->_registers.set_zero(this->_registers.a == 0);
     this->_registers.set_negative(this->_registers.a & 0x80);
+
+    break;
   }
 
   case OpCode::AND::IndirectIndexed: {
@@ -323,6 +327,23 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::CMP::IndexedIndirect: {
+    const std::uint8_t ptr = this->read(this->_registers.pc++);
+    (void)this->read(ptr);
+
+    const std::uint8_t indexed_ptr = static_cast<std::uint8_t>(ptr + this->_registers.x);
+
+    const std::uint8_t low   = this->read(indexed_ptr);
+    const std::uint8_t high  = this->read(static_cast<std::uint8_t>(indexed_ptr + 1));
+    const std::uint16_t addr = static_cast<std::uint16_t>((high << 8) | low);
+
+    const std::uint8_t value = this->read(addr);
+
+    const std::uint8_t result = this->_registers.a - value;
+
+    this->_registers.set_carry(this->_registers.a >= value);
+    this->_registers.set_zero(this->_registers.a == value);
+    this->_registers.set_negative(result & 0x80);
+
     break;
   }
 
