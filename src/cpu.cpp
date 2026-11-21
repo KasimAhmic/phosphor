@@ -402,10 +402,7 @@ std::int8_t CPU::step() {
   case OpCode::EOR::Immediate: {
     const std::uint8_t value = this->read(this->_registers.pc++);
 
-    this->_registers.a ^= value;
-
-    this->_registers.set_zero(this->_registers.a == 0);
-    this->_registers.set_negative(this->_registers.a & 0x80);
+    this->bitwise_eor(value);
 
     break;
   }
@@ -442,10 +439,7 @@ std::int8_t CPU::step() {
 
     const std::uint8_t value = this->read(addr);
 
-    this->_registers.a ^= value;
-
-    this->_registers.set_zero(this->_registers.a == 0);
-    this->_registers.set_negative(this->_registers.a & 0x80);
+    this->bitwise_eor(value);
 
     break;
   }
@@ -1166,4 +1160,11 @@ void CPU::compare(const std::uint8_t value) {
   this->_registers.set_carry(this->_registers.a >= value);
   this->_registers.set_zero(result == 0);
   this->_registers.set_negative(result & 0x80);
+}
+
+void CPU::bitwise_eor(const std::uint8_t value) {
+  this->_registers.a ^= value;
+
+  this->_registers.set_zero(this->_registers.a == 0);
+  this->_registers.set_negative(this->_registers.a & 0x80);
 }

@@ -76,4 +76,5 @@ private:
   void bitwise_and(std::uint8_t value);
   void branch_if(bool condition);
   void compare(std::uint8_t value);
+  void bitwise_eor(std::uint8_t value);
 };
