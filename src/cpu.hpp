@@ -71,7 +71,7 @@ private:
   void tick();
 
   std::uint8_t read(std::uint16_t addr);
-  std::uint16_t read_indexed_zero_page();
+  std::uint16_t resolve_indexed_indirect();
   void write(std::uint16_t addr, std::uint8_t value);
 
   void add_with_carry(std::uint8_t value);

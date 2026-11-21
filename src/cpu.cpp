@@ -57,7 +57,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::ADC::IndexedIndirect: {
-    const std::uint16_t addr = this->read_indexed_zero_page();
+    const std::uint16_t addr = this->resolve_indexed_indirect();
 
     const std::uint8_t value = this->read(addr);
 
@@ -99,7 +99,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::AND::IndexedIndirect: {
-    const std::uint16_t addr = this->read_indexed_zero_page();
+    const std::uint16_t addr = this->resolve_indexed_indirect();
 
     const std::uint8_t value = this->read(addr);
 
@@ -264,7 +264,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::CMP::IndexedIndirect: {
-    const std::uint16_t addr = this->read_indexed_zero_page();
+    const std::uint16_t addr = this->resolve_indexed_indirect();
 
     const std::uint8_t value = this->read(addr);
 
@@ -384,7 +384,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::EOR::IndexedIndirect: {
-    const std::uint16_t addr = this->read_indexed_zero_page();
+    const std::uint16_t addr = this->resolve_indexed_indirect();
 
     const std::uint8_t value = this->read(addr);
 
@@ -510,7 +510,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::LDA::IndexedIndirect: {
-    const std::uint16_t addr = this->read_indexed_zero_page();
+    const std::uint16_t addr = this->resolve_indexed_indirect();
 
     this->_registers.a = this->read(addr);
 
@@ -652,7 +652,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::ORA::IndexedIndirect: {
-    const std::uint16_t addr = this->read_indexed_zero_page();
+    const std::uint16_t addr = this->resolve_indexed_indirect();
 
     const std::uint8_t value = this->read(addr);
 
@@ -825,7 +825,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::SBC::IndexedIndirect: {
-    const std::uint16_t addr = this->read_indexed_zero_page();
+    const std::uint16_t addr = this->resolve_indexed_indirect();
 
     const std::uint8_t value = this->read(addr);
 
@@ -1019,7 +1019,7 @@ std::uint8_t CPU::read(std::uint16_t addr) {
   return value;
 }
 
-std::uint16_t CPU::read_indexed_zero_page() {
+std::uint16_t CPU::resolve_indexed_indirect() {
   const std::uint8_t ptr = this->read(this->_registers.pc++);
   (void)this->read(ptr);
 
