@@ -10,17 +10,6 @@ CPU::CPU(std::array<std::uint8_t, 65536> mem)
 
 CPU::~CPU() = default;
 
-void CPU::reset() {
-  this->_registers.pc = 0xC000;
-  this->_registers.a  = 0x00;
-  this->_registers.x  = 0x00;
-  this->_registers.y  = 0x00;
-  this->_registers.p  = 0x24;
-  this->_registers.sp = 0xFD;
-
-  this->_total_cycle_count = 7;
-}
-
 std::int8_t CPU::step() {
   this->_current_cycle_count = 0;
 
@@ -1068,6 +1057,15 @@ std::int8_t CPU::step() {
   }
 
   return this->_current_cycle_count;
+}
+
+void CPU::set_test_state(const Registers& registers,
+                         std::array<std::uint8_t, 65536>& memory,
+                         const std::uint64_t total_cycle_count) {
+  this->_registers           = registers;
+  this->_memory              = memory;
+  this->_current_cycle_count = 0;
+  this->_total_cycle_count   = total_cycle_count;
 }
 
 void CPU::tick() {

@@ -52,8 +52,11 @@ public:
     bool operator==(const Registers&) const = default;
   };
 
-  void reset();
   std::int8_t step();
+
+  void set_test_state(const Registers& registers,
+                      std::array<std::uint8_t, 65536>& memory,
+                      std::uint64_t total_cycle_count);
 
   std::uint16_t get_program_counter() const { return this->_registers.pc; }
   void set_program_counter(std::uint16_t pc) { this->_registers.pc = pc; }

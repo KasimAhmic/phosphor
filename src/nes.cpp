@@ -5,6 +5,6 @@
 
 NES::NES() : _cpu(std::array<std::uint8_t, 65536>{}), _ppu(), _apu() {};
 
-NES::~NES() {};
+NES::~NES() = default;
 
-void NES::reset() { this->_cpu.reset(); }
+void NES::reset() {}

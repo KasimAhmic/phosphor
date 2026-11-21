@@ -100,17 +100,21 @@ target_link_libraries(${PROJECT_NAME}
 include(CTest)
 
 if (BUILD_TESTING)
+  add_subdirectory(external/json EXCLUDE_FROM_ALL)
+
   add_subdirectory(external/googletest ${CMAKE_CURRENT_BINARY_DIR}/googletest EXCLUDE_FROM_ALL)
 
   add_executable(${PROJECT_NAME}_tests
       tests/test_main.cpp
       tests/nestest.cpp
+      tests/sst.cpp
   )
 
   target_link_libraries(${PROJECT_NAME}_tests
     PRIVATE
       GTest::gtest
       spdlog::spdlog
+      nlohmann_json::nlohmann_json
       libnes
   )
 

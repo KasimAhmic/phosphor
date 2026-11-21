@@ -8,8 +8,8 @@
 #include "cpu.hpp"
 
 TEST(CPU, NESTest) {
-  std::ifstream rom_file("../tests/nestest.nes", std::ios::binary | std::ios::ate);
-  std::ifstream log_file("../tests/nestest.log");
+  std::ifstream rom_file("../tests/data/nestest/nestest.nes", std::ios::binary | std::ios::ate);
+  std::ifstream log_file("../tests/data/nestest/nestest.log");
 
   if (!rom_file) {
     FAIL() << "Failed to open nestest.nes: " << std::error_code(errno, std::generic_category()).message();
@@ -70,7 +70,16 @@ TEST(CPU, NESTest) {
 
   CPU cpu{memory};
 
-  cpu.reset();
+  const CPU::Registers registers{
+      .pc = 0xC000,
+      .a  = 0x00,
+      .x  = 0x00,
+      .y  = 0x00,
+      .p  = 0x24,
+      .sp = 0xFD,
+  };
+
+  cpu.set_test_state(registers, memory, 7);
 
   std::string line;
   std::size_t instruction = 0;
