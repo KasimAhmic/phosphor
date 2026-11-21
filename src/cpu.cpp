@@ -646,6 +646,14 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::ORA::ZeroPage: {
+    const std::uint8_t addr  = this->read(this->_registers.pc++);
+    const std::uint8_t value = this->read(addr);
+
+    this->_registers.a |= value;
+
+    this->_registers.set_zero(this->_registers.a == 0);
+    this->_registers.set_negative(this->_registers.a & 0x80);
+
     break;
   }
 
