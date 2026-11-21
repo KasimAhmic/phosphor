@@ -248,7 +248,7 @@ std::int8_t CPU::step() {
   case OpCode::CMP::Immediate: {
     const std::uint8_t value = this->read(this->_registers.pc++);
 
-    this->compare(value);
+    this->compare(this->_registers.a, value);
 
     break;
   }
@@ -257,7 +257,7 @@ std::int8_t CPU::step() {
     const std::uint8_t addr  = this->read(this->_registers.pc++);
     const std::uint8_t value = this->read(addr);
 
-    this->compare(value);
+    this->compare(this->_registers.a, value);
 
     break;
   }
@@ -283,7 +283,7 @@ std::int8_t CPU::step() {
 
     const std::uint8_t value = this->read(addr);
 
-    this->compare(value);
+    this->compare(this->_registers.a, value);
 
     break;
   }
@@ -305,6 +305,11 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::CPX::ZeroPage: {
+    const std::uint8_t addr  = this->read(this->_registers.pc++);
+    const std::uint8_t value = this->read(addr);
+
+    this->compare(this->_registers.x, value);
+
     break;
   }
 
@@ -1134,10 +1139,10 @@ void CPU::branch_if(const bool condition) {
   }
 }
 
-void CPU::compare(const std::uint8_t value) {
-  const std::uint8_t result = this->_registers.a - value;
+void CPU::compare(const std::uint8_t reg, const std::uint8_t value) {
+  const std::uint8_t result = reg - value;
 
-  this->_registers.set_carry(this->_registers.a >= value);
+  this->_registers.set_carry(reg >= value);
   this->_registers.set_zero(result == 0);
   this->_registers.set_negative(result & 0x80);
 }
