@@ -74,4 +74,6 @@ private:
 
   void add_with_carry(std::uint8_t value);
   void bitwise_and(std::uint8_t value);
+  void branch_if(bool condition);
+  void compare(std::uint8_t value);
 };
