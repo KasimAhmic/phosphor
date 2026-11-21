@@ -124,7 +124,19 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::AND::IndexedIndirect: {
-    break;
+    const std::uint8_t ptr = this->read(this->_registers.pc++);
+    (void)this->read(ptr);
+
+    const std::uint8_t low   = this->read(ptr);
+    const std::uint8_t high  = this->read(static_cast<std::uint8_t>(ptr + 1));
+    const std::uint16_t addr = static_cast<std::uint16_t>((high << 8) | low);
+
+    const std::uint8_t value = this->read(addr);
+
+    this->_registers.a &= value;
+
+    this->_registers.set_zero(this->_registers.a == 0);
+    this->_registers.set_negative(this->_registers.a & 0x80);
   }
 
   case OpCode::AND::IndirectIndexed: {
