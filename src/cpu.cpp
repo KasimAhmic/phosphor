@@ -456,6 +456,7 @@ std::int8_t CPU::step() {
   case OpCode::JSR::Absolute: {
     const auto low = this->read(_registers.pc++);
     (void)this->read(0x0100 | this->_registers.sp);
+
     const auto return_addr = this->_registers.pc;
 
     this->write(0x0100 | this->_registers.sp--, static_cast<std::uint8_t>(return_addr >> 8));
@@ -478,7 +479,13 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::LDA::ZeroPage: {
-    break;
+    const std::uint8_t addr = this->read(_registers.pc++);
+    this->_registers.a      = this->read(addr);
+
+    this->_registers.set_zero(this->_registers.a == 0);
+    this->_registers.set_negative(this->_registers.a & 0x80);
+
+    RETURN_CYCLE_COUNT(3);
   }
 
   case OpCode::LDA::ZeroPageX: {
