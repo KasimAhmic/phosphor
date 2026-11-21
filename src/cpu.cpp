@@ -280,7 +280,6 @@ std::int8_t CPU::step() {
 
   case OpCode::CMP::IndexedIndirect: {
     const std::uint16_t addr = this->resolve_indexed_indirect();
-
     const std::uint8_t value = this->read(addr);
 
     this->compare(this->_registers.a, value);
@@ -295,11 +294,7 @@ std::int8_t CPU::step() {
   case OpCode::CPX::Immediate: {
     const std::uint8_t value = this->read(this->_registers.pc++);
 
-    const std::uint8_t result = this->_registers.x - value;
-
-    this->_registers.set_carry(this->_registers.x >= value);
-    this->_registers.set_zero(result == 0);
-    this->_registers.set_negative(result & 0x80);
+    this->compare(this->_registers.x, value);
 
     break;
   }
@@ -320,11 +315,7 @@ std::int8_t CPU::step() {
   case OpCode::CPY::Immediate: {
     const std::uint8_t value = this->read(this->_registers.pc++);
 
-    const std::uint8_t result = this->_registers.y - value;
-
-    this->_registers.set_carry(this->_registers.y >= value);
-    this->_registers.set_zero(result == 0);
-    this->_registers.set_negative(result & 0x80);
+    this->compare(this->_registers.y, value);
 
     break;
   }
