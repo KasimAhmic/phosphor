@@ -951,6 +951,10 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::STY::ZeroPage: {
+    const std::uint8_t addr = this->read(this->_registers.pc++);
+
+    this->write(addr, this->_registers.y);
+
     break;
   }
 
