@@ -60,7 +60,7 @@ std::int8_t CPU::step() {
 
     this->_registers.set_carry(result > 0xFF);
     this->_registers.set_zero(this->_registers.a == 0);
-    this->_registers.set_overflow((this->_registers.a ^ a) & (this->_registers.a ^ value) & 0x80);
+    this->_registers.set_overflow((a ^ this->_registers.a) & (value ^ this->_registers.a) & 0x80);
     this->_registers.set_negative(this->_registers.a & 0x80);
 
     break;
@@ -87,10 +87,28 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::ADC::IndexedIndirect: {
-    // const std::uint8_t ptr = this->read(this->_registers.pc++);
-    // (void)this->read(ptr);
+    const std::uint8_t ptr = this->read(this->_registers.pc++);
+    const std::uint8_t a   = this->_registers.a;
 
-    // const std::uint8_t = const std::uint8_t low = this->read();
+    (void)this->read(ptr);
+
+    const std::uint8_t indexed_ptr = static_cast<std::uint8_t>(ptr + this->_registers.x);
+
+    const std::uint8_t low   = this->read(indexed_ptr);
+    const std::uint8_t high  = this->read(static_cast<std::uint8_t>(indexed_ptr + 1));
+    const std::uint16_t addr = static_cast<std::uint16_t>((high << 8) | low);
+
+    const std::uint8_t value = this->read(addr);
+
+    const std::uint16_t result = a + value + this->_registers.is_carry_set();
+
+    this->_registers.a = static_cast<std::uint8_t>(result);
+
+    this->_registers.set_carry(result > 0xFF);
+    this->_registers.set_zero(this->_registers.a == 0);
+    this->_registers.set_overflow((a ^ this->_registers.a) & (value ^ this->_registers.a) & 0x80);
+    this->_registers.set_negative(this->_registers.a & 0x80);
+
     break;
   }
 
@@ -861,15 +879,15 @@ std::int8_t CPU::step() {
     const std::uint8_t value = this->read(this->_registers.pc++);
     const std::uint8_t a     = this->_registers.a;
 
-    const std::int16_t result  = static_cast<std::int16_t>(a) - static_cast<std::int16_t>(value) -
-                                 !this->_registers.is_carry_set();
-    const std::uint8_t result8 = static_cast<std::uint8_t>(result);
+    const std::int16_t result = static_cast<std::int16_t>(a) - static_cast<std::int16_t>(value) -
+                                !this->_registers.is_carry_set();
 
-    this->_registers.a = result8;
+    this->_registers.a = static_cast<std::uint8_t>(result);
+    ;
 
     this->_registers.set_carry(result >= 0x00);
     this->_registers.set_zero(this->_registers.a == 0);
-    this->_registers.set_overflow((a ^ result8) & (a ^ value) & 0x80);
+    this->_registers.set_overflow((a ^ this->_registers.a) & (a ^ value) & 0x80);
     this->_registers.set_negative(this->_registers.a & 0x80);
 
     break;
