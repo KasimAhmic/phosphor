@@ -79,6 +79,11 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::AND::ZeroPage: {
+    const std::uint8_t addr  = this->read(this->_registers.pc++);
+    const std::uint8_t value = this->read(addr);
+
+    this->bitwise_and(value);
+
     break;
   }
 
