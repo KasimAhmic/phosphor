@@ -862,17 +862,8 @@ std::int8_t CPU::step() {
 
   case OpCode::SBC::Immediate: {
     const std::uint8_t value = this->read(this->_registers.pc++);
-    const std::uint8_t a     = this->_registers.a;
 
-    const std::int16_t result = static_cast<std::int16_t>(a) - static_cast<std::int16_t>(value) -
-                                !this->_registers.is_carry_set();
-
-    this->_registers.a = static_cast<std::uint8_t>(result);
-
-    this->_registers.set_carry(result >= 0x00);
-    this->_registers.set_zero(this->_registers.a == 0);
-    this->_registers.set_overflow((a ^ this->_registers.a) & (a ^ value) & 0x80);
-    this->_registers.set_negative(this->_registers.a & 0x80);
+    this->subtract_with_carry(value);
 
     break;
   }
@@ -899,7 +890,6 @@ std::int8_t CPU::step() {
 
   case OpCode::SBC::IndexedIndirect: {
     const std::uint8_t ptr = this->read(this->_registers.pc++);
-    const std::uint8_t a   = this->_registers.a;
 
     (void)this->read(ptr);
 
@@ -911,15 +901,7 @@ std::int8_t CPU::step() {
 
     const std::uint8_t value = this->read(addr);
 
-    const std::int16_t result = static_cast<std::int16_t>(a) - static_cast<std::int16_t>(value) -
-                                !this->_registers.is_carry_set();
-
-    this->_registers.a = static_cast<std::uint8_t>(result);
-
-    this->_registers.set_carry(result >= 0x00);
-    this->_registers.set_zero(this->_registers.a == 0);
-    this->_registers.set_overflow((a ^ this->_registers.a) & (a ^ value) & 0x80);
-    this->_registers.set_negative(this->_registers.a & 0x80);
+    this->subtract_with_carry(value);
 
     break;
   }
@@ -1166,5 +1148,19 @@ void CPU::bitwise_eor(const std::uint8_t value) {
   this->_registers.a ^= value;
 
   this->_registers.set_zero(this->_registers.a == 0);
+  this->_registers.set_negative(this->_registers.a & 0x80);
+}
+
+void CPU::subtract_with_carry(std::uint8_t value) {
+  const std::uint8_t a = this->_registers.a;
+
+  const std::int16_t result = static_cast<std::int16_t>(a) - static_cast<std::int16_t>(value) -
+                              !this->_registers.is_carry_set();
+
+  this->_registers.a = static_cast<std::uint8_t>(result);
+
+  this->_registers.set_carry(result >= 0x00);
+  this->_registers.set_zero(this->_registers.a == 0);
+  this->_registers.set_overflow((a ^ this->_registers.a) & (a ^ value) & 0x80);
   this->_registers.set_negative(this->_registers.a & 0x80);
 }

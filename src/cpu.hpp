@@ -77,4 +77,5 @@ private:
   void branch_if(bool condition);
   void compare(std::uint8_t value);
   void bitwise_eor(std::uint8_t value);
+  void subtract_with_carry(std::uint8_t value);
 };
