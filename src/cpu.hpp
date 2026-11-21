@@ -73,4 +73,5 @@ private:
   std::array<std::uint8_t, 65536> _memory;
 
   void add_with_carry(std::uint8_t value);
+  void bitwise_and(std::uint8_t value);
 };

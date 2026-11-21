@@ -103,10 +103,7 @@ std::int8_t CPU::step() {
   case OpCode::AND::Immediate: {
     const uint8_t value = this->read(this->_registers.pc++);
 
-    this->_registers.a &= value;
-
-    this->_registers.set_zero(this->_registers.a == 0);
-    this->_registers.set_negative(this->_registers.a & 0x80);
+    this->bitwise_and(value);
 
     break;
   }
@@ -143,10 +140,7 @@ std::int8_t CPU::step() {
 
     const std::uint8_t value = this->read(addr);
 
-    this->_registers.a &= value;
-
-    this->_registers.set_zero(this->_registers.a == 0);
-    this->_registers.set_negative(this->_registers.a & 0x80);
+    this->bitwise_and(value);
 
     break;
   }
@@ -1140,6 +1134,13 @@ void CPU::add_with_carry(const std::uint8_t value) {
   this->_registers.set_carry(result > 0xFF);
   this->_registers.set_zero(this->_registers.a == 0);
   this->_registers.set_overflow((a ^ this->_registers.a) & (value ^ this->_registers.a) & 0x80);
+  this->_registers.set_negative(this->_registers.a & 0x80);
+}
+
+void CPU::bitwise_and(const std::uint8_t value) {
+  this->_registers.a &= value;
+
+  this->_registers.set_zero(this->_registers.a == 0);
   this->_registers.set_negative(this->_registers.a & 0x80);
 }
 
