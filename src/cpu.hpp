@@ -5,7 +5,7 @@
 
 class CPU {
 public:
-  CPU(std::array<std::uint8_t, 65536> memory);
+  explicit CPU(std::array<std::uint8_t, 65536> memory);
   ~CPU();
 
   struct Registers {

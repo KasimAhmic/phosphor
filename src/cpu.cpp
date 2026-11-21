@@ -5,9 +5,10 @@
 
 #include "opcode.hpp"
 
-CPU::CPU(std::array<std::uint8_t, 65536> mem) : _registers(), _total_cycle_count(0), _memory(mem) {}
+CPU::CPU(std::array<std::uint8_t, 65536> mem)
+    : _registers(), _total_cycle_count{0}, _current_cycle_count{0}, _memory{mem} {}
 
-CPU::~CPU() {}
+CPU::~CPU() = default;
 
 void CPU::reset() {
   this->_registers.pc = 0xC000;
