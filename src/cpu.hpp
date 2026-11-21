@@ -58,7 +58,7 @@ public:
   std::uint16_t get_program_counter() const { return this->_registers.pc; }
   void set_program_counter(std::uint16_t pc) { this->_registers.pc = pc; }
 
-  std::uint64_t get_cycle_count() const { return this->_cycle_count; }
+  std::uint64_t get_cycle_count() const { return this->_total_cycle_count; }
   std::array<std::uint8_t, 65536> get_memory() const { return this->_memory; }
   Registers get_registers() const { return this->_registers; }
 
@@ -68,8 +68,10 @@ private:
   void tick();
 
   Registers _registers;
-  std::uint64_t _cycle_count;
+  std::uint64_t _total_cycle_count;
   std::array<std::uint8_t, 65536> _memory;
 
-  std::uint8_t branch_if(bool condition);
+  std::int8_t _current_cycle_count;
+
+  void branch_if(bool condition);
 };

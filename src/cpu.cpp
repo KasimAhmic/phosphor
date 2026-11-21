@@ -1,15 +1,11 @@
 #include "cpu.hpp"
+
 #include <ostream>
 #include <print>
+
 #include "opcode.hpp"
 
-#define RETURN_CYCLE_COUNT(count)                                                                                      \
-  do {                                                                                                                 \
-    this->_cycle_count += (count);                                                                                     \
-    return (count);                                                                                                    \
-  } while (0)
-
-CPU::CPU(std::array<std::uint8_t, 65536> mem) : _registers(), _cycle_count(0), _memory(mem) {}
+CPU::CPU(std::array<std::uint8_t, 65536> mem) : _registers(), _total_cycle_count(0), _memory(mem) {}
 
 CPU::~CPU() {}
 
@@ -21,7 +17,7 @@ void CPU::reset() {
   this->_registers.p  = 0x24;
   this->_registers.sp = 0xFD;
 
-  this->_cycle_count = 7;
+  this->_total_cycle_count = 7;
 }
 
 std::uint8_t CPU::read(std::uint16_t addr) {
@@ -39,10 +35,13 @@ void CPU::write(std::uint16_t addr, std::uint8_t value) {
 }
 
 void CPU::tick() {
-  // TODO: For cycle accurate emulation, will do later
+  this->_current_cycle_count++;
+  this->_total_cycle_count++;
 }
 
 std::int8_t CPU::step() {
+  this->_current_cycle_count = 0;
+
   const auto opcode = this->read(this->_registers.pc++);
 
   switch (opcode) {
@@ -60,7 +59,7 @@ std::int8_t CPU::step() {
     this->_registers.set_overflow((this->_registers.a ^ a) & (this->_registers.a ^ value) & 0x80);
     this->_registers.set_negative(this->_registers.a & 0x80);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::ADC::ZeroPage: {
@@ -99,7 +98,7 @@ std::int8_t CPU::step() {
     this->_registers.set_zero(this->_registers.a == 0);
     this->_registers.set_negative(this->_registers.a & 0x80);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::AND::ZeroPage: {
@@ -141,7 +140,7 @@ std::int8_t CPU::step() {
     this->_registers.set_zero(this->_registers.a == 0);
     this->_registers.set_negative(this->_registers.a & 0x80);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::ASL::ZeroPage: {
@@ -161,15 +160,18 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::BCC::Relative: {
-    return this->branch_if(this->_registers.is_carry_clear());
+    this->branch_if(this->_registers.is_carry_clear());
+    break;
   }
 
   case OpCode::BCS::Relative: {
-    return this->branch_if(this->_registers.is_carry_set());
+    this->branch_if(this->_registers.is_carry_set());
+    break;
   }
 
   case OpCode::BEQ::Relative: {
-    return this->branch_if(this->_registers.is_zero_set());
+    this->branch_if(this->_registers.is_zero_set());
+    break;
   }
 
   case OpCode::BIT::ZeroPage: {
@@ -182,7 +184,7 @@ std::int8_t CPU::step() {
     this->_registers.set_overflow(value & 0x40);
     this->_registers.set_negative(value & 0x80);
 
-    RETURN_CYCLE_COUNT(3);
+    break;
   }
 
   case OpCode::BIT::Absolute: {
@@ -190,15 +192,18 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::BMI::Relative: {
-    return this->branch_if(this->_registers.is_negative_set());
+    this->branch_if(this->_registers.is_negative_set());
+    break;
   }
 
   case OpCode::BNE::Relative: {
-    return this->branch_if(this->_registers.is_zero_clear());
+    this->branch_if(this->_registers.is_zero_clear());
+    break;
   }
 
   case OpCode::BPL::Relative: {
-    return this->branch_if(this->_registers.is_negative_clear());
+    this->branch_if(this->_registers.is_negative_clear());
+    break;
   }
 
   case OpCode::BRK::Implied: {
@@ -206,11 +211,13 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::BVC::Relative: {
-    return this->branch_if(this->_registers.is_overflow_clear());
+    this->branch_if(this->_registers.is_overflow_clear());
+    break;
   }
 
   case OpCode::BVS::Relative: {
-    return this->branch_if(this->_registers.is_overflow_set());
+    this->branch_if(this->_registers.is_overflow_set());
+    break;
   }
 
   case OpCode::CLC::Implied: {
@@ -218,7 +225,7 @@ std::int8_t CPU::step() {
 
     this->_registers.set_carry(false);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::CLD::Implied: {
@@ -226,7 +233,7 @@ std::int8_t CPU::step() {
 
     this->_registers.set_decimal_mode(false);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::CLI::Implied: {
@@ -234,7 +241,7 @@ std::int8_t CPU::step() {
 
     this->_registers.set_interrupt_disable(false);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::CLV::Implied: {
@@ -242,7 +249,7 @@ std::int8_t CPU::step() {
 
     this->_registers.set_overflow(false);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::CMP::Immediate: {
@@ -254,7 +261,7 @@ std::int8_t CPU::step() {
     this->_registers.set_zero(result == 0);
     this->_registers.set_negative(result & 0x80);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::CMP::ZeroPage: {
@@ -294,7 +301,7 @@ std::int8_t CPU::step() {
     this->_registers.set_zero(result == 0);
     this->_registers.set_negative(result & 0x80);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::CPX::ZeroPage: {
@@ -314,7 +321,7 @@ std::int8_t CPU::step() {
     this->_registers.set_zero(result == 0);
     this->_registers.set_negative(result & 0x80);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::CPY::ZeroPage: {
@@ -349,7 +356,7 @@ std::int8_t CPU::step() {
     this->_registers.set_zero(this->_registers.x == 0);
     this->_registers.set_negative(this->_registers.x & 0x80);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::DEY::Implied: {
@@ -360,7 +367,7 @@ std::int8_t CPU::step() {
     this->_registers.set_zero(this->_registers.y == 0);
     this->_registers.set_negative(this->_registers.y & 0x80);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::EOR::Immediate: {
@@ -371,7 +378,7 @@ std::int8_t CPU::step() {
     this->_registers.set_zero(this->_registers.a == 0);
     this->_registers.set_negative(this->_registers.a & 0x80);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::EOR::ZeroPage: {
@@ -426,7 +433,7 @@ std::int8_t CPU::step() {
     this->_registers.set_zero(this->_registers.x == 0);
     this->_registers.set_negative(this->_registers.x & 0x80);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::INY::Implied: {
@@ -437,7 +444,7 @@ std::int8_t CPU::step() {
     this->_registers.set_zero(this->_registers.y == 0);
     this->_registers.set_negative(this->_registers.y & 0x80);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::JMP::Absolute: {
@@ -446,7 +453,7 @@ std::int8_t CPU::step() {
 
     this->_registers.pc = static_cast<std::uint16_t>(low | (high << 8));
 
-    RETURN_CYCLE_COUNT(3);
+    break;
   }
 
   case OpCode::JMP::Indirect: {
@@ -466,7 +473,7 @@ std::int8_t CPU::step() {
 
     this->_registers.pc = static_cast<std::uint16_t>(low | (high << 8));
 
-    RETURN_CYCLE_COUNT(6);
+    break;
   }
 
   case OpCode::LDA::Immediate: {
@@ -475,7 +482,7 @@ std::int8_t CPU::step() {
     this->_registers.set_zero(this->_registers.a == 0);
     this->_registers.set_negative((this->_registers.a & 0x80) != 0);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::LDA::ZeroPage: {
@@ -485,7 +492,7 @@ std::int8_t CPU::step() {
     this->_registers.set_zero(this->_registers.a == 0);
     this->_registers.set_negative(this->_registers.a & 0x80);
 
-    RETURN_CYCLE_COUNT(3);
+    break;
   }
 
   case OpCode::LDA::ZeroPageX: {
@@ -503,7 +510,7 @@ std::int8_t CPU::step() {
     this->_registers.set_zero(this->_registers.a == 0);
     this->_registers.set_negative(this->_registers.a & 0x80);
 
-    RETURN_CYCLE_COUNT(4);
+    break;
   }
 
   case OpCode::LDA::AbsoluteX: {
@@ -530,7 +537,7 @@ std::int8_t CPU::step() {
     this->_registers.set_zero(this->_registers.a == 0);
     this->_registers.set_negative(this->_registers.a & 0x80);
 
-    RETURN_CYCLE_COUNT(6);
+    break;
   }
 
   case OpCode::LDA::IndirectIndexed: {
@@ -543,7 +550,7 @@ std::int8_t CPU::step() {
     this->_registers.set_zero(this->_registers.x == 0);
     this->_registers.set_negative(this->_registers.x & 0x80);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::LDX::ZeroPage: {
@@ -565,7 +572,7 @@ std::int8_t CPU::step() {
     this->_registers.set_zero(this->_registers.x == 0);
     this->_registers.set_negative(this->_registers.x & 0x80);
 
-    RETURN_CYCLE_COUNT(4);
+    break;
   }
 
   case OpCode::LDX::AbsoluteY: {
@@ -578,7 +585,7 @@ std::int8_t CPU::step() {
     this->_registers.set_zero(this->_registers.y == 0);
     this->_registers.set_negative(this->_registers.y & 0x80);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::LDY::ZeroPage: {
@@ -608,7 +615,7 @@ std::int8_t CPU::step() {
     this->_registers.set_zero(this->_registers.a == 0);
     this->_registers.set_negative(false);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::LSR::ZeroPage: {
@@ -630,7 +637,7 @@ std::int8_t CPU::step() {
   case OpCode::NOP::Implied: {
     (void)this->read(this->_registers.pc);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::ORA::Immediate: {
@@ -641,7 +648,7 @@ std::int8_t CPU::step() {
     this->_registers.set_zero(this->_registers.a == 0);
     this->_registers.set_negative(this->_registers.a & 0x80);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::ORA::ZeroPage: {
@@ -677,7 +684,7 @@ std::int8_t CPU::step() {
 
     this->write(0x0100 | this->_registers.sp--, this->_registers.a);
 
-    RETURN_CYCLE_COUNT(3);
+    break;
   }
 
   case OpCode::PHP::Implied: {
@@ -685,7 +692,7 @@ std::int8_t CPU::step() {
 
     this->write(0x0100 | this->_registers.sp--, this->_registers.p | 0x30);
 
-    RETURN_CYCLE_COUNT(3);
+    break;
   }
 
   case OpCode::PLA::Implied: {
@@ -697,7 +704,7 @@ std::int8_t CPU::step() {
     this->_registers.set_zero(this->_registers.a == 0);
     this->_registers.set_negative(this->_registers.a & 0x80);
 
-    RETURN_CYCLE_COUNT(4);
+    break;
   }
 
   case OpCode::PLP::Implied: {
@@ -706,7 +713,7 @@ std::int8_t CPU::step() {
 
     this->_registers.p = (this->read(0x0100 | this->_registers.sp) & ~0x10) | 0x20;
 
-    RETURN_CYCLE_COUNT(4);
+    break;
   }
 
   case OpCode::ROL::Accumulator: {
@@ -721,7 +728,7 @@ std::int8_t CPU::step() {
     this->_registers.set_zero(this->_registers.a == 0);
     this->_registers.set_negative(this->_registers.a & 0x80);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::ROL::ZeroPage: {
@@ -752,7 +759,7 @@ std::int8_t CPU::step() {
     this->_registers.set_zero(this->_registers.a == 0);
     this->_registers.set_negative(this->_registers.a & 0x80);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::ROR::ZeroPage: {
@@ -782,7 +789,7 @@ std::int8_t CPU::step() {
     this->_registers.pc = (high << 8) | low;
     this->_registers.p  = (p & ~0x10) | 0x20;
 
-    RETURN_CYCLE_COUNT(6);
+    break;
   }
 
   case OpCode::RTS::Implied: {
@@ -797,7 +804,7 @@ std::int8_t CPU::step() {
 
     (void)this->read(this->_registers.pc++);
 
-    RETURN_CYCLE_COUNT(6);
+    break;
   }
 
   case OpCode::SBC::Immediate: {
@@ -815,7 +822,7 @@ std::int8_t CPU::step() {
     this->_registers.set_overflow((a ^ result8) & (a ^ value) & 0x80);
     this->_registers.set_negative(this->_registers.a & 0x80);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::SBC::ZeroPage: {
@@ -851,7 +858,7 @@ std::int8_t CPU::step() {
 
     this->_registers.set_carry(true);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::SED::Implied: {
@@ -859,7 +866,7 @@ std::int8_t CPU::step() {
 
     this->_registers.set_decimal_mode(true);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::SEI::Implied: {
@@ -867,7 +874,7 @@ std::int8_t CPU::step() {
 
     this->_registers.set_interrupt_disable(true);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::STA::ZeroPage: {
@@ -875,7 +882,7 @@ std::int8_t CPU::step() {
 
     this->write(addr, this->_registers.a);
 
-    RETURN_CYCLE_COUNT(3);
+    break;
   }
 
   case OpCode::STA::ZeroPageX: {
@@ -887,7 +894,7 @@ std::int8_t CPU::step() {
 
     this->write(final_addr, this->_registers.a);
 
-    RETURN_CYCLE_COUNT(4);
+    break;
   }
 
   case OpCode::STA::Absolute: {
@@ -897,7 +904,7 @@ std::int8_t CPU::step() {
 
     this->write(addr, this->_registers.a);
 
-    RETURN_CYCLE_COUNT(4);
+    break;
   }
 
   case OpCode::STA::AbsoluteX: {
@@ -920,7 +927,7 @@ std::int8_t CPU::step() {
     const auto addr = this->read(this->_registers.pc++);
     this->write(addr, this->_registers.x);
 
-    RETURN_CYCLE_COUNT(3);
+    break;
   }
 
   case OpCode::STX::ZeroPageY: {
@@ -934,7 +941,7 @@ std::int8_t CPU::step() {
 
     this->write(addr, this->_registers.x);
 
-    RETURN_CYCLE_COUNT(4);
+    break;
   }
 
   case OpCode::STY::ZeroPage: {
@@ -957,7 +964,7 @@ std::int8_t CPU::step() {
     this->_registers.set_zero(this->_registers.x == 0);
     this->_registers.set_negative(this->_registers.x & 0x80);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::TAY::Implied: {
@@ -968,7 +975,7 @@ std::int8_t CPU::step() {
     this->_registers.set_zero(this->_registers.y == 0);
     this->_registers.set_negative(this->_registers.y & 0x80);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::TSX::Implied: {
@@ -979,7 +986,7 @@ std::int8_t CPU::step() {
     this->_registers.set_zero(this->_registers.x == 0);
     this->_registers.set_negative(this->_registers.x & 0x80);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::TXA::Implied: {
@@ -990,7 +997,7 @@ std::int8_t CPU::step() {
     this->_registers.set_zero(this->_registers.a == 0);
     this->_registers.set_negative(this->_registers.a & 0x80);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::TXS::Implied: {
@@ -998,7 +1005,7 @@ std::int8_t CPU::step() {
 
     this->_registers.sp = this->_registers.x;
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
 
   case OpCode::TYA::Implied: {
@@ -1009,14 +1016,14 @@ std::int8_t CPU::step() {
     this->_registers.set_zero(this->_registers.a == 0);
     this->_registers.set_negative(this->_registers.a & 0x80);
 
-    RETURN_CYCLE_COUNT(2);
+    break;
   }
   }
 
-  return -1;
+  return this->_current_cycle_count;
 }
 
-std::uint8_t CPU::branch_if(bool condition) {
+void CPU::branch_if(bool condition) {
   const std::int8_t offset = static_cast<std::int8_t>(this->read(this->_registers.pc++));
 
   if (condition) {
@@ -1031,13 +1038,11 @@ std::uint8_t CPU::branch_if(bool condition) {
 
       this->_registers.pc = target;
 
-      RETURN_CYCLE_COUNT(4);
+      return;
     }
 
     this->_registers.pc = target;
 
-    RETURN_CYCLE_COUNT(3);
+    return;
   }
-
-  RETURN_CYCLE_COUNT(2);
 }

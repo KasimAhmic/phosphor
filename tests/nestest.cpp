@@ -121,7 +121,7 @@ TEST(CPU, NESTest) {
     ASSERT_EQ(actual.sp, expected.sp) << "Stack pointer mismatch";
     ASSERT_EQ(actual_cycles, expected_cycles) << "Cycle count mismatch";
 
-    if (cpu.step() == -1) {
+    if (cpu.step() < 2) {
       FAIL() << "Unhandled opcode encountered at line #" << instruction + 1;
     }
 
