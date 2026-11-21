@@ -63,14 +63,16 @@ public:
   Registers get_registers() const { return this->_registers; }
 
 private:
-  std::uint8_t read(std::uint16_t addr);
-  void write(std::uint16_t addr, std::uint8_t value);
-  void tick();
-
   Registers _registers;
   std::uint64_t _total_cycle_count;
   std::uint8_t _current_cycle_count;
   std::array<std::uint8_t, 65536> _memory;
+
+  void tick();
+
+  std::uint8_t read(std::uint16_t addr);
+  std::uint16_t read_indexed_zero_page();
+  void write(std::uint16_t addr, std::uint8_t value);
 
   void add_with_carry(std::uint8_t value);
   void bitwise_and(std::uint8_t value);
