@@ -708,7 +708,18 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::ROR::Accumulator: {
-    break;
+    (void)this->read(this->_registers.pc);
+
+    const std::uint8_t old_carry = this->_registers.is_carry_set();
+    const std::uint8_t new_carry = this->_registers.a & 0x01;
+
+    this->_registers.a = static_cast<std::uint8_t>((this->_registers.a >> 1) | (old_carry << 7));
+
+    this->_registers.set_carry(new_carry);
+    this->_registers.set_zero(this->_registers.a == 0);
+    this->_registers.set_negative(this->_registers.a & 0x80);
+
+    RETURN_CYCLE_COUNT(2);
   }
 
   case OpCode::ROR::ZeroPage: {
