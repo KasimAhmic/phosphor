@@ -37,6 +37,11 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::ADC::ZeroPage: {
+    const std::uint8_t addr  = this->read(this->_registers.pc++);
+    const std::uint8_t value = this->read(addr);
+
+    this->add_with_carry(value);
+
     break;
   }
 
