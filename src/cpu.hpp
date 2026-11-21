@@ -69,9 +69,8 @@ private:
 
   Registers _registers;
   std::uint64_t _total_cycle_count;
+  std::uint8_t _current_cycle_count;
   std::array<std::uint8_t, 65536> _memory;
-
-  std::int8_t _current_cycle_count;
 
   void branch_if(bool condition);
 };

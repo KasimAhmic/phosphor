@@ -23,7 +23,8 @@ void CPU::reset() {
 // TODO: Look into implementing read methods that handle zero page wrapping and word reads for convenience
 
 std::uint8_t CPU::read(std::uint16_t addr) {
-  const std::uint8_t value = _memory[addr];
+  // TODO: Replace with bus call when implemented
+  const std::uint8_t value = this->_memory[addr];
 
   this->tick();
 
@@ -31,7 +32,8 @@ std::uint8_t CPU::read(std::uint16_t addr) {
 }
 
 void CPU::write(std::uint16_t addr, std::uint8_t value) {
-  _memory[addr] = value;
+  // TODO: Replace with bus call when implemented
+  this->_memory[addr] = value;
 
   this->tick();
 }
@@ -85,6 +87,10 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::ADC::IndexedIndirect: {
+    // const std::uint8_t ptr = this->read(this->_registers.pc++);
+    // (void)this->read(ptr);
+
+    // const std::uint8_t = const std::uint8_t low = this->read();
     break;
   }
 
@@ -419,8 +425,10 @@ std::int8_t CPU::step() {
     const std::uint8_t ptr = this->read(this->_registers.pc++);
     (void)this->read(ptr);
 
-    const std::uint8_t low   = this->read(ptr);
-    const std::uint8_t high  = this->read(static_cast<std::uint8_t>(ptr + 1));
+    const std::uint8_t indexed_ptr = static_cast<std::uint8_t>(ptr + this->_registers.x);
+
+    const std::uint8_t low   = this->read(indexed_ptr);
+    const std::uint8_t high  = this->read(static_cast<std::uint8_t>(indexed_ptr + 1));
     const std::uint16_t addr = static_cast<std::uint16_t>((high << 8) | low);
 
     const std::uint8_t value = this->read(addr);
@@ -429,6 +437,8 @@ std::int8_t CPU::step() {
 
     this->_registers.set_zero(this->_registers.a == 0);
     this->_registers.set_negative(this->_registers.a & 0x80);
+
+    break;
   }
 
   case OpCode::EOR::IndirectIndexed: {
