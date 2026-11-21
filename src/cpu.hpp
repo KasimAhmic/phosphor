@@ -72,5 +72,5 @@ private:
   std::uint8_t _current_cycle_count;
   std::array<std::uint8_t, 65536> _memory;
 
-  void branch_if(bool condition);
+  void add_with_carry(std::uint8_t value);
 };
