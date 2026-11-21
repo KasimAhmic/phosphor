@@ -534,7 +534,13 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::LDX::ZeroPage: {
-    break;
+    const std::uint8_t addr  = this->read(this->_registers.pc++);
+    const std::uint8_t value = this->read(addr);
+
+    this->_registers.x = value;
+
+    this->_registers.set_zero(this->_registers.x == 0);
+    this->_registers.set_negative(this->_registers.x & 0x80);
   }
 
   case OpCode::LDX::ZeroPageY: {
@@ -569,8 +575,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::LDY::ZeroPage: {
-    const std::uint8_t addr = this->read(this->_registers.pc++);
-
+    const std::uint8_t addr  = this->read(this->_registers.pc++);
     const std::uint8_t value = this->read(addr);
 
     this->_registers.y = value;
