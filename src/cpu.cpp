@@ -321,6 +321,11 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::CPY::ZeroPage: {
+    const std::uint8_t addr  = this->read(this->_registers.pc++);
+    const std::uint8_t value = this->read(addr);
+
+    this->compare(this->_registers.y, value);
+
     break;
   }
 
