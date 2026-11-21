@@ -78,4 +78,5 @@ private:
   void compare(std::uint8_t value);
   void bitwise_eor(std::uint8_t value);
   void subtract_with_carry(std::uint8_t value);
+  void transfer(std::uint8_t value, std::uint8_t& reg);
 };

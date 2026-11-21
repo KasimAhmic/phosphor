@@ -1028,10 +1028,7 @@ std::int8_t CPU::step() {
   case OpCode::TAX::Implied: {
     (void)this->read(this->_registers.pc);
 
-    this->_registers.x = this->_registers.a;
-
-    this->_registers.set_zero(this->_registers.x == 0);
-    this->_registers.set_negative(this->_registers.x & 0x80);
+    this->transfer(this->_registers.a, this->_registers.x);
 
     break;
   }
@@ -1039,10 +1036,7 @@ std::int8_t CPU::step() {
   case OpCode::TAY::Implied: {
     (void)this->read(this->_registers.pc);
 
-    this->_registers.y = this->_registers.a;
-
-    this->_registers.set_zero(this->_registers.y == 0);
-    this->_registers.set_negative(this->_registers.y & 0x80);
+    this->transfer(this->_registers.a, this->_registers.y);
 
     break;
   }
@@ -1050,10 +1044,7 @@ std::int8_t CPU::step() {
   case OpCode::TSX::Implied: {
     (void)this->read(this->_registers.pc);
 
-    this->_registers.x = this->_registers.sp;
-
-    this->_registers.set_zero(this->_registers.x == 0);
-    this->_registers.set_negative(this->_registers.x & 0x80);
+    this->transfer(this->_registers.sp, this->_registers.x);
 
     break;
   }
@@ -1061,10 +1052,7 @@ std::int8_t CPU::step() {
   case OpCode::TXA::Implied: {
     (void)this->read(this->_registers.pc);
 
-    this->_registers.a = this->_registers.x;
-
-    this->_registers.set_zero(this->_registers.a == 0);
-    this->_registers.set_negative(this->_registers.a & 0x80);
+    this->transfer(this->_registers.x, this->_registers.a);
 
     break;
   }
@@ -1080,10 +1068,7 @@ std::int8_t CPU::step() {
   case OpCode::TYA::Implied: {
     (void)this->read(this->_registers.pc);
 
-    this->_registers.a = this->_registers.y;
-
-    this->_registers.set_zero(this->_registers.a == 0);
-    this->_registers.set_negative(this->_registers.a & 0x80);
+    this->transfer(this->_registers.y, this->_registers.a);
 
     break;
   }
@@ -1163,4 +1148,11 @@ void CPU::subtract_with_carry(std::uint8_t value) {
   this->_registers.set_zero(this->_registers.a == 0);
   this->_registers.set_overflow((a ^ this->_registers.a) & (a ^ value) & 0x80);
   this->_registers.set_negative(this->_registers.a & 0x80);
+}
+
+void CPU::transfer(const std::uint8_t value, std::uint8_t& reg) {
+  reg = value;
+
+  this->_registers.set_zero(reg == 0);
+  this->_registers.set_negative(reg & 0x80);
 }
