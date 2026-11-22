@@ -126,6 +126,17 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::ASL::ZeroPage: {
+    const std::uint16_t addr  = this->read(this->_registers.pc++);
+    const std::uint8_t value  = this->read(addr);
+    const std::uint8_t result = value << 1;
+
+    this->write(addr, value);
+    this->write(addr, result);
+
+    this->_registers.set_carry(value & 0x80);
+    this->_registers.set_zero(result == 0);
+    this->_registers.set_negative(result & 0x80);
+
     break;
   }
 
@@ -551,6 +562,8 @@ std::int8_t CPU::step() {
 
     this->_registers.set_zero(this->_registers.x == 0);
     this->_registers.set_negative(this->_registers.x & 0x80);
+
+    break;
   }
 
   case OpCode::LDX::ZeroPageY: {
