@@ -74,6 +74,7 @@ private:
   void tick();
 
   std::uint8_t read(std::uint16_t addr);
+  std::pair<std::uint8_t, std::uint8_t> resolve_zero_page();
   std::uint16_t resolve_indexed_indirect();
   void write(std::uint16_t addr, std::uint8_t value);
 
