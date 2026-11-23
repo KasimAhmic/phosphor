@@ -628,9 +628,8 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::LDY::Absolute: {
-    const std::uint8_t low  = this->read(this->_registers.pc++);
-    const std::uint8_t high = this->read(this->_registers.pc++);
-
+    const std::uint8_t low   = this->read(this->_registers.pc++);
+    const std::uint8_t high  = this->read(this->_registers.pc++);
     const std::uint16_t addr = static_cast<std::uint16_t>((high << 8) | low);
 
     const std::uint8_t value = this->read(addr);
@@ -1071,6 +1070,12 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::STY::Absolute: {
+    const std::uint8_t low   = this->read(this->_registers.pc++);
+    const std::uint8_t high  = this->read(this->_registers.pc++);
+    const std::uint16_t addr = (high << 8) | low;
+
+    this->write(addr, this->_registers.y);
+
     break;
   }
 
