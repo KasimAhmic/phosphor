@@ -415,6 +415,20 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::DEC::Absolute: {
+    const std::uint8_t low   = this->read(this->_registers.pc++);
+    const std::uint8_t high  = this->read(this->_registers.pc++);
+    const std::uint16_t addr = (high << 8) | low;
+
+    const std::uint8_t value = this->read(addr);
+
+    const std::uint8_t result = value - 1;
+
+    this->write(addr, value);
+    this->write(addr, result);
+
+    this->_registers.set_zero(result == 0);
+    this->_registers.set_negative(result & 0x80);
+
     break;
   }
 
