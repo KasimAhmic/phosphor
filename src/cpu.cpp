@@ -655,8 +655,8 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::JMP::Absolute: {
-    const auto low  = this->read(_registers.pc++);
-    const auto high = this->read(_registers.pc++);
+    const std::uint8_t low  = this->read(this->_registers.pc++);
+    const std::uint8_t high = this->read(this->_registers.pc++);
 
     this->_registers.pc = static_cast<std::uint16_t>(low | (high << 8));
 
@@ -664,14 +664,26 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::JMP::Indirect: {
+    const std::uint8_t low   = this->read(this->_registers.pc++);
+    const std::uint8_t high  = this->read(this->_registers.pc++);
+    const std::uint16_t addr = (high << 8) | low;
+
+    const std::uint8_t target_low = this->read(addr);
+
+    const std::uint16_t next_addr = (addr & 0xFF00) | static_cast<std::uint8_t>(addr + 1);
+
+    const std::uint8_t target_high = this->read(next_addr);
+
+    this->_registers.pc = (target_high << 8) | target_low;
+
     break;
   }
 
   case OpCode::JSR::Absolute: {
-    const auto low = this->read(_registers.pc++);
+    const std::uint8_t low = this->read(_registers.pc++);
     (void)this->read(0x0100 | this->_registers.sp);
 
-    const auto return_addr = this->_registers.pc;
+    const std::uint16_t return_addr = this->_registers.pc;
 
     this->write(0x0100 | this->_registers.sp--, static_cast<std::uint8_t>(return_addr >> 8));
     this->write(0x0100 | this->_registers.sp--, static_cast<std::uint8_t>(return_addr & 0xFF));
