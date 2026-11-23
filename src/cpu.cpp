@@ -417,6 +417,14 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::EOR::Absolute: {
+    const std::uint8_t low   = this->read(this->_registers.pc++);
+    const std::uint8_t high  = this->read(this->_registers.pc++);
+    const std::uint16_t addr = (high << 8) | low;
+
+    const std::uint8_t value = this->read(addr);
+
+    this->bitwise_eor(value);
+
     break;
   }
 
