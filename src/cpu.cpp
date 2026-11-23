@@ -419,6 +419,18 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::INC::ZeroPage: {
+    const std::uint8_t addr  = this->read(this->_registers.pc++);
+    const std::uint8_t value = this->read(addr);
+
+    this->write(addr, value);
+
+    const std::uint8_t result = value + 1;
+
+    this->write(addr, result);
+
+    this->_registers.set_zero(result == 0);
+    this->_registers.set_negative(result & 0x80);
+
     break;
   }
 
