@@ -178,6 +178,18 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::BIT::Absolute: {
+    const std::uint8_t low   = this->read(this->_registers.pc++);
+    const std::uint8_t high  = this->read(this->_registers.pc++);
+    const std::uint16_t addr = (high << 8) | low;
+
+    const std::uint8_t value = this->read(addr);
+
+    const std::uint8_t result = this->_registers.a & value;
+
+    this->_registers.set_zero(result == 0);
+    this->_registers.set_overflow(value & 0x40);
+    this->_registers.set_negative(value & 0x80);
+
     break;
   }
 
