@@ -733,6 +733,17 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::ORA::Absolute: {
+    const std::uint8_t low   = this->read(this->_registers.pc++);
+    const std::uint8_t high  = this->read(this->_registers.pc++);
+    const std::uint16_t addr = (high << 8) | low;
+
+    const std::uint8_t value = this->read(addr);
+
+    this->_registers.a |= value;
+
+    this->_registers.set_zero(this->_registers.a == 0);
+    this->_registers.set_negative(this->_registers.a & 0x80);
+
     break;
   }
 
