@@ -525,6 +525,10 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::EOR::ZeroPageX: {
+    const std::uint8_t value = this->read_zero_page_indexed(this->_registers.x);
+
+    this->bitwise_eor(value);
+
     break;
   }
 
