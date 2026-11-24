@@ -623,7 +623,7 @@ std::uint8_t CPU::step() {
   case OpCode::LDA::Immediate: {
     const std::uint8_t value = this->read(_registers.pc++);
 
-    this->load(this->_registers.a, value);
+    this->assign_register(this->_registers.a, value);
 
     break;
   }
@@ -631,7 +631,7 @@ std::uint8_t CPU::step() {
   case OpCode::LDA::ZeroPage: {
     const std::uint8_t value = this->read_zero_page();
 
-    this->load(this->_registers.a, value);
+    this->assign_register(this->_registers.a, value);
 
     break;
   }
@@ -639,7 +639,7 @@ std::uint8_t CPU::step() {
   case OpCode::LDA::ZeroPageX: {
     const std::uint8_t value = this->read_zero_page_indexed(this->_registers.x);
 
-    this->load(this->_registers.a, value);
+    this->assign_register(this->_registers.a, value);
 
     break;
   }
@@ -647,7 +647,7 @@ std::uint8_t CPU::step() {
   case OpCode::LDA::Absolute: {
     const std::uint8_t value = this->read_absolute();
 
-    this->load(this->_registers.a, value);
+    this->assign_register(this->_registers.a, value);
 
     break;
   }
@@ -655,7 +655,7 @@ std::uint8_t CPU::step() {
   case OpCode::LDA::AbsoluteX: {
     const std::uint8_t value = this->read_absolute_indexed(this->_registers.x);
 
-    this->load(this->_registers.a, value);
+    this->assign_register(this->_registers.a, value);
 
     break;
   }
@@ -663,7 +663,7 @@ std::uint8_t CPU::step() {
   case OpCode::LDA::AbsoluteY: {
     const std::uint8_t value = this->read_absolute_indexed(this->_registers.y);
 
-    this->load(this->_registers.a, value);
+    this->assign_register(this->_registers.a, value);
 
     break;
   }
@@ -671,7 +671,7 @@ std::uint8_t CPU::step() {
   case OpCode::LDA::IndexedIndirect: {
     const std::uint8_t value = this->read_indexed_indirect();
 
-    this->load(this->_registers.a, value);
+    this->assign_register(this->_registers.a, value);
 
     break;
   }
@@ -679,7 +679,7 @@ std::uint8_t CPU::step() {
   case OpCode::LDA::IndirectIndexed: {
     const std::uint8_t value = this->read_indirect_indexed();
 
-    this->load(this->_registers.a, value);
+    this->assign_register(this->_registers.a, value);
 
     break;
   }
@@ -687,7 +687,7 @@ std::uint8_t CPU::step() {
   case OpCode::LDX::Immediate: {
     const std::uint8_t value = this->read(_registers.pc++);
 
-    this->load(this->_registers.x, value);
+    this->assign_register(this->_registers.x, value);
 
     break;
   }
@@ -695,7 +695,7 @@ std::uint8_t CPU::step() {
   case OpCode::LDX::ZeroPage: {
     const std::uint8_t value = this->read_zero_page();
 
-    this->load(this->_registers.x, value);
+    this->assign_register(this->_registers.x, value);
 
     break;
   }
@@ -703,7 +703,7 @@ std::uint8_t CPU::step() {
   case OpCode::LDX::ZeroPageY: {
     const std::uint8_t value = this->read_zero_page_indexed(this->_registers.y);
 
-    this->load(this->_registers.x, value);
+    this->assign_register(this->_registers.x, value);
 
     break;
   }
@@ -711,7 +711,7 @@ std::uint8_t CPU::step() {
   case OpCode::LDX::Absolute: {
     const std::uint8_t value = this->read_absolute();
 
-    this->load(this->_registers.x, value);
+    this->assign_register(this->_registers.x, value);
 
     break;
   }
@@ -719,7 +719,7 @@ std::uint8_t CPU::step() {
   case OpCode::LDX::AbsoluteY: {
     const std::uint8_t value = this->read_absolute_indexed(this->_registers.y);
 
-    this->load(this->_registers.x, value);
+    this->assign_register(this->_registers.x, value);
 
     break;
   }
@@ -727,7 +727,7 @@ std::uint8_t CPU::step() {
   case OpCode::LDY::Immediate: {
     const std::uint8_t value = this->read(_registers.pc++);
 
-    this->load(this->_registers.y, value);
+    this->assign_register(this->_registers.y, value);
 
     break;
   }
@@ -735,7 +735,7 @@ std::uint8_t CPU::step() {
   case OpCode::LDY::ZeroPage: {
     const std::uint8_t value = this->read_zero_page();
 
-    this->load(this->_registers.y, value);
+    this->assign_register(this->_registers.y, value);
 
     break;
   }
@@ -743,7 +743,7 @@ std::uint8_t CPU::step() {
   case OpCode::LDY::ZeroPageX: {
     const std::uint8_t value = this->read_zero_page_indexed(this->_registers.x);
 
-    this->load(this->_registers.y, value);
+    this->assign_register(this->_registers.y, value);
 
     break;
   }
@@ -751,7 +751,7 @@ std::uint8_t CPU::step() {
   case OpCode::LDY::Absolute: {
     const std::uint8_t value = this->read_absolute();
 
-    this->load(this->_registers.y, value);
+    this->assign_register(this->_registers.y, value);
 
     break;
   }
@@ -759,7 +759,7 @@ std::uint8_t CPU::step() {
   case OpCode::LDY::AbsoluteX: {
     const std::uint8_t value = this->read_absolute_indexed(this->_registers.x);
 
-    this->load(this->_registers.y, value);
+    this->assign_register(this->_registers.y, value);
 
     break;
   }
@@ -1243,7 +1243,7 @@ std::uint8_t CPU::step() {
   case OpCode::TAX::Implied: {
     (void)this->read(this->_registers.pc);
 
-    this->transfer(this->_registers.a, this->_registers.x);
+    this->assign_register(this->_registers.x, this->_registers.a);
 
     break;
   }
@@ -1251,7 +1251,7 @@ std::uint8_t CPU::step() {
   case OpCode::TAY::Implied: {
     (void)this->read(this->_registers.pc);
 
-    this->transfer(this->_registers.a, this->_registers.y);
+    this->assign_register(this->_registers.y, this->_registers.a);
 
     break;
   }
@@ -1259,7 +1259,7 @@ std::uint8_t CPU::step() {
   case OpCode::TSX::Implied: {
     (void)this->read(this->_registers.pc);
 
-    this->transfer(this->_registers.sp, this->_registers.x);
+    this->assign_register(this->_registers.x, this->_registers.sp);
 
     break;
   }
@@ -1267,7 +1267,7 @@ std::uint8_t CPU::step() {
   case OpCode::TXA::Implied: {
     (void)this->read(this->_registers.pc);
 
-    this->transfer(this->_registers.x, this->_registers.a);
+    this->assign_register(this->_registers.a, this->_registers.x);
 
     break;
   }
@@ -1283,7 +1283,7 @@ std::uint8_t CPU::step() {
   case OpCode::TYA::Implied: {
     (void)this->read(this->_registers.pc);
 
-    this->transfer(this->_registers.y, this->_registers.a);
+    this->assign_register(this->_registers.a, this->_registers.y);
 
     break;
   }
@@ -1683,13 +1683,6 @@ void CPU::subtract_with_carry(const std::uint8_t value) {
   this->_registers.set_negative(this->_registers.a & 0x80);
 }
 
-void CPU::transfer(const std::uint8_t value, std::uint8_t& reg) {
-  reg = value;
-
-  this->_registers.set_zero(reg == 0);
-  this->_registers.set_negative(reg & 0x80);
-}
-
 void CPU::increment(const std::uint16_t addr) {
   const std::uint8_t value  = this->read(addr);
   const std::uint8_t result = value + 1;
@@ -1712,7 +1705,7 @@ void CPU::decrement(const std::uint16_t addr) {
   this->_registers.set_negative(result & 0x80);
 }
 
-void CPU::load(std::uint8_t& reg, std::uint8_t value) {
+void CPU::assign_register(std::uint8_t& reg, const std::uint8_t value) {
   reg = value;
 
   this->_registers.set_zero(reg == 0);
