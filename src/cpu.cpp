@@ -1311,6 +1311,22 @@ std::uint8_t CPU::step() {
     break;
   }
 
+  case OpCode::Unofficial::ARR::Immediate: {
+    const std::uint8_t value = this->read(this->_registers.pc++);
+
+    const std::uint8_t old_carry  = this->_registers.is_carry_set();
+    const std::uint8_t and_result = this->_registers.a & value;
+
+    const auto result = static_cast<std::uint8_t>((and_result >> 1) | (old_carry << 7));
+
+    this->assign_register(this->_registers.a, result);
+
+    this->_registers.set_carry(result & 0x40);
+    this->_registers.set_overflow((result ^ (result << 1)) & 0x40);
+
+    break;
+  }
+
   case OpCode::Unofficial::DCP::ZeroPage: {
     const std::uint16_t addr = this->resolve_zero_page();
     const std::uint8_t value = this->decrement(addr);
