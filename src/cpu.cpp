@@ -1598,30 +1598,65 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::Unofficial::SLO::ZeroPage: {
+    const std::uint16_t addr = this->resolve_zero_page();
+    const std::uint8_t value = this->shift_left(addr);
+
+    this->bitwise_or(value);
+
     break;
   }
 
   case OpCode::Unofficial::SLO::ZeroPageX: {
+    const std::uint16_t addr = this->resolve_zero_page_indexed(this->_registers.x);
+    const std::uint8_t value = this->shift_left(addr);
+
+    this->bitwise_or(value);
+
     break;
   }
 
   case OpCode::Unofficial::SLO::Absolute: {
+    const std::uint16_t addr = this->resolve_absolute();
+    const std::uint8_t value = this->shift_left(addr);
+
+    this->bitwise_or(value);
+
     break;
   }
 
   case OpCode::Unofficial::SLO::AbsoluteX: {
+    const std::uint16_t addr = this->resolve_absolute_indexed(this->_registers.x);
+    const std::uint8_t value = this->shift_left(addr);
+
+    this->bitwise_or(value);
+
     break;
   }
 
   case OpCode::Unofficial::SLO::AbsoluteY: {
+    const std::uint16_t addr = this->resolve_absolute_indexed(this->_registers.y);
+    const std::uint8_t value = this->shift_left(addr);
+
+    this->bitwise_or(value);
+
     break;
   }
 
   case OpCode::Unofficial::SLO::IndexedIndirect: {
+    const std::uint16_t addr = this->resolve_indexed_indirect();
+    const std::uint8_t value = this->shift_left(addr);
+
+    this->bitwise_or(value);
+
     break;
   }
 
   case OpCode::Unofficial::SLO::IndirectIndexed: {
+    const std::uint16_t addr = this->resolve_indirect_indexed();
+    const std::uint8_t value = this->shift_left(addr);
+
+    this->bitwise_or(value);
+
     break;
   }
 
