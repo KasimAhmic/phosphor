@@ -213,11 +213,7 @@ std::uint8_t CPU::step() {
   case OpCode::BIT::ZeroPage: {
     const std::uint8_t value = this->read_zero_page();
 
-    const std::uint8_t result = this->_registers.a & value;
-
-    this->_registers.set_zero(result == 0);
-    this->_registers.set_overflow(value & 0x40);
-    this->_registers.set_negative(value & 0x80);
+    this->bit_test(value);
 
     break;
   }
@@ -225,11 +221,7 @@ std::uint8_t CPU::step() {
   case OpCode::BIT::Absolute: {
     const std::uint8_t value = this->read_absolute();
 
-    const std::uint8_t result = this->_registers.a & value;
-
-    this->_registers.set_zero(result == 0);
-    this->_registers.set_overflow(value & 0x40);
-    this->_registers.set_negative(value & 0x80);
+    this->bit_test(value);
 
     break;
   }
@@ -1694,6 +1686,14 @@ void CPU::branch_if(const bool condition) {
 
     return;
   }
+}
+
+void CPU::bit_test(const std::uint8_t value) {
+  const std::uint8_t result = this->_registers.a & value;
+
+  this->_registers.set_zero(result == 0);
+  this->_registers.set_overflow(value & 0x40);
+  this->_registers.set_negative(value & 0x80);
 }
 
 void CPU::compare(const std::uint8_t reg, const std::uint8_t value) {

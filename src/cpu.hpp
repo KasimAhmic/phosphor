@@ -76,6 +76,9 @@ private:
   std::uint8_t read(std::uint16_t addr);
   void write(std::uint16_t addr, std::uint8_t value);
 
+  std::uint8_t pop_stack();
+  void push_stack();
+
   std::uint8_t read_zero_page();
   std::uint16_t resolve_zero_page();
 
@@ -100,6 +103,7 @@ private:
   void shift_left(std::uint16_t addr, std::uint8_t value);
   void shift_right(std::uint16_t addr, std::uint8_t value);
   void branch_if(bool condition);
+  void bit_test(std::uint8_t value);
   void compare(std::uint8_t reg, std::uint8_t value);
   void add_with_carry(std::uint8_t value);
   void subtract_with_carry(std::uint8_t value);
