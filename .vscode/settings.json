@@ -1,4 +1,4 @@
 {
   "cmake.ctest.allowParallelJobs": true,
-  "cmake.ctest.parallelJobs": 16
+  "cmake.ctest.parallelJobs": 4
 }

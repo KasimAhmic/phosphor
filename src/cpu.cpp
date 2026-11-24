@@ -1435,6 +1435,10 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::STY::ZeroPageX: {
+    const std::uint16_t addr = this->resolve_zero_page_indexed(this->_registers.x);
+
+    this->write(addr, this->_registers.y);
+
     break;
   }
 
@@ -1528,10 +1532,27 @@ std::uint8_t CPU::read_zero_page() {
   return value;
 }
 
-std::uint8_t CPU::resolve_zero_page() {
+std::uint16_t CPU::resolve_zero_page() {
   const std::uint8_t addr = this->read(this->_registers.pc++);
 
   return addr;
+}
+
+std::uint8_t CPU::read_zero_page_indexed(std::uint8_t index) {
+  const std::uint16_t addr = this->resolve_zero_page_indexed(index);
+  const std::uint8_t value = this->read(addr);
+
+  return value;
+}
+
+std::uint16_t CPU::resolve_zero_page_indexed(std::uint8_t index) {
+  const std::uint8_t addr = this->read(this->_registers.pc++);
+
+  const std::uint8_t indexed_addr = addr + index;
+
+  (void)this->read(addr);
+
+  return indexed_addr;
 }
 
 std::uint8_t CPU::read_absolute_indexed(const std::uint8_t index) {
