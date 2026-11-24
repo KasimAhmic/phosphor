@@ -597,10 +597,9 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::JMP::Absolute: {
-    const std::uint8_t low  = this->read(this->_registers.pc++);
-    const std::uint8_t high = this->read(this->_registers.pc++);
+    const std::uint16_t addr = this->resolve_absolute();
 
-    this->_registers.pc = static_cast<std::uint16_t>(low | (high << 8));
+    this->_registers.pc = addr;
 
     break;
   }
@@ -608,10 +607,8 @@ std::uint8_t CPU::step() {
   case OpCode::JMP::Indirect: {
     const std::uint16_t addr = this->resolve_absolute();
 
-    const std::uint8_t target_low = this->read(addr);
-
-    const std::uint16_t next_addr = (addr & 0xFF00) | static_cast<std::uint8_t>(addr + 1);
-
+    const std::uint8_t target_low  = this->read(addr);
+    const std::uint16_t next_addr  = (addr & 0xFF00) | static_cast<std::uint8_t>(addr + 1);
     const std::uint8_t target_high = this->read(next_addr);
 
     this->_registers.pc = (target_high << 8) | target_low;
@@ -636,10 +633,9 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::LDA::Immediate: {
-    this->_registers.a = this->read(_registers.pc++);
+    const std::uint8_t value = this->read(_registers.pc++);
 
-    this->_registers.set_zero(this->_registers.a == 0);
-    this->_registers.set_negative((this->_registers.a & 0x80) != 0);
+    this->load(this->_registers.a, value);
 
     break;
   }
@@ -647,10 +643,7 @@ std::uint8_t CPU::step() {
   case OpCode::LDA::ZeroPage: {
     const std::uint8_t value = this->read_zero_page();
 
-    this->_registers.a = value;
-
-    this->_registers.set_zero(this->_registers.a == 0);
-    this->_registers.set_negative(this->_registers.a & 0x80);
+    this->load(this->_registers.a, value);
 
     break;
   }
@@ -658,24 +651,15 @@ std::uint8_t CPU::step() {
   case OpCode::LDA::ZeroPageX: {
     const std::uint8_t value = this->read_zero_page_indexed(this->_registers.x);
 
-    this->_registers.a = value;
-
-    this->_registers.set_zero(this->_registers.a == 0);
-    this->_registers.set_negative(this->_registers.a & 0x80);
+    this->load(this->_registers.a, value);
 
     break;
   }
 
   case OpCode::LDA::Absolute: {
-    const std::uint8_t low  = this->read(_registers.pc++);
-    const std::uint8_t high = this->read(_registers.pc++);
+    const std::uint8_t value = this->read_absolute();
 
-    const std::uint16_t addr = (high << 8) | low;
-
-    this->_registers.a = this->read(addr);
-
-    this->_registers.set_zero(this->_registers.a == 0);
-    this->_registers.set_negative(this->_registers.a & 0x80);
+    this->load(this->_registers.a, value);
 
     break;
   }
@@ -683,10 +667,7 @@ std::uint8_t CPU::step() {
   case OpCode::LDA::AbsoluteX: {
     const std::uint8_t value = this->read_absolute_indexed(this->_registers.x);
 
-    this->_registers.a = value;
-
-    this->_registers.set_zero(this->_registers.a == 0);
-    this->_registers.set_negative(this->_registers.a & 0x80);
+    this->load(this->_registers.a, value);
 
     break;
   }
@@ -694,10 +675,7 @@ std::uint8_t CPU::step() {
   case OpCode::LDA::AbsoluteY: {
     const std::uint8_t value = this->read_absolute_indexed(this->_registers.y);
 
-    this->_registers.a = value;
-
-    this->_registers.set_zero(this->_registers.a == 0);
-    this->_registers.set_negative(this->_registers.a & 0x80);
+    this->load(this->_registers.a, value);
 
     break;
   }
@@ -705,10 +683,7 @@ std::uint8_t CPU::step() {
   case OpCode::LDA::IndexedIndirect: {
     const std::uint8_t value = this->read_indexed_indirect();
 
-    this->_registers.a = value;
-
-    this->_registers.set_zero(this->_registers.a == 0);
-    this->_registers.set_negative(this->_registers.a & 0x80);
+    this->load(this->_registers.a, value);
 
     break;
   }
@@ -716,19 +691,15 @@ std::uint8_t CPU::step() {
   case OpCode::LDA::IndirectIndexed: {
     const std::uint8_t value = this->read_indirect_indexed();
 
-    this->_registers.a = value;
-
-    this->_registers.set_zero(this->_registers.a == 0);
-    this->_registers.set_negative(this->_registers.a & 0x80);
+    this->load(this->_registers.a, value);
 
     break;
   }
 
   case OpCode::LDX::Immediate: {
-    this->_registers.x = this->read(_registers.pc++);
+    const std::uint8_t value = this->read(_registers.pc++);
 
-    this->_registers.set_zero(this->_registers.x == 0);
-    this->_registers.set_negative(this->_registers.x & 0x80);
+    this->load(this->_registers.x, value);
 
     break;
   }
@@ -736,10 +707,7 @@ std::uint8_t CPU::step() {
   case OpCode::LDX::ZeroPage: {
     const std::uint8_t value = this->read_zero_page();
 
-    this->_registers.x = value;
-
-    this->_registers.set_zero(this->_registers.x == 0);
-    this->_registers.set_negative(this->_registers.x & 0x80);
+    this->load(this->_registers.x, value);
 
     break;
   }
@@ -747,24 +715,15 @@ std::uint8_t CPU::step() {
   case OpCode::LDX::ZeroPageY: {
     const std::uint8_t value = this->read_zero_page_indexed(this->_registers.y);
 
-    this->_registers.x = value;
-
-    this->_registers.set_zero(this->_registers.x == 0);
-    this->_registers.set_negative(this->_registers.x & 0x80);
+    this->load(this->_registers.x, value);
 
     break;
   }
 
   case OpCode::LDX::Absolute: {
-    const std::uint8_t low  = this->read(_registers.pc++);
-    const std::uint8_t high = this->read(_registers.pc++);
+    const std::uint8_t value = this->read_absolute();
 
-    const std::uint16_t addr = (high << 8) | low;
-
-    this->_registers.x = this->read(addr);
-
-    this->_registers.set_zero(this->_registers.x == 0);
-    this->_registers.set_negative(this->_registers.x & 0x80);
+    this->load(this->_registers.x, value);
 
     break;
   }
@@ -772,19 +731,15 @@ std::uint8_t CPU::step() {
   case OpCode::LDX::AbsoluteY: {
     const std::uint8_t value = this->read_absolute_indexed(this->_registers.y);
 
-    this->_registers.x = value;
-
-    this->_registers.set_zero(this->_registers.x == 0);
-    this->_registers.set_negative(this->_registers.x & 0x80);
+    this->load(this->_registers.x, value);
 
     break;
   }
 
   case OpCode::LDY::Immediate: {
-    this->_registers.y = this->read(_registers.pc++);
+    const std::uint8_t value = this->read(_registers.pc++);
 
-    this->_registers.set_zero(this->_registers.y == 0);
-    this->_registers.set_negative(this->_registers.y & 0x80);
+    this->load(this->_registers.y, value);
 
     break;
   }
@@ -792,24 +747,15 @@ std::uint8_t CPU::step() {
   case OpCode::LDY::ZeroPage: {
     const std::uint8_t value = this->read_zero_page();
 
-    this->_registers.y = value;
-
-    this->_registers.set_zero(this->_registers.y == 0);
-    this->_registers.set_negative(this->_registers.y & 0x80);
+    this->load(this->_registers.y, value);
 
     break;
   }
 
   case OpCode::LDY::ZeroPageX: {
-    const std::uint8_t addr = this->read(this->_registers.pc++);
+    const std::uint8_t value = this->read_zero_page_indexed(this->_registers.x);
 
-    (void)this->read(addr);
-    const std::uint8_t value = this->read(static_cast<std::uint8_t>(addr + this->_registers.x));
-
-    this->_registers.y = value;
-
-    this->_registers.set_zero(this->_registers.y == 0);
-    this->_registers.set_negative(this->_registers.y & 0x80);
+    this->load(this->_registers.y, value);
 
     break;
   }
@@ -817,10 +763,7 @@ std::uint8_t CPU::step() {
   case OpCode::LDY::Absolute: {
     const std::uint8_t value = this->read_absolute();
 
-    this->_registers.y = value;
-
-    this->_registers.set_zero(this->_registers.y == 0);
-    this->_registers.set_negative(this->_registers.y & 0x80);
+    this->load(this->_registers.y, value);
 
     break;
   }
@@ -828,10 +771,7 @@ std::uint8_t CPU::step() {
   case OpCode::LDY::AbsoluteX: {
     const std::uint8_t value = this->read_absolute_indexed(this->_registers.x);
 
-    this->_registers.y = value;
-
-    this->_registers.set_zero(this->_registers.y == 0);
-    this->_registers.set_negative(this->_registers.y & 0x80);
+    this->load(this->_registers.y, value);
 
     break;
   }
@@ -1595,7 +1535,6 @@ std::uint8_t CPU::read_absolute_indexed(const std::uint8_t index) {
 
 std::uint8_t CPU::read_absolute() {
   const std::uint16_t addr = this->resolve_absolute();
-
   const std::uint8_t value = this->read(addr);
 
   return value;
@@ -1819,4 +1758,11 @@ void CPU::decrement(const std::uint16_t addr) {
 
   this->_registers.set_zero(result == 0);
   this->_registers.set_negative(result & 0x80);
+}
+
+void CPU::load(std::uint8_t& reg, std::uint8_t value) {
+  reg = value;
+
+  this->_registers.set_zero(reg == 0);
+  this->_registers.set_negative(reg & 0x80);
 }

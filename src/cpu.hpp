@@ -106,4 +106,5 @@ private:
   void transfer(std::uint8_t value, std::uint8_t& reg);
   void increment(std::uint16_t addr);
   void decrement(std::uint16_t addr);
+  void load(std::uint8_t& reg, std::uint8_t value);
 };
