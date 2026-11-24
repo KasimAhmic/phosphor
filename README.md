@@ -5,11 +5,11 @@ My attempt at making an NES emulator from scratch using C++ and SDL3.
 ## Progress
 
 - CPU emulation:
-  - Status: **In progress**
+  - Status: **DONE!**
   - Official opcodes implemented: 151/151
-  - Unofficial opcodes implemented: 85/105
+  - Unofficial opcodes implemented: 105/105
 - PPU emulation:
-  - Status: **Not started**
+  - Status: **In progress**
 - APU emulation:
   - Status: **Not started**
 - Input handling:
