@@ -608,6 +608,10 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::INC::AbsoluteX: {
+    const std::uint16_t addr = this->resolve_absolute_indexed(this->_registers.x);
+
+    this->increment(addr);
+
     break;
   }
 
