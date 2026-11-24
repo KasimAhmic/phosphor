@@ -74,6 +74,7 @@ private:
   void tick();
 
   std::uint8_t read(std::uint16_t addr);
+  void write(std::uint16_t addr, std::uint8_t value);
 
   std::uint8_t read_zero_page();
   std::uint16_t resolve_zero_page();
@@ -89,7 +90,8 @@ private:
 
   std::uint16_t resolve_indexed_indirect();
 
-  void write(std::uint16_t addr, std::uint8_t value);
+  std::uint8_t read_indirect_indexed();
+  std::uint16_t resolve_indirect_indexed();
 
   void add_with_carry(std::uint8_t value);
   void bitwise_and(std::uint8_t value);

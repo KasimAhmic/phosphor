@@ -75,21 +75,7 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::ADC::IndirectIndexed: {
-    const std::uint8_t ptr  = this->read(this->_registers.pc++);
-    const std::uint8_t low  = this->read(ptr);
-    const std::uint8_t high = this->read(static_cast<std::uint8_t>(ptr + 1));
-
-    const std::uint16_t indexed_low = low + this->_registers.y;
-    const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-    std::uint8_t value = this->read(addr);
-
-    if (indexed_low > 0xFF) {
-      const std::uint8_t fixed_high  = high + 1;
-      const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-      value = this->read(fixed_addr);
-    }
+    const std::uint8_t value = this->read_indirect_indexed();
 
     this->add_with_carry(value);
 
@@ -154,21 +140,7 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::AND::IndirectIndexed: {
-    const std::uint8_t ptr  = this->read(this->_registers.pc++);
-    const std::uint8_t low  = this->read(ptr);
-    const std::uint8_t high = this->read(static_cast<std::uint8_t>(ptr + 1));
-
-    const std::uint16_t indexed_low = low + this->_registers.y;
-    const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-    std::uint8_t value = this->read(addr);
-
-    if (indexed_low > 0xFF) {
-      const std::uint8_t fixed_high  = high + 1;
-      const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-      value = this->read(fixed_addr);
-    }
+    const std::uint8_t value = this->read_indirect_indexed();
 
     this->bitwise_and(value);
 
@@ -430,21 +402,7 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::CMP::IndirectIndexed: {
-    const std::uint8_t ptr  = this->read(this->_registers.pc++);
-    const std::uint8_t low  = this->read(ptr);
-    const std::uint8_t high = this->read(static_cast<std::uint8_t>(ptr + 1));
-
-    const std::uint16_t indexed_low = low + this->_registers.y;
-    const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-    std::uint8_t value = this->read(addr);
-
-    if (indexed_low > 0xFF) {
-      const std::uint8_t fixed_high  = high + 1;
-      const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-      value = this->read(fixed_addr);
-    }
+    const std::uint8_t value = this->read_indirect_indexed();
 
     this->compare(this->_registers.a, value);
 
@@ -611,21 +569,7 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::EOR::IndirectIndexed: {
-    const std::uint8_t ptr  = this->read(this->_registers.pc++);
-    const std::uint8_t low  = this->read(ptr);
-    const std::uint8_t high = this->read(static_cast<std::uint8_t>(ptr + 1));
-
-    const std::uint16_t indexed_low = low + this->_registers.y;
-    const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-    std::uint8_t value = this->read(addr);
-
-    if (indexed_low > 0xFF) {
-      const std::uint8_t fixed_high  = high + 1;
-      const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-      value = this->read(fixed_addr);
-    }
+    const std::uint8_t value = this->read_indirect_indexed();
 
     this->bitwise_eor(value);
 
@@ -805,21 +749,7 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::LDA::IndirectIndexed: {
-    const std::uint8_t ptr  = this->read(this->_registers.pc++);
-    const std::uint8_t low  = this->read(ptr);
-    const std::uint8_t high = this->read(static_cast<std::uint8_t>(ptr + 1));
-
-    const std::uint16_t indexed_low = low + this->_registers.y;
-    const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-    std::uint8_t value = this->read(addr);
-
-    if (indexed_low > 0xFF) {
-      const std::uint8_t fixed_high  = high + 1;
-      const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-      value = this->read(fixed_addr);
-    }
+    const std::uint8_t value = this->read_indirect_indexed();
 
     this->_registers.a = value;
 
@@ -1110,21 +1040,7 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::ORA::IndirectIndexed: {
-    const std::uint8_t ptr  = this->read(this->_registers.pc++);
-    const std::uint8_t low  = this->read(ptr);
-    const std::uint8_t high = this->read(static_cast<std::uint8_t>(ptr + 1));
-
-    const std::uint16_t indexed_low = low + this->_registers.y;
-    const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-    std::uint8_t value = this->read(addr);
-
-    if (indexed_low > 0xFF) {
-      const std::uint8_t fixed_high  = high + 1;
-      const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-      value = this->read(fixed_addr);
-    }
+    const std::uint8_t value = this->read_indirect_indexed();
 
     this->_registers.a |= value;
 
@@ -1444,21 +1360,7 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::SBC::IndirectIndexed: {
-    const std::uint8_t ptr  = this->read(this->_registers.pc++);
-    const std::uint8_t low  = this->read(ptr);
-    const std::uint8_t high = this->read(static_cast<std::uint8_t>(ptr + 1));
-
-    const std::uint16_t indexed_low = low + this->_registers.y;
-    const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-    std::uint8_t value = this->read(addr);
-
-    if (indexed_low > 0xFF) {
-      const std::uint8_t fixed_high  = high + 1;
-      const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-      value = this->read(fixed_addr);
-    }
+    const std::uint8_t value = this->read_indirect_indexed();
 
     this->subtract_with_carry(value);
 
@@ -1534,15 +1436,7 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::STA::IndexedIndirect: {
-    const std::uint16_t ptr = this->read(this->_registers.pc++);
-    (void)this->read(ptr);
-
-    const auto indexed_ptr = static_cast<std::uint8_t>(ptr + this->_registers.x);
-
-    const std::uint8_t low  = this->read(indexed_ptr);
-    const std::uint8_t high = this->read(static_cast<std::uint8_t>(indexed_ptr + 1));
-
-    const auto addr = static_cast<std::uint16_t>((high << 8) | low);
+    const std::uint16_t addr = this->resolve_indexed_indirect();
 
     this->write(addr, this->_registers.a);
 
@@ -1550,21 +1444,7 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::STA::IndirectIndexed: {
-    const std::uint8_t ptr  = this->read(this->_registers.pc++);
-    const std::uint8_t low  = this->read(ptr);
-    const std::uint8_t high = this->read(static_cast<std::uint8_t>(ptr + 1));
-
-    const std::uint16_t indexed_low = low + this->_registers.y;
-
-    std::uint16_t addr = (high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-    (void)this->read(addr);
-
-    if (indexed_low > 0xFF) {
-      const std::uint8_t fixed_high = high + 1;
-
-      addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
-    }
+    const std::uint16_t addr = this->resolve_indirect_indexed();
 
     this->write(addr, this->_registers.a);
 
@@ -1751,6 +1631,13 @@ std::uint8_t CPU::read(const std::uint16_t addr) {
   return value;
 }
 
+void CPU::write(const std::uint16_t addr, const std::uint8_t value) {
+  // TODO: Replace with bus call when implemented
+  this->_memory[addr] = value;
+
+  this->tick();
+}
+
 std::uint8_t CPU::read_zero_page() {
   const std::uint8_t addr  = this->resolve_zero_page();
   const std::uint8_t value = this->read(addr);
@@ -1850,11 +1737,44 @@ std::uint16_t CPU::resolve_indexed_indirect() {
   return addr;
 }
 
-void CPU::write(const std::uint16_t addr, const std::uint8_t value) {
-  // TODO: Replace with bus call when implemented
-  this->_memory[addr] = value;
+std::uint8_t CPU::read_indirect_indexed() {
+  const std::uint8_t ptr  = this->read(this->_registers.pc++);
+  const std::uint8_t low  = this->read(ptr);
+  const std::uint8_t high = this->read(static_cast<std::uint8_t>(ptr + 1));
 
-  this->tick();
+  const std::uint16_t indexed_low = low + this->_registers.y;
+  const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
+
+  std::uint8_t value = this->read(addr);
+
+  if (indexed_low > 0xFF) {
+    const std::uint8_t fixed_high  = high + 1;
+    const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
+
+    value = this->read(fixed_addr);
+  }
+
+  return value;
+}
+
+std::uint16_t CPU::resolve_indirect_indexed() {
+  const std::uint8_t ptr  = this->read(this->_registers.pc++);
+  const std::uint8_t low  = this->read(ptr);
+  const std::uint8_t high = this->read(static_cast<std::uint8_t>(ptr + 1));
+
+  const std::uint16_t indexed_low = low + this->_registers.y;
+
+  std::uint16_t addr = (high << 8) | static_cast<std::uint8_t>(indexed_low);
+
+  (void)this->read(addr);
+
+  if (indexed_low > 0xFF) {
+    const std::uint8_t fixed_high = high + 1;
+
+    addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
+  }
+
+  return addr;
 }
 
 void CPU::add_with_carry(const std::uint8_t value) {
