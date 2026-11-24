@@ -94,12 +94,14 @@ private:
   std::uint8_t read_indirect_indexed();
   std::uint16_t resolve_indirect_indexed();
 
-  void add_with_carry(std::uint8_t value);
   void bitwise_and(std::uint8_t value);
   void bitwise_or(std::uint8_t value);
   void bitwise_eor(std::uint8_t value);
+  void shift_left(std::uint16_t addr, std::uint8_t value);
+  void shift_right(std::uint16_t addr, std::uint8_t value);
   void branch_if(bool condition);
   void compare(std::uint8_t reg, std::uint8_t value);
+  void add_with_carry(std::uint8_t value);
   void subtract_with_carry(std::uint8_t value);
   void transfer(std::uint8_t value, std::uint8_t& reg);
   void increment(std::uint16_t addr);

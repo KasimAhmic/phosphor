@@ -163,14 +163,7 @@ std::uint8_t CPU::step() {
     const std::uint8_t addr  = this->resolve_zero_page();
     const std::uint8_t value = this->read(addr);
 
-    const std::uint8_t result = value << 1;
-
-    this->write(addr, value);
-    this->write(addr, result);
-
-    this->_registers.set_carry(value & 0x80);
-    this->_registers.set_zero(result == 0);
-    this->_registers.set_negative(result & 0x80);
+    this->shift_left(addr, value);
 
     break;
   }
@@ -179,14 +172,7 @@ std::uint8_t CPU::step() {
     const std::uint8_t addr  = this->resolve_zero_page_indexed(this->_registers.x);
     const std::uint8_t value = this->read(addr);
 
-    const std::uint8_t result = value << 1;
-
-    this->write(addr, value);
-    this->write(addr, result);
-
-    this->_registers.set_carry(value & 0x80);
-    this->_registers.set_zero(result == 0);
-    this->_registers.set_negative(result & 0x80);
+    this->shift_left(addr, value);
 
     break;
   }
@@ -195,15 +181,7 @@ std::uint8_t CPU::step() {
     const std::uint16_t addr = this->resolve_absolute();
     const std::uint8_t value = this->read(addr);
 
-    const std::uint8_t carry  = value & 0x80;
-    const std::uint8_t result = value << 1;
-
-    this->write(addr, value);
-    this->write(addr, result);
-
-    this->_registers.set_carry(carry);
-    this->_registers.set_zero(result == 0);
-    this->_registers.set_negative(result & 0x80);
+    this->shift_left(addr, value);
 
     break;
   }
@@ -212,15 +190,7 @@ std::uint8_t CPU::step() {
     const std::uint16_t addr = this->resolve_absolute_indexed(this->_registers.x);
     const std::uint8_t value = this->read(addr);
 
-    const std::uint8_t carry  = value & 0x80;
-    const std::uint8_t result = value << 1;
-
-    this->write(addr, value);
-    this->write(addr, result);
-
-    this->_registers.set_carry(carry);
-    this->_registers.set_zero(result == 0);
-    this->_registers.set_negative(result & 0x80);
+    this->shift_left(addr, value);
 
     break;
   }
@@ -884,15 +854,7 @@ std::uint8_t CPU::step() {
     const std::uint8_t addr  = this->resolve_zero_page();
     const std::uint8_t value = this->read(addr);
 
-    const std::uint8_t carry  = value & 0x01;
-    const std::uint8_t result = value >> 1;
-
-    this->write(addr, value);
-    this->write(addr, result);
-
-    this->_registers.set_carry(carry);
-    this->_registers.set_zero(result == 0);
-    this->_registers.set_negative(false);
+    this->shift_right(addr, value);
 
     break;
   }
@@ -901,51 +863,25 @@ std::uint8_t CPU::step() {
     const std::uint8_t addr  = this->resolve_zero_page_indexed(this->_registers.x);
     const std::uint8_t value = this->read(addr);
 
-    const std::uint8_t carry  = value & 0x01;
-    const std::uint8_t result = value >> 1;
-
-    this->write(addr, value);
-    this->write(addr, result);
-
-    this->_registers.set_carry(carry);
-    this->_registers.set_zero(result == 0);
-    this->_registers.set_negative(false);
+    this->shift_right(addr, value);
 
     break;
   }
 
   case OpCode::LSR::Absolute: {
     const std::uint16_t addr = this->resolve_absolute();
-
     const std::uint8_t value = this->read(addr);
 
-    const std::uint8_t carry  = value & 0x01;
-    const std::uint8_t result = value >> 1;
-
-    this->write(addr, value);
-    this->write(addr, result);
-
-    this->_registers.set_carry(carry);
-    this->_registers.set_zero(result == 0);
-    this->_registers.set_negative(false);
+    this->shift_right(addr, value);
 
     break;
   }
 
   case OpCode::LSR::AbsoluteX: {
     const std::uint16_t addr = this->resolve_absolute_indexed(this->_registers.x);
-
     const std::uint8_t value = this->read(addr);
 
-    const std::uint8_t carry  = value & 0x01;
-    const std::uint8_t result = value >> 1;
-
-    this->write(addr, value);
-    this->write(addr, result);
-
-    this->_registers.set_carry(carry);
-    this->_registers.set_zero(result == 0);
-    this->_registers.set_negative(false);
+    this->shift_right(addr, value);
 
     break;
   }
@@ -1753,19 +1689,6 @@ std::uint16_t CPU::resolve_indirect_indexed() {
   return addr;
 }
 
-void CPU::add_with_carry(const std::uint8_t value) {
-  const std::uint8_t a = this->_registers.a;
-
-  const std::uint16_t result = a + value + this->_registers.is_carry_set();
-
-  this->_registers.a = static_cast<std::uint8_t>(result);
-
-  this->_registers.set_carry(result > 0xFF);
-  this->_registers.set_zero(this->_registers.a == 0);
-  this->_registers.set_overflow((a ^ this->_registers.a) & (value ^ this->_registers.a) & 0x80);
-  this->_registers.set_negative(this->_registers.a & 0x80);
-}
-
 void CPU::bitwise_and(const std::uint8_t value) {
   this->_registers.a &= value;
 
@@ -1785,6 +1708,29 @@ void CPU::bitwise_eor(const std::uint8_t value) {
 
   this->_registers.set_zero(this->_registers.a == 0);
   this->_registers.set_negative(this->_registers.a & 0x80);
+}
+
+void CPU::shift_left(const std::uint16_t addr, const std::uint8_t value) {
+  const std::uint8_t result = value << 1;
+
+  this->write(addr, value);
+  this->write(addr, result);
+
+  this->_registers.set_carry(value & 0x80);
+  this->_registers.set_zero(result == 0);
+  this->_registers.set_negative(result & 0x80);
+}
+
+void CPU::shift_right(const std::uint16_t addr, const std::uint8_t value) {
+  const std::uint8_t carry  = value & 0x01;
+  const std::uint8_t result = value >> 1;
+
+  this->write(addr, value);
+  this->write(addr, result);
+
+  this->_registers.set_carry(carry);
+  this->_registers.set_zero(result == 0);
+  this->_registers.set_negative(false);
 }
 
 void CPU::branch_if(const bool condition) {
@@ -1817,6 +1763,19 @@ void CPU::compare(const std::uint8_t reg, const std::uint8_t value) {
   this->_registers.set_carry(reg >= value);
   this->_registers.set_zero(result == 0);
   this->_registers.set_negative(result & 0x80);
+}
+
+void CPU::add_with_carry(const std::uint8_t value) {
+  const std::uint8_t a = this->_registers.a;
+
+  const std::uint16_t result = a + value + this->_registers.is_carry_set();
+
+  this->_registers.a = static_cast<std::uint8_t>(result);
+
+  this->_registers.set_carry(result > 0xFF);
+  this->_registers.set_zero(this->_registers.a == 0);
+  this->_registers.set_overflow((a ^ this->_registers.a) & (value ^ this->_registers.a) & 0x80);
+  this->_registers.set_negative(this->_registers.a & 0x80);
 }
 
 void CPU::subtract_with_carry(const std::uint8_t value) {
