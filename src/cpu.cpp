@@ -1235,6 +1235,10 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::SBC::ZeroPageX: {
+    const std::uint8_t value = this->read_zero_page_indexed(this->_registers.x);
+
+    this->subtract_with_carry(value);
+
     break;
   }
 
@@ -1330,7 +1334,7 @@ std::uint8_t CPU::step() {
 
     (void)this->read(addr);
 
-    const std::uint8_t final_addr = static_cast<std::uint8_t>(addr + this->_registers.x);
+    const auto final_addr = static_cast<std::uint8_t>(addr + this->_registers.x);
 
     this->write(final_addr, this->_registers.a);
 
@@ -1365,12 +1369,12 @@ std::uint8_t CPU::step() {
     const std::uint16_t ptr = this->read(this->_registers.pc++);
     (void)this->read(ptr);
 
-    const std::uint8_t indexed_ptr = static_cast<std::uint8_t>(ptr + this->_registers.x);
+    const auto indexed_ptr = static_cast<std::uint8_t>(ptr + this->_registers.x);
 
     const std::uint8_t low  = this->read(indexed_ptr);
     const std::uint8_t high = this->read(static_cast<std::uint8_t>(indexed_ptr + 1));
 
-    const std::uint16_t addr = static_cast<std::uint16_t>((high << 8) | low);
+    const auto addr = static_cast<std::uint16_t>((high << 8) | low);
 
     this->write(addr, this->_registers.a);
 
