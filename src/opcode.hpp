@@ -392,6 +392,21 @@ namespace OpCode {
       inline constexpr Definition IndirectIndexed = {0xF3, Instruction::ISC, AddressingMode::IndirectIndexed};
     } // namespace ISC
 
+    namespace KIL {
+      inline constexpr Definition Implied1  = {0x02, Instruction::KIL, AddressingMode::Implied};
+      inline constexpr Definition Implied2  = {0x12, Instruction::KIL, AddressingMode::Implied};
+      inline constexpr Definition Implied3  = {0x22, Instruction::KIL, AddressingMode::Implied};
+      inline constexpr Definition Implied4  = {0x32, Instruction::KIL, AddressingMode::Implied};
+      inline constexpr Definition Implied5  = {0x42, Instruction::KIL, AddressingMode::Implied};
+      inline constexpr Definition Implied6  = {0x52, Instruction::KIL, AddressingMode::Implied};
+      inline constexpr Definition Implied7  = {0x62, Instruction::KIL, AddressingMode::Implied};
+      inline constexpr Definition Implied8  = {0x72, Instruction::KIL, AddressingMode::Implied};
+      inline constexpr Definition Implied9  = {0x92, Instruction::KIL, AddressingMode::Implied};
+      inline constexpr Definition Implied10 = {0xB2, Instruction::KIL, AddressingMode::Implied};
+      inline constexpr Definition Implied11 = {0xD2, Instruction::KIL, AddressingMode::Implied};
+      inline constexpr Definition Implied12 = {0xF2, Instruction::KIL, AddressingMode::Implied};
+    } // namespace KIL
+
     namespace LAS {
       inline constexpr Definition AbsoluteY = {0xBB, Instruction::LAS, AddressingMode::AbsoluteY};
     } // namespace LAS

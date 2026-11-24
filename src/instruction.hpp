@@ -445,6 +445,13 @@ enum class Instruction : std::uint8_t {
   ISC,
 
   /**
+   * @brief UNOFFICIAL OPCODE. Halts the CPU.
+   *
+   * @see https://www.nesdev.org/wiki/CPU_unofficial_opcodes
+   */
+  KIL,
+
+  /**
    * @brief UNOFFICIAL OPCODE. Load A, X, and SP from memory masked by the original SP.
    *
    * @see https://www.nesdev.org/wiki/CPU_unofficial_opcodes

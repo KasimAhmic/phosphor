@@ -1422,6 +1422,31 @@ std::uint8_t CPU::step() {
     break;
   }
 
+  case OpCode::Unofficial::KIL::Implied1:
+  case OpCode::Unofficial::KIL::Implied2:
+  case OpCode::Unofficial::KIL::Implied3:
+  case OpCode::Unofficial::KIL::Implied4:
+  case OpCode::Unofficial::KIL::Implied5:
+  case OpCode::Unofficial::KIL::Implied6:
+  case OpCode::Unofficial::KIL::Implied7:
+  case OpCode::Unofficial::KIL::Implied8:
+  case OpCode::Unofficial::KIL::Implied9:
+  case OpCode::Unofficial::KIL::Implied10:
+  case OpCode::Unofficial::KIL::Implied11:
+  case OpCode::Unofficial::KIL::Implied12: {
+    (void)this->read(this->_registers.pc);
+
+    (void)this->read(0xFFFF);
+    (void)this->read(0xFFFE);
+    (void)this->read(0xFFFE);
+
+    for (std::uint8_t i = 0; i < 6; ++i) {
+      (void)this->read(0xFFFF);
+    }
+
+    break;
+  }
+
   case OpCode::Unofficial::LAX::Immediate: {
     const std::uint8_t value  = this->read(this->_registers.pc++);
     const std::uint8_t result = (this->_registers.a | CPU::UNSTABLE_MAGIC) & value;
