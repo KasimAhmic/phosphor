@@ -370,6 +370,16 @@ namespace OpCode {
       inline constexpr Definition IndirectIndexed = {0xF3, Instruction::ISC, AddressingMode::IndirectIndexed};
     } // namespace ISC
 
+    namespace LAX {
+      inline constexpr Definition Immediate       = {0xAB, Instruction::LAX, AddressingMode::Immediate};
+      inline constexpr Definition ZeroPage        = {0xA7, Instruction::LAX, AddressingMode::ZeroPage};
+      inline constexpr Definition ZeroPageY       = {0xB7, Instruction::LAX, AddressingMode::ZeroPageY};
+      inline constexpr Definition Absolute        = {0xAF, Instruction::LAX, AddressingMode::Absolute};
+      inline constexpr Definition AbsoluteY       = {0xBF, Instruction::LAX, AddressingMode::AbsoluteY};
+      inline constexpr Definition IndexedIndirect = {0xA3, Instruction::LAX, AddressingMode::IndexedIndirect};
+      inline constexpr Definition IndirectIndexed = {0xB3, Instruction::LAX, AddressingMode::IndirectIndexed};
+    } // namespace LAX
+
     namespace NOP {
       inline constexpr Definition ZeroPage1 = {0x04, Instruction::NOP, AddressingMode::ZeroPage};
       inline constexpr Definition ZeroPage2 = {0x44, Instruction::NOP, AddressingMode::ZeroPage};

@@ -1351,6 +1351,64 @@ std::uint8_t CPU::step() {
     break;
   }
 
+  case OpCode::Unofficial::LAX::Immediate: {
+    break;
+  }
+
+  case OpCode::Unofficial::LAX::ZeroPage: {
+    const std::uint8_t value = this->read_zero_page();
+
+    this->_registers.a = value;
+    this->assign_register(this->_registers.x, value);
+
+    break;
+  }
+
+  case OpCode::Unofficial::LAX::ZeroPageY: {
+    const std::uint8_t value = this->read_zero_page_indexed(this->_registers.y);
+
+    this->_registers.a = value;
+    this->assign_register(this->_registers.x, value);
+
+    break;
+  }
+
+  case OpCode::Unofficial::LAX::Absolute: {
+    const std::uint8_t value = this->read_absolute();
+
+    this->_registers.a = value;
+    this->assign_register(this->_registers.x, value);
+
+    break;
+  }
+
+  case OpCode::Unofficial::LAX::AbsoluteY: {
+    const std::uint8_t value = this->read_absolute_indexed(this->_registers.y);
+
+    this->_registers.a = value;
+    this->assign_register(this->_registers.x, value);
+
+    break;
+  }
+
+  case OpCode::Unofficial::LAX::IndexedIndirect: {
+    const std::uint8_t value = this->read_indexed_indirect();
+
+    this->_registers.a = value;
+    this->assign_register(this->_registers.x, value);
+
+    break;
+  }
+
+  case OpCode::Unofficial::LAX::IndirectIndexed: {
+    const std::uint8_t value = this->read_indirect_indexed();
+
+    this->_registers.a = value;
+    this->assign_register(this->_registers.x, value);
+
+    break;
+  }
+
   case OpCode::Unofficial::ISC::ZeroPage: {
     const std::uint16_t addr = this->resolve_zero_page();
     const std::uint8_t value = this->increment(addr);

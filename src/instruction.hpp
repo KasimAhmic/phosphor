@@ -410,6 +410,13 @@ enum class Instruction : std::uint8_t {
   ISC,
 
   /**
+   * @brief UNOFFICIAL OPCODE. Load A and X.
+   *
+   * @see https://www.nesdev.org/wiki/CPU_unofficial_opcodes
+   */
+  LAX,
+
+  /**
    * @brief UNOFFICIAL OPCODE. Equivalent to ROL + AND.
    *
    * @see https://www.nesdev.org/wiki/CPU_unofficial_opcodes
@@ -422,6 +429,13 @@ enum class Instruction : std::uint8_t {
    * @see https://www.nesdev.org/wiki/CPU_unofficial_opcodes
    */
   RRA,
+
+  /**
+   * @brief UNOFFICIAL OPCODE. Store A & X.
+   *
+   * @see https://www.nesdev.org/wiki/CPU_unofficial_opcodes
+   */
+  SAX,
 
   /**
    * @brief UNOFFICIAL OPCODE. Equivalent to ASL + ORA.
