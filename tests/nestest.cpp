@@ -9,9 +9,9 @@
 #include "cpu.hpp"
 #include "opcode.hpp"
 
-const char* opcode_to_string(const std::uint8_t code);
+const char* opcode_to_string(std::uint8_t code);
 
-TEST(CPU, NESTest) {
+TEST(CPU_Nestest, NESTest) {
   std::ifstream rom_file("../tests/data/nestest/nestest.nes", std::ios::binary | std::ios::ate);
   std::ifstream log_file("../tests/data/nestest/nestest.log");
 
