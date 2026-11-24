@@ -66,8 +66,7 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::ADC::IndexedIndirect: {
-    const std::uint16_t addr = this->resolve_indexed_indirect();
-    const std::uint8_t value = this->read(addr);
+    const std::uint8_t value = this->read_indexed_indirect();
 
     this->add_with_carry(value);
 
@@ -131,8 +130,7 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::AND::IndexedIndirect: {
-    const std::uint16_t addr = this->resolve_indexed_indirect();
-    const std::uint8_t value = this->read(addr);
+    const std::uint8_t value = this->read_indexed_indirect();
 
     this->bitwise_and(value);
 
@@ -393,8 +391,7 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::CMP::IndexedIndirect: {
-    const std::uint16_t addr = this->resolve_indexed_indirect();
-    const std::uint8_t value = this->read(addr);
+    const std::uint8_t value = this->read_indexed_indirect();
 
     this->compare(this->_registers.a, value);
 
@@ -560,8 +557,7 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::EOR::IndexedIndirect: {
-    const std::uint16_t addr = this->resolve_indexed_indirect();
-    const std::uint8_t value = this->read(addr);
+    const std::uint8_t value = this->read_indexed_indirect();
 
     this->bitwise_eor(value);
 
@@ -737,8 +733,7 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::LDA::IndexedIndirect: {
-    const std::uint16_t addr = this->resolve_indexed_indirect();
-    const std::uint8_t value = this->read(addr);
+    const std::uint8_t value = this->read_indexed_indirect();
 
     this->_registers.a = value;
 
@@ -1028,8 +1023,7 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::ORA::IndexedIndirect: {
-    const std::uint16_t addr = this->resolve_indexed_indirect();
-    const std::uint8_t value = this->read(addr);
+    const std::uint8_t value = this->read_indexed_indirect();
 
     this->_registers.a |= value;
 
@@ -1351,8 +1345,7 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::SBC::IndexedIndirect: {
-    const std::uint16_t addr = this->resolve_indexed_indirect();
-    const std::uint8_t value = this->read(addr);
+    const std::uint8_t value = this->read_indexed_indirect();
 
     this->subtract_with_carry(value);
 
@@ -1721,6 +1714,13 @@ std::uint16_t CPU::resolve_absolute_indexed(const std::uint8_t index) {
   }
 
   return addr;
+}
+
+std::uint8_t CPU::read_indexed_indirect() {
+  const std::uint16_t addr = this->resolve_indexed_indirect();
+  const std::uint8_t value = this->read(addr);
+
+  return value;
 }
 
 std::uint16_t CPU::resolve_indexed_indirect() {

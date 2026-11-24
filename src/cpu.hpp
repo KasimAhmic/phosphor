@@ -88,6 +88,7 @@ private:
   std::uint8_t read_absolute_indexed(std::uint8_t index);
   std::uint16_t resolve_absolute_indexed(std::uint8_t index);
 
+  std::uint8_t read_indexed_indirect();
   std::uint16_t resolve_indexed_indirect();
 
   std::uint8_t read_indirect_indexed();
