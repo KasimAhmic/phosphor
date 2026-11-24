@@ -396,6 +396,34 @@ enum class Instruction : std::uint8_t {
   TYA,
 
   /**
+   * @brief UNOFFICIAL OPCODE. A &= immediate, C becomes bit 7 of A.
+   *
+   * @see https://www.nesdev.org/wiki/CPU_unofficial_opcodes
+   */
+  ANC,
+
+  /**
+   * @brief UNOFFICIAL OPCODE. A &= immediate, then logical shift right.
+   *
+   * @see https://www.nesdev.org/wiki/CPU_unofficial_opcodes
+   */
+  ALR,
+
+  /**
+   * @brief UNOFFICIAL OPCODE. A &= immediate, then rotate right through carry.
+   *
+   * @see https://www.nesdev.org/wiki/CPU_unofficial_opcodes
+   */
+  ARR,
+
+  /**
+   * @brief UNOFFICIAL OPCODE.X = (A & X) - immediate.
+   *
+   * @see https://www.nesdev.org/wiki/CPU_unofficial_opcodes
+   */
+  AXS,
+
+  /**
    * @brief UNOFFICIAL OPCODE. Equivalent to DEC + CMP.
    *
    * @see https://www.nesdev.org/wiki/CPU_unofficial_opcodes

@@ -1288,6 +1288,16 @@ std::uint8_t CPU::step() {
     break;
   }
 
+  case OpCode::Unofficial::ANC::Immediate1:
+  case OpCode::Unofficial::ANC::Immediate2: {
+    const std::uint8_t value = this->read(this->_registers.pc++);
+
+    this->bitwise_and(value);
+    this->_registers.set_carry(this->_registers.a & 0x80);
+
+    break;
+  }
+
   case OpCode::Unofficial::DCP::ZeroPage: {
     const std::uint16_t addr = this->resolve_zero_page();
     const std::uint8_t value = this->decrement(addr);

@@ -350,6 +350,23 @@ namespace OpCode {
   } // namespace TYA
 
   namespace Unofficial {
+    namespace ANC {
+      inline constexpr Definition Immediate1 = {0x0B, Instruction::ANC, AddressingMode::Immediate};
+      inline constexpr Definition Immediate2 = {0x2B, Instruction::ANC, AddressingMode::Immediate};
+    } // namespace ANC
+
+    namespace ALR {
+      inline constexpr Definition Immediate = {0x4B, Instruction::ALR, AddressingMode::Immediate};
+    } // namespace ALR
+
+    namespace ARR {
+      inline constexpr Definition Immediate = {0x6B, Instruction::ARR, AddressingMode::Immediate};
+    } // namespace ARR
+
+    namespace AXS {
+      inline constexpr Definition Immediate = {0xCB, Instruction::AXS, AddressingMode::Immediate};
+    } // namespace AXS
+
     namespace DCP {
       inline constexpr Definition ZeroPage        = {0xC7, Instruction::DCP, AddressingMode::ZeroPage};
       inline constexpr Definition ZeroPageX       = {0xD7, Instruction::DCP, AddressingMode::ZeroPageX};
@@ -441,6 +458,10 @@ namespace OpCode {
       inline constexpr Definition Absolute        = {0x8F, Instruction::SAX, AddressingMode::Absolute};
       inline constexpr Definition IndexedIndirect = {0x83, Instruction::SAX, AddressingMode::IndexedIndirect};
     } // namespace SAX
+
+    namespace SBC {
+      inline constexpr Definition Immediate = {0xEB, Instruction::SBC, AddressingMode::Immediate};
+    } // namespace SBC
 
     namespace SLO {
       inline constexpr Definition ZeroPage        = {0x07, Instruction::SLO, AddressingMode::ZeroPage};
