@@ -26,7 +26,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::ADC::ZeroPage: {
-    const auto [_, value] = this->resolve_zero_page();
+    const auto [_, value] = this->read_zero_page();
 
     this->add_with_carry(value);
 
@@ -50,20 +50,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::ADC::AbsoluteX: {
-    const std::uint8_t low  = this->read(this->_registers.pc++);
-    const std::uint8_t high = this->read(this->_registers.pc++);
-
-    const std::uint16_t indexed_low = low + this->_registers.x;
-    const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-    std::uint8_t value = this->read(addr);
-
-    if (indexed_low > 0xFF) {
-      const std::uint8_t fixed_high  = static_cast<std::uint8_t>(high + 1);
-      const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-      value = this->read(fixed_addr);
-    }
+    const std::uint8_t value = this->read_absolute_indexed(this->_registers.x);
 
     this->add_with_carry(value);
 
@@ -71,20 +58,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::ADC::AbsoluteY: {
-    const std::uint8_t low  = this->read(this->_registers.pc++);
-    const std::uint8_t high = this->read(this->_registers.pc++);
-
-    const std::uint16_t indexed_low = low + this->_registers.y;
-    const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-    std::uint8_t value = this->read(addr);
-
-    if (indexed_low > 0xFF) {
-      const std::uint8_t fixed_high  = static_cast<std::uint8_t>(high + 1);
-      const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-      value = this->read(fixed_addr);
-    }
+    const std::uint8_t value = this->read_absolute_indexed(this->_registers.y);
 
     this->add_with_carry(value);
 
@@ -93,7 +67,6 @@ std::int8_t CPU::step() {
 
   case OpCode::ADC::IndexedIndirect: {
     const std::uint16_t addr = this->resolve_indexed_indirect();
-
     const std::uint8_t value = this->read(addr);
 
     this->add_with_carry(value);
@@ -132,7 +105,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::AND::ZeroPage: {
-    const auto [_, value] = this->resolve_zero_page();
+    const auto [_, value] = this->read_zero_page();
 
     this->bitwise_and(value);
 
@@ -156,20 +129,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::AND::AbsoluteX: {
-    const std::uint8_t low  = this->read(this->_registers.pc++);
-    const std::uint8_t high = this->read(this->_registers.pc++);
-
-    const std::uint16_t indexed_low = low + this->_registers.x;
-    const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-    std::uint8_t value = this->read(addr);
-
-    if (indexed_low > 0xFF) {
-      const std::uint8_t fixed_high  = static_cast<std::uint8_t>(high + 1);
-      const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-      value = this->read(fixed_addr);
-    }
+    const std::uint8_t value = this->read_absolute_indexed(this->_registers.x);
 
     this->bitwise_and(value);
 
@@ -177,20 +137,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::AND::AbsoluteY: {
-    const std::uint8_t low  = this->read(this->_registers.pc++);
-    const std::uint8_t high = this->read(this->_registers.pc++);
-
-    const std::uint16_t indexed_low = low + this->_registers.y;
-    const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-    std::uint8_t value = this->read(addr);
-
-    if (indexed_low > 0xFF) {
-      const std::uint8_t fixed_high  = static_cast<std::uint8_t>(high + 1);
-      const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-      value = this->read(fixed_addr);
-    }
+    const std::uint8_t value = this->read_absolute_indexed(this->_registers.y);
 
     this->bitwise_and(value);
 
@@ -199,7 +146,6 @@ std::int8_t CPU::step() {
 
   case OpCode::AND::IndexedIndirect: {
     const std::uint16_t addr = this->resolve_indexed_indirect();
-
     const std::uint8_t value = this->read(addr);
 
     this->bitwise_and(value);
@@ -244,7 +190,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::ASL::ZeroPage: {
-    const auto [addr, value] = this->resolve_zero_page();
+    const auto [addr, value] = this->read_zero_page();
 
     const std::uint8_t result = value << 1;
 
@@ -302,7 +248,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::BIT::ZeroPage: {
-    const auto [_, value] = this->resolve_zero_page();
+    const auto [_, value] = this->read_zero_page();
 
     const std::uint8_t result = this->_registers.a & value;
 
@@ -399,7 +345,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::CMP::ZeroPage: {
-    const auto [_, value] = this->resolve_zero_page();
+    const auto [_, value] = this->read_zero_page();
 
     this->compare(this->_registers.a, value);
 
@@ -423,20 +369,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::CMP::AbsoluteX: {
-    const std::uint8_t low  = this->read(this->_registers.pc++);
-    const std::uint8_t high = this->read(this->_registers.pc++);
-
-    const std::uint16_t indexed_low = low + this->_registers.x;
-    const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-    std::uint8_t value = this->read(addr);
-
-    if (indexed_low > 0xFF) {
-      const std::uint8_t fixed_high  = static_cast<std::uint8_t>(high + 1);
-      const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-      value = this->read(fixed_addr);
-    }
+    const std::uint8_t value = this->read_absolute_indexed(this->_registers.x);
 
     this->compare(this->_registers.a, value);
 
@@ -444,20 +377,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::CMP::AbsoluteY: {
-    const std::uint8_t low  = this->read(this->_registers.pc++);
-    const std::uint8_t high = this->read(this->_registers.pc++);
-
-    const std::uint16_t indexed_low = low + this->_registers.y;
-    const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-    std::uint8_t value = this->read(addr);
-
-    if (indexed_low > 0xFF) {
-      const std::uint8_t fixed_high  = static_cast<std::uint8_t>(high + 1);
-      const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-      value = this->read(fixed_addr);
-    }
+    const std::uint8_t value = this->read_absolute_indexed(this->_registers.y);
 
     this->compare(this->_registers.a, value);
 
@@ -504,7 +424,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::CPX::ZeroPage: {
-    const auto [_, value] = this->resolve_zero_page();
+    const auto [_, value] = this->read_zero_page();
 
     this->compare(this->_registers.x, value);
 
@@ -532,7 +452,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::CPY::ZeroPage: {
-    const auto [_, value] = this->resolve_zero_page();
+    const auto [_, value] = this->read_zero_page();
 
     this->compare(this->_registers.y, value);
 
@@ -552,7 +472,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::DEC::ZeroPage: {
-    const auto [addr, value] = this->resolve_zero_page();
+    const auto [addr, value] = this->read_zero_page();
 
     this->write(addr, value);
 
@@ -623,7 +543,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::EOR::ZeroPage: {
-    const auto [_, value] = this->resolve_zero_page();
+    const auto [_, value] = this->read_zero_page();
 
     this->bitwise_eor(value);
 
@@ -647,20 +567,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::EOR::AbsoluteX: {
-    const std::uint8_t low  = this->read(this->_registers.pc++);
-    const std::uint8_t high = this->read(this->_registers.pc++);
-
-    const std::uint16_t indexed_low = low + this->_registers.x;
-    const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-    std::uint8_t value = this->read(addr);
-
-    if (indexed_low > 0xFF) {
-      const std::uint8_t fixed_high  = static_cast<std::uint8_t>(high + 1);
-      const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-      value = this->read(fixed_addr);
-    }
+    const std::uint8_t value = this->read_absolute_indexed(this->_registers.x);
 
     this->bitwise_eor(value);
 
@@ -668,20 +575,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::EOR::AbsoluteY: {
-    const std::uint8_t low  = this->read(this->_registers.pc++);
-    const std::uint8_t high = this->read(this->_registers.pc++);
-
-    const std::uint16_t indexed_low = low + this->_registers.y;
-    const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-    std::uint8_t value = this->read(addr);
-
-    if (indexed_low > 0xFF) {
-      const std::uint8_t fixed_high  = static_cast<std::uint8_t>(high + 1);
-      const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-      value = this->read(fixed_addr);
-    }
+    const std::uint8_t value = this->read_absolute_indexed(this->_registers.y);
 
     this->bitwise_eor(value);
 
@@ -690,7 +584,6 @@ std::int8_t CPU::step() {
 
   case OpCode::EOR::IndexedIndirect: {
     const std::uint16_t addr = this->resolve_indexed_indirect();
-
     const std::uint8_t value = this->read(addr);
 
     this->bitwise_eor(value);
@@ -721,7 +614,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::INC::ZeroPage: {
-    const auto [addr, value] = this->resolve_zero_page();
+    const auto [addr, value] = this->read_zero_page();
 
     const std::uint8_t result = value + 1;
 
@@ -833,7 +726,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::LDA::ZeroPage: {
-    const auto [_, value] = this->resolve_zero_page();
+    const auto [_, value] = this->read_zero_page();
 
     this->_registers.a = value;
 
@@ -862,20 +755,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::LDA::AbsoluteX: {
-    const std::uint8_t low  = this->read(this->_registers.pc++);
-    const std::uint8_t high = this->read(this->_registers.pc++);
-
-    const std::uint16_t indexed_low = low + this->_registers.x;
-    const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-    std::uint8_t value = this->read(addr);
-
-    if (indexed_low > 0xFF) {
-      const std::uint8_t fixed_high  = static_cast<std::uint8_t>(high + 1);
-      const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-      value = this->read(fixed_addr);
-    }
+    const std::uint8_t value = this->read_absolute_indexed(this->_registers.x);
 
     this->_registers.a = value;
 
@@ -886,20 +766,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::LDA::AbsoluteY: {
-    const std::uint8_t low  = this->read(this->_registers.pc++);
-    const std::uint8_t high = this->read(this->_registers.pc++);
-
-    const std::uint16_t indexed_low = low + this->_registers.y;
-    const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-    std::uint8_t value = this->read(addr);
-
-    if (indexed_low > 0xFF) {
-      const std::uint8_t fixed_high  = static_cast<std::uint8_t>(high + 1);
-      const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-      value = this->read(fixed_addr);
-    }
+    const std::uint8_t value = this->read_absolute_indexed(this->_registers.y);
 
     this->_registers.a = value;
 
@@ -911,8 +778,9 @@ std::int8_t CPU::step() {
 
   case OpCode::LDA::IndexedIndirect: {
     const std::uint16_t addr = this->resolve_indexed_indirect();
+    const std::uint8_t value = this->read(addr);
 
-    this->_registers.a = this->read(addr);
+    this->_registers.a = value;
 
     this->_registers.set_zero(this->_registers.a == 0);
     this->_registers.set_negative(this->_registers.a & 0x80);
@@ -955,7 +823,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::LDX::ZeroPage: {
-    const auto [_, value] = this->resolve_zero_page();
+    const auto [_, value] = this->read_zero_page();
 
     this->_registers.x = value;
 
@@ -997,7 +865,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::LDY::ZeroPage: {
-    const auto [_, value] = this->resolve_zero_page();
+    const auto [_, value] = this->read_zero_page();
 
     this->_registers.y = value;
 
@@ -1055,7 +923,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::LSR::ZeroPage: {
-    const auto [addr, value] = this->resolve_zero_page();
+    const auto [addr, value] = this->read_zero_page();
 
     const std::uint8_t carry  = value & 0x01;
     const std::uint8_t result = value >> 1;
@@ -1116,7 +984,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::ORA::ZeroPage: {
-    const auto [_, value] = this->resolve_zero_page();
+    const auto [_, value] = this->read_zero_page();
 
     this->_registers.a |= value;
 
@@ -1146,20 +1014,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::ORA::AbsoluteX: {
-    const std::uint8_t low  = this->read(this->_registers.pc++);
-    const std::uint8_t high = this->read(this->_registers.pc++);
-
-    const std::uint16_t indexed_low = low + this->_registers.x;
-    const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-    std::uint8_t value = this->read(addr);
-
-    if (indexed_low > 0xFF) {
-      const std::uint8_t fixed_high  = static_cast<std::uint8_t>(high + 1);
-      const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-      value = this->read(fixed_addr);
-    }
+    const std::uint8_t value = this->read_absolute_indexed(this->_registers.x);
 
     this->_registers.a |= value;
 
@@ -1170,20 +1025,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::ORA::AbsoluteY: {
-    const std::uint8_t low  = this->read(this->_registers.pc++);
-    const std::uint8_t high = this->read(this->_registers.pc++);
-
-    const std::uint16_t indexed_low = low + this->_registers.y;
-    const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-    std::uint8_t value = this->read(addr);
-
-    if (indexed_low > 0xFF) {
-      const std::uint8_t fixed_high  = static_cast<std::uint8_t>(high + 1);
-      const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-      value = this->read(fixed_addr);
-    }
+    const std::uint8_t value = this->read_absolute_indexed(this->_registers.y);
 
     this->_registers.a |= value;
 
@@ -1195,7 +1037,6 @@ std::int8_t CPU::step() {
 
   case OpCode::ORA::IndexedIndirect: {
     const std::uint16_t addr = this->resolve_indexed_indirect();
-
     const std::uint8_t value = this->read(addr);
 
     this->_registers.a |= value;
@@ -1284,7 +1125,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::ROL::ZeroPage: {
-    const auto [addr, value] = this->resolve_zero_page();
+    const auto [addr, value] = this->read_zero_page();
 
     const std::uint8_t old_carry = this->_registers.is_carry_set();
     const std::uint8_t new_carry = value & 0x80;
@@ -1348,7 +1189,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::ROR::ZeroPage: {
-    const auto [addr, value] = this->resolve_zero_page();
+    const auto [addr, value] = this->read_zero_page();
 
     const std::uint8_t old_carry = this->_registers.is_carry_set();
     const std::uint8_t new_carry = value & 0x01;
@@ -1433,7 +1274,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::SBC::ZeroPage: {
-    const auto [_, value] = this->resolve_zero_page();
+    const auto [_, value] = this->read_zero_page();
 
     this->subtract_with_carry(value);
 
@@ -1457,20 +1298,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::SBC::AbsoluteX: {
-    const std::uint8_t low  = this->read(this->_registers.pc++);
-    const std::uint8_t high = this->read(this->_registers.pc++);
-
-    const std::uint16_t indexed_low = low + this->_registers.x;
-    const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-    std::uint8_t value = this->read(addr);
-
-    if (indexed_low > 0xFF) {
-      const std::uint8_t fixed_high  = static_cast<std::uint8_t>(high + 1);
-      const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-      value = this->read(fixed_addr);
-    }
+    const std::uint8_t value = this->read_absolute_indexed(this->_registers.x);
 
     this->subtract_with_carry(value);
 
@@ -1478,20 +1306,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::SBC::AbsoluteY: {
-    const std::uint8_t low  = this->read(this->_registers.pc++);
-    const std::uint8_t high = this->read(this->_registers.pc++);
-
-    const std::uint16_t indexed_low = low + this->_registers.y;
-    const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-    std::uint8_t value = this->read(addr);
-
-    if (indexed_low > 0xFF) {
-      const std::uint8_t fixed_high  = static_cast<std::uint8_t>(high + 1);
-      const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-      value = this->read(fixed_addr);
-    }
+    const std::uint8_t value = this->read_absolute_indexed(this->_registers.y);
 
     this->subtract_with_carry(value);
 
@@ -1500,7 +1315,6 @@ std::int8_t CPU::step() {
 
   case OpCode::SBC::IndexedIndirect: {
     const std::uint16_t addr = this->resolve_indexed_indirect();
-
     const std::uint8_t value = this->read(addr);
 
     this->subtract_with_carry(value);
@@ -1584,40 +1398,8 @@ std::int8_t CPU::step() {
     break;
   }
 
-    // const std::uint8_t low  = this->read(this->_registers.pc++);
-    // const std::uint8_t high = this->read(this->_registers.pc++);
-
-    // const std::uint16_t indexed_low = low + this->_registers.x;
-    // const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-    // std::uint8_t value = this->read(addr);
-
-    // if (indexed_low > 0xFF) {
-    //   const std::uint8_t fixed_high  = static_cast<std::uint8_t>(high + 1);
-    //   const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-    //   value = this->read(fixed_addr);
-    // }
-
-    // this->subtract_with_carry(value);
-
-    // break;
-
   case OpCode::STA::AbsoluteX: {
-    const std::uint8_t low  = this->read(this->_registers.pc++);
-    const std::uint8_t high = this->read(this->_registers.pc++);
-
-    const std::uint16_t indexed_low = low + this->_registers.x;
-
-    std::uint16_t addr = (high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-    (void)this->read(addr);
-
-    if (indexed_low > 0xFF) {
-      const std::uint8_t fixed_high = static_cast<std::uint8_t>(high + 1);
-
-      addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
-    }
+    const std::uint16_t addr = this->resolve_absolute_indexed(this->_registers.x);
 
     this->write(addr, this->_registers.a);
 
@@ -1625,20 +1407,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::STA::AbsoluteY: {
-    const std::uint8_t low  = this->read(this->_registers.pc++);
-    const std::uint8_t high = this->read(this->_registers.pc++);
-
-    const std::uint16_t indexed_low = low + this->_registers.y;
-
-    std::uint16_t addr = (high << 8) | static_cast<std::uint8_t>(indexed_low);
-
-    (void)this->read(addr);
-
-    if (indexed_low > 0xFF) {
-      const std::uint8_t fixed_high = static_cast<std::uint8_t>(high + 1);
-
-      addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
-    }
+    const std::uint16_t addr = this->resolve_absolute_indexed(this->_registers.y);
 
     this->write(addr, this->_registers.a);
 
@@ -1793,13 +1562,6 @@ void CPU::tick() {
   this->_total_cycle_count++;
 }
 
-std::pair<std::uint8_t, std::uint8_t> CPU::resolve_zero_page() {
-  const std::uint8_t addr  = this->read(this->_registers.pc++);
-  const std::uint8_t value = this->read(addr);
-
-  return {addr, value};
-}
-
 std::uint8_t CPU::read(std::uint16_t addr) {
   // TODO: Replace with bus call when implemented
   const std::uint8_t value = this->_memory[addr];
@@ -1809,8 +1571,55 @@ std::uint8_t CPU::read(std::uint16_t addr) {
   return value;
 }
 
+std::pair<std::uint16_t, std::uint8_t> CPU::read_zero_page() {
+  const std::uint8_t addr  = this->read(this->_registers.pc++);
+  const std::uint8_t value = this->read(addr);
+
+  return {addr, value};
+}
+
+std::uint8_t CPU::read_absolute_indexed(std::uint8_t index) {
+  const std::uint8_t low  = this->read(this->_registers.pc++);
+  const std::uint8_t high = this->read(this->_registers.pc++);
+
+  const std::uint16_t indexed_low = low + index;
+
+  const std::uint16_t addr = (high << 8) | static_cast<std::uint8_t>(indexed_low);
+
+  std::uint8_t value = this->read(addr);
+
+  if (indexed_low > 0xFF) {
+    const std::uint8_t fixed_high  = static_cast<std::uint8_t>(high + 1);
+    const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
+
+    value = this->read(fixed_addr);
+  }
+
+  return value;
+}
+
+std::uint16_t CPU::resolve_absolute_indexed(std::uint8_t index) {
+  const std::uint8_t low  = this->read(this->_registers.pc++);
+  const std::uint8_t high = this->read(this->_registers.pc++);
+
+  const std::uint16_t indexed_low = low + index;
+
+  std::uint16_t addr = (high << 8) | static_cast<std::uint8_t>(indexed_low);
+
+  (void)this->read(addr);
+
+  if (indexed_low > 0xFF) {
+    const std::uint8_t fixed_high = static_cast<std::uint8_t>(high + 1);
+
+    addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
+  }
+
+  return addr;
+}
+
 std::uint16_t CPU::resolve_indexed_indirect() {
   const std::uint8_t ptr = this->read(this->_registers.pc++);
+
   (void)this->read(ptr);
 
   const std::uint8_t indexed_ptr = static_cast<std::uint8_t>(ptr + this->_registers.x);
