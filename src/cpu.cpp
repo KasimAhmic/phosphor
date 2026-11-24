@@ -1327,6 +1327,18 @@ std::uint8_t CPU::step() {
     break;
   }
 
+  case OpCode::Unofficial::AXS::Immediate: {
+    const std::uint8_t value = this->read(this->_registers.pc++);
+
+    const std::uint8_t operand = this->_registers.a & this->_registers.x;
+    const auto result          = static_cast<std::uint8_t>(operand - value);
+
+    this->_registers.set_carry(operand >= value);
+    this->assign_register(this->_registers.x, result);
+
+    break;
+  }
+
   case OpCode::Unofficial::DCP::ZeroPage: {
     const std::uint16_t addr = this->resolve_zero_page();
     const std::uint8_t value = this->decrement(addr);
