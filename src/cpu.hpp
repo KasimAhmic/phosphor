@@ -74,10 +74,18 @@ private:
   void tick();
 
   std::uint8_t read(std::uint16_t addr);
-  std::pair<std::uint16_t, std::uint8_t> read_zero_page();
+
+  std::uint8_t read_zero_page();
+  std::uint8_t resolve_zero_page();
+
+  std::uint8_t read_absolute();
+  std::uint16_t resolve_absolute();
+
   std::uint8_t read_absolute_indexed(std::uint8_t index);
   std::uint16_t resolve_absolute_indexed(std::uint8_t index);
+
   std::uint16_t resolve_indexed_indirect();
+
   void write(std::uint16_t addr, std::uint8_t value);
 
   void add_with_carry(std::uint8_t value);

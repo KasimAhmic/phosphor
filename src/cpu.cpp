@@ -26,7 +26,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::ADC::ZeroPage: {
-    const auto [_, value] = this->read_zero_page();
+    const std::uint8_t value = this->read_zero_page();
 
     this->add_with_carry(value);
 
@@ -38,11 +38,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::ADC::Absolute: {
-    const std::uint8_t low   = this->read(this->_registers.pc++);
-    const std::uint8_t high  = this->read(this->_registers.pc++);
-    const std::uint16_t addr = (high << 8) | low;
-
-    const std::uint8_t value = this->read(addr);
+    const std::uint8_t value = this->read_absolute();
 
     this->add_with_carry(value);
 
@@ -105,7 +101,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::AND::ZeroPage: {
-    const auto [_, value] = this->read_zero_page();
+    const std::uint8_t value = this->read_zero_page();
 
     this->bitwise_and(value);
 
@@ -117,11 +113,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::AND::Absolute: {
-    const std::uint8_t low   = this->read(this->_registers.pc++);
-    const std::uint8_t high  = this->read(this->_registers.pc++);
-    const std::uint16_t addr = (high << 8) | low;
-
-    const std::uint8_t value = this->read(addr);
+    const std::uint8_t value = this->read_absolute();
 
     this->bitwise_and(value);
 
@@ -190,7 +182,8 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::ASL::ZeroPage: {
-    const auto [addr, value] = this->read_zero_page();
+    const std::uint8_t addr  = this->resolve_zero_page();
+    const std::uint8_t value = this->read(addr);
 
     const std::uint8_t result = value << 1;
 
@@ -209,9 +202,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::ASL::Absolute: {
-    const std::uint8_t low   = this->read(this->_registers.pc++);
-    const std::uint8_t high  = this->read(this->_registers.pc++);
-    const std::uint16_t addr = (high << 8) | low;
+    const std::uint16_t addr = this->resolve_absolute();
 
     const std::uint8_t value = this->read(addr);
 
@@ -248,7 +239,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::BIT::ZeroPage: {
-    const auto [_, value] = this->read_zero_page();
+    const std::uint8_t value = this->read_zero_page();
 
     const std::uint8_t result = this->_registers.a & value;
 
@@ -260,11 +251,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::BIT::Absolute: {
-    const std::uint8_t low   = this->read(this->_registers.pc++);
-    const std::uint8_t high  = this->read(this->_registers.pc++);
-    const std::uint16_t addr = (high << 8) | low;
-
-    const std::uint8_t value = this->read(addr);
+    const std::uint8_t value = this->read_absolute();
 
     const std::uint8_t result = this->_registers.a & value;
 
@@ -345,7 +332,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::CMP::ZeroPage: {
-    const auto [_, value] = this->read_zero_page();
+    const std::uint8_t value = this->read_zero_page();
 
     this->compare(this->_registers.a, value);
 
@@ -357,11 +344,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::CMP::Absolute: {
-    const std::uint8_t low   = this->read(this->_registers.pc++);
-    const std::uint8_t high  = this->read(this->_registers.pc++);
-    const std::uint16_t addr = (high << 8) | low;
-
-    const std::uint8_t value = this->read(addr);
+    const std::uint8_t value = this->read_absolute();
 
     this->compare(this->_registers.a, value);
 
@@ -424,7 +407,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::CPX::ZeroPage: {
-    const auto [_, value] = this->read_zero_page();
+    const std::uint8_t value = this->read_zero_page();
 
     this->compare(this->_registers.x, value);
 
@@ -432,11 +415,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::CPX::Absolute: {
-    const std::uint8_t low   = this->read(this->_registers.pc++);
-    const std::uint8_t high  = this->read(this->_registers.pc++);
-    const std::uint16_t addr = (high << 8) | low;
-
-    const std::uint8_t value = this->read(addr);
+    const std::uint8_t value = this->read_absolute();
 
     this->compare(this->_registers.x, value);
 
@@ -452,7 +431,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::CPY::ZeroPage: {
-    const auto [_, value] = this->read_zero_page();
+    const std::uint8_t value = this->read_zero_page();
 
     this->compare(this->_registers.y, value);
 
@@ -460,11 +439,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::CPY::Absolute: {
-    const std::uint8_t low   = this->read(this->_registers.pc++);
-    const std::uint8_t high  = this->read(this->_registers.pc++);
-    const std::uint16_t addr = (high << 8) | low;
-
-    const std::uint8_t value = this->read(addr);
+    const std::uint8_t value = this->read_absolute();
 
     this->compare(this->_registers.y, value);
 
@@ -472,7 +447,8 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::DEC::ZeroPage: {
-    const auto [addr, value] = this->read_zero_page();
+    const std::uint8_t addr  = this->resolve_zero_page();
+    const std::uint8_t value = this->read(addr);
 
     this->write(addr, value);
 
@@ -491,9 +467,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::DEC::Absolute: {
-    const std::uint8_t low   = this->read(this->_registers.pc++);
-    const std::uint8_t high  = this->read(this->_registers.pc++);
-    const std::uint16_t addr = (high << 8) | low;
+    const std::uint16_t addr = this->resolve_absolute();
 
     const std::uint8_t value = this->read(addr);
 
@@ -543,7 +517,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::EOR::ZeroPage: {
-    const auto [_, value] = this->read_zero_page();
+    const std::uint8_t value = this->read_zero_page();
 
     this->bitwise_eor(value);
 
@@ -555,11 +529,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::EOR::Absolute: {
-    const std::uint8_t low   = this->read(this->_registers.pc++);
-    const std::uint8_t high  = this->read(this->_registers.pc++);
-    const std::uint16_t addr = (high << 8) | low;
-
-    const std::uint8_t value = this->read(addr);
+    const std::uint8_t value = this->read_absolute();
 
     this->bitwise_eor(value);
 
@@ -614,7 +584,8 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::INC::ZeroPage: {
-    const auto [addr, value] = this->read_zero_page();
+    const std::uint8_t addr  = this->resolve_zero_page();
+    const std::uint8_t value = this->read(addr);
 
     const std::uint8_t result = value + 1;
 
@@ -632,9 +603,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::INC::Absolute: {
-    const std::uint8_t low   = this->read(this->_registers.pc++);
-    const std::uint8_t high  = this->read(this->_registers.pc++);
-    const std::uint16_t addr = (high << 8) | low;
+    const std::uint16_t addr = this->resolve_absolute();
 
     const std::uint8_t value = this->read(addr);
 
@@ -685,9 +654,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::JMP::Indirect: {
-    const std::uint8_t low   = this->read(this->_registers.pc++);
-    const std::uint8_t high  = this->read(this->_registers.pc++);
-    const std::uint16_t addr = (high << 8) | low;
+    const std::uint16_t addr = this->resolve_absolute();
 
     const std::uint8_t target_low = this->read(addr);
 
@@ -726,7 +693,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::LDA::ZeroPage: {
-    const auto [_, value] = this->read_zero_page();
+    const std::uint8_t value = this->read_zero_page();
 
     this->_registers.a = value;
 
@@ -823,7 +790,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::LDX::ZeroPage: {
-    const auto [_, value] = this->read_zero_page();
+    const std::uint8_t value = this->read_zero_page();
 
     this->_registers.x = value;
 
@@ -865,7 +832,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::LDY::ZeroPage: {
-    const auto [_, value] = this->read_zero_page();
+    const std::uint8_t value = this->read_zero_page();
 
     this->_registers.y = value;
 
@@ -923,7 +890,8 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::LSR::ZeroPage: {
-    const auto [addr, value] = this->read_zero_page();
+    const std::uint8_t addr  = this->resolve_zero_page();
+    const std::uint8_t value = this->read(addr);
 
     const std::uint8_t carry  = value & 0x01;
     const std::uint8_t result = value >> 1;
@@ -943,9 +911,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::LSR::Absolute: {
-    const std::uint8_t low   = this->read(this->_registers.pc++);
-    const std::uint8_t high  = this->read(this->_registers.pc++);
-    const std::uint16_t addr = (high << 8) | low;
+    const std::uint16_t addr = this->resolve_absolute();
 
     const std::uint8_t value = this->read(addr);
 
@@ -984,7 +950,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::ORA::ZeroPage: {
-    const auto [_, value] = this->read_zero_page();
+    const std::uint8_t value = this->read_zero_page();
 
     this->_registers.a |= value;
 
@@ -999,11 +965,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::ORA::Absolute: {
-    const std::uint8_t low   = this->read(this->_registers.pc++);
-    const std::uint8_t high  = this->read(this->_registers.pc++);
-    const std::uint16_t addr = (high << 8) | low;
-
-    const std::uint8_t value = this->read(addr);
+    const std::uint8_t value = this->read_absolute();
 
     this->_registers.a |= value;
 
@@ -1125,7 +1087,8 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::ROL::ZeroPage: {
-    const auto [addr, value] = this->read_zero_page();
+    const std::uint8_t addr  = this->resolve_zero_page();
+    const std::uint8_t value = this->read(addr);
 
     const std::uint8_t old_carry = this->_registers.is_carry_set();
     const std::uint8_t new_carry = value & 0x80;
@@ -1148,9 +1111,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::ROL::Absolute: {
-    const std::uint8_t low   = this->read(this->_registers.pc++);
-    const std::uint8_t high  = this->read(this->_registers.pc++);
-    const std::uint16_t addr = (high << 8) | low;
+    const std::uint16_t addr = this->resolve_absolute();
 
     const std::uint8_t value = this->read(addr);
 
@@ -1189,7 +1150,8 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::ROR::ZeroPage: {
-    const auto [addr, value] = this->read_zero_page();
+    const std::uint8_t addr  = this->resolve_zero_page();
+    const std::uint8_t value = this->read(addr);
 
     const std::uint8_t old_carry = this->_registers.is_carry_set();
     const std::uint8_t new_carry = value & 0x01;
@@ -1211,9 +1173,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::ROR::Absolute: {
-    const std::uint8_t low   = this->read(this->_registers.pc++);
-    const std::uint8_t high  = this->read(this->_registers.pc++);
-    const std::uint16_t addr = (high << 8) | low;
+    const std::uint16_t addr = this->resolve_absolute();
 
     const std::uint8_t value = this->read(addr);
 
@@ -1274,7 +1234,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::SBC::ZeroPage: {
-    const auto [_, value] = this->read_zero_page();
+    const std::uint8_t value = this->read_zero_page();
 
     this->subtract_with_carry(value);
 
@@ -1286,11 +1246,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::SBC::Absolute: {
-    const std::uint8_t low   = this->read(this->_registers.pc++);
-    const std::uint8_t high  = this->read(this->_registers.pc++);
-    const std::uint16_t addr = (high << 8) | low;
-
-    const std::uint8_t value = this->read(addr);
+    const std::uint8_t value = this->read_absolute();
 
     this->subtract_with_carry(value);
 
@@ -1389,9 +1345,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::STA::Absolute: {
-    const std::uint8_t low   = this->read(this->_registers.pc++);
-    const std::uint8_t high  = this->read(this->_registers.pc++);
-    const std::uint16_t addr = (high << 8) | low;
+    const std::uint16_t addr = this->resolve_absolute();
 
     this->write(addr, this->_registers.a);
 
@@ -1465,9 +1419,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::STX::Absolute: {
-    const std::uint8_t low   = this->read(this->_registers.pc++);
-    const std::uint8_t high  = this->read(this->_registers.pc++);
-    const std::uint16_t addr = (high << 8) | low;
+    const std::uint16_t addr = this->resolve_absolute();
 
     this->write(addr, this->_registers.x);
 
@@ -1487,9 +1439,7 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::STY::Absolute: {
-    const std::uint8_t low   = this->read(this->_registers.pc++);
-    const std::uint8_t high  = this->read(this->_registers.pc++);
-    const std::uint16_t addr = (high << 8) | low;
+    const std::uint16_t addr = this->resolve_absolute();
 
     this->write(addr, this->_registers.y);
 
@@ -1562,7 +1512,7 @@ void CPU::tick() {
   this->_total_cycle_count++;
 }
 
-std::uint8_t CPU::read(std::uint16_t addr) {
+std::uint8_t CPU::read(const std::uint16_t addr) {
   // TODO: Replace with bus call when implemented
   const std::uint8_t value = this->_memory[addr];
 
@@ -1571,14 +1521,20 @@ std::uint8_t CPU::read(std::uint16_t addr) {
   return value;
 }
 
-std::pair<std::uint16_t, std::uint8_t> CPU::read_zero_page() {
-  const std::uint8_t addr  = this->read(this->_registers.pc++);
+std::uint8_t CPU::read_zero_page() {
+  const std::uint8_t addr  = this->resolve_zero_page();
   const std::uint8_t value = this->read(addr);
 
-  return {addr, value};
+  return value;
 }
 
-std::uint8_t CPU::read_absolute_indexed(std::uint8_t index) {
+std::uint8_t CPU::resolve_zero_page() {
+  const std::uint8_t addr = this->read(this->_registers.pc++);
+
+  return addr;
+}
+
+std::uint8_t CPU::read_absolute_indexed(const std::uint8_t index) {
   const std::uint8_t low  = this->read(this->_registers.pc++);
   const std::uint8_t high = this->read(this->_registers.pc++);
 
@@ -1598,7 +1554,23 @@ std::uint8_t CPU::read_absolute_indexed(std::uint8_t index) {
   return value;
 }
 
-std::uint16_t CPU::resolve_absolute_indexed(std::uint8_t index) {
+std::uint8_t CPU::read_absolute() {
+  const std::uint16_t addr = this->resolve_absolute();
+
+  const std::uint8_t value = this->read(addr);
+
+  return value;
+}
+
+std::uint16_t CPU::resolve_absolute() {
+  const std::uint8_t low   = this->read(this->_registers.pc++);
+  const std::uint8_t high  = this->read(this->_registers.pc++);
+  const std::uint16_t addr = (high << 8) | low;
+
+  return addr;
+}
+
+std::uint16_t CPU::resolve_absolute_indexed(const std::uint8_t index) {
   const std::uint8_t low  = this->read(this->_registers.pc++);
   const std::uint8_t high = this->read(this->_registers.pc++);
 
@@ -1631,7 +1603,7 @@ std::uint16_t CPU::resolve_indexed_indirect() {
   return addr;
 }
 
-void CPU::write(std::uint16_t addr, std::uint8_t value) {
+void CPU::write(const std::uint16_t addr, const std::uint8_t value) {
   // TODO: Replace with bus call when implemented
   this->_memory[addr] = value;
 
@@ -1697,7 +1669,7 @@ void CPU::bitwise_eor(const std::uint8_t value) {
   this->_registers.set_negative(this->_registers.a & 0x80);
 }
 
-void CPU::subtract_with_carry(std::uint8_t value) {
+void CPU::subtract_with_carry(const std::uint8_t value) {
   const std::uint8_t a = this->_registers.a;
 
   const std::int16_t result = static_cast<std::int16_t>(a) - static_cast<std::int16_t>(value) -
