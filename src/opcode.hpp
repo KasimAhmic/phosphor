@@ -348,4 +348,41 @@ namespace OpCode {
   namespace TYA {
     inline constexpr Definition Implied = {0x98, Instruction::TYA, AddressingMode::Implied};
   } // namespace TYA
+
+  namespace Unofficial {
+    namespace NOP {
+      inline constexpr Definition ZeroPage1 = {0x04, Instruction::NOP, AddressingMode::ZeroPage};
+      inline constexpr Definition ZeroPage2 = {0x44, Instruction::NOP, AddressingMode::ZeroPage};
+      inline constexpr Definition ZeroPage3 = {0x64, Instruction::NOP, AddressingMode::ZeroPage};
+
+      inline constexpr Definition Absolute = {0x0C, Instruction::NOP, AddressingMode::Absolute};
+
+      inline constexpr Definition ZeroPageX1 = {0x14, Instruction::NOP, AddressingMode::ZeroPageX};
+      inline constexpr Definition ZeroPageX2 = {0x34, Instruction::NOP, AddressingMode::ZeroPageX};
+      inline constexpr Definition ZeroPageX3 = {0x54, Instruction::NOP, AddressingMode::ZeroPageX};
+      inline constexpr Definition ZeroPageX4 = {0x74, Instruction::NOP, AddressingMode::ZeroPageX};
+      inline constexpr Definition ZeroPageX5 = {0xD4, Instruction::NOP, AddressingMode::ZeroPageX};
+      inline constexpr Definition ZeroPageX6 = {0xF4, Instruction::NOP, AddressingMode::ZeroPageX};
+
+      inline constexpr Definition Implied1 = {0x1A, Instruction::NOP, AddressingMode::Implied};
+      inline constexpr Definition Implied2 = {0x3A, Instruction::NOP, AddressingMode::Implied};
+      inline constexpr Definition Implied3 = {0x5A, Instruction::NOP, AddressingMode::Implied};
+      inline constexpr Definition Implied4 = {0x7A, Instruction::NOP, AddressingMode::Implied};
+      inline constexpr Definition Implied5 = {0xDA, Instruction::NOP, AddressingMode::Implied};
+      inline constexpr Definition Implied6 = {0xFA, Instruction::NOP, AddressingMode::Implied};
+
+      inline constexpr Definition Immediate1 = {0x80, Instruction::NOP, AddressingMode::Immediate};
+      inline constexpr Definition Immediate2 = {0x82, Instruction::NOP, AddressingMode::Immediate};
+      inline constexpr Definition Immediate3 = {0x89, Instruction::NOP, AddressingMode::Immediate};
+      inline constexpr Definition Immediate4 = {0xC2, Instruction::NOP, AddressingMode::Immediate};
+      inline constexpr Definition Immediate5 = {0xE2, Instruction::NOP, AddressingMode::Immediate};
+
+      inline constexpr Definition AbsoluteX1 = {0x1C, Instruction::NOP, AddressingMode::AbsoluteX};
+      inline constexpr Definition AbsoluteX2 = {0x3C, Instruction::NOP, AddressingMode::AbsoluteX};
+      inline constexpr Definition AbsoluteX3 = {0x5C, Instruction::NOP, AddressingMode::AbsoluteX};
+      inline constexpr Definition AbsoluteX4 = {0x7C, Instruction::NOP, AddressingMode::AbsoluteX};
+      inline constexpr Definition AbsoluteX5 = {0xDC, Instruction::NOP, AddressingMode::AbsoluteX};
+      inline constexpr Definition AbsoluteX6 = {0xFC, Instruction::NOP, AddressingMode::AbsoluteX};
+    } // namespace NOP
+  } // namespace Unofficial
 } // namespace OpCode

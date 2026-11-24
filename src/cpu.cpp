@@ -1666,6 +1666,63 @@ std::uint8_t CPU::step() {
 
     break;
   }
+
+  case OpCode::Unofficial::NOP::ZeroPage1:
+  case OpCode::Unofficial::NOP::ZeroPage2:
+  case OpCode::Unofficial::NOP::ZeroPage3: {
+    (void)this->read_zero_page();
+
+    break;
+  }
+
+  case OpCode::Unofficial::NOP::Absolute: {
+    (void)this->read_absolute();
+
+    break;
+  }
+
+  case OpCode::Unofficial::NOP::ZeroPageX1:
+  case OpCode::Unofficial::NOP::ZeroPageX2:
+  case OpCode::Unofficial::NOP::ZeroPageX3:
+  case OpCode::Unofficial::NOP::ZeroPageX4:
+  case OpCode::Unofficial::NOP::ZeroPageX5:
+  case OpCode::Unofficial::NOP::ZeroPageX6: {
+    (void)this->read_zero_page_indexed(this->_registers.x);
+
+    break;
+  }
+
+  case OpCode::Unofficial::NOP::Implied1:
+  case OpCode::Unofficial::NOP::Implied2:
+  case OpCode::Unofficial::NOP::Implied3:
+  case OpCode::Unofficial::NOP::Implied4:
+  case OpCode::Unofficial::NOP::Implied5:
+  case OpCode::Unofficial::NOP::Implied6: {
+    (void)this->read(this->_registers.pc);
+
+    break;
+  }
+
+  case OpCode::Unofficial::NOP::Immediate1:
+  case OpCode::Unofficial::NOP::Immediate2:
+  case OpCode::Unofficial::NOP::Immediate3:
+  case OpCode::Unofficial::NOP::Immediate4:
+  case OpCode::Unofficial::NOP::Immediate5: {
+    (void)this->read(this->_registers.pc++);
+
+    break;
+  }
+
+  case OpCode::Unofficial::NOP::AbsoluteX1:
+  case OpCode::Unofficial::NOP::AbsoluteX2:
+  case OpCode::Unofficial::NOP::AbsoluteX3:
+  case OpCode::Unofficial::NOP::AbsoluteX4:
+  case OpCode::Unofficial::NOP::AbsoluteX5:
+  case OpCode::Unofficial::NOP::AbsoluteX6: {
+    (void)this->read_absolute_indexed(this->_registers.x);
+
+    break;
+  }
   }
 
   return this->_current_cycle_count;

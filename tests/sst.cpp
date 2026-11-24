@@ -15,7 +15,7 @@ constexpr std::size_t MEMORY_SIZE = 65536;
 // B and unused are not conventional persistent hardware flags
 constexpr std::uint8_t STATUS_MASK = 0xCF;
 
-void run_single_step_tests(std::string filename) {
+void run_single_step_tests(const std::string& filename) {
   const std::filesystem::path path{"../tests/data/sst/" + filename + ".json"};
 
   std::ifstream file(path);
@@ -230,108 +230,108 @@ TEST(CPU, SST_SBC_AbsoluteY) { run_single_step_tests("f9"); }
 TEST(CPU, SST_SBC_AbsoluteX) { run_single_step_tests("fd"); }
 TEST(CPU, SST_INC_AbsoluteX) { run_single_step_tests("fe"); }
 
-// TEST(CPU, SST_KIL) { run_single_step_tests("02"); }
-// TEST(CPU, SST_SLO_IndexedIndirect) { run_single_step_tests("03"); }
-// TEST(CPU, SST_NOP_ZeroPage) { run_single_step_tests("04"); }
-// TEST(CPU, SST_SLO_ZeroPage) { run_single_step_tests("07"); }
-// TEST(CPU, SST_ANC_Immediate) { run_single_step_tests("0b"); }
-// TEST(CPU, SST_NOP_Absolute) { run_single_step_tests("0c"); }
-// TEST(CPU, SST_SLO_Absolute) { run_single_step_tests("0f"); }
-// TEST(CPU, SST_KIL_12) { run_single_step_tests("12"); }
-// TEST(CPU, SST_SLO_IndirectIndexed) { run_single_step_tests("13"); }
-// TEST(CPU, SST_NOP_ZeroPageX) { run_single_step_tests("14"); }
-// TEST(CPU, SST_SLO_ZeroPageX) { run_single_step_tests("17"); }
-// TEST(CPU, SST_NOP) { run_single_step_tests("1a"); }
-// TEST(CPU, SST_SLO_AbsoluteY) { run_single_step_tests("1b"); }
-// TEST(CPU, SST_NOP_AbsoluteX) { run_single_step_tests("1c"); }
-// TEST(CPU, SST_SLO_AbsoluteX) { run_single_step_tests("1f"); }
-// TEST(CPU, SST_KIL_22) { run_single_step_tests("22"); }
-// TEST(CPU, SST_RLA_IndexedIndirect) { run_single_step_tests("23"); }
-// TEST(CPU, SST_RLA_ZeroPage) { run_single_step_tests("27"); }
-// TEST(CPU, SST_ANC_Immediate_2B) { run_single_step_tests("2b"); }
-// TEST(CPU, SST_RLA_Absolute) { run_single_step_tests("2f"); }
-// TEST(CPU, SST_KIL_32) { run_single_step_tests("32"); }
-// TEST(CPU, SST_RLA_IndirectIndexed) { run_single_step_tests("33"); }
-// TEST(CPU, SST_NOP_ZeroPageX_34) { run_single_step_tests("34"); }
-// TEST(CPU, SST_RLA_ZeroPageX) { run_single_step_tests("37"); }
-// TEST(CPU, SST_NOP_3A) { run_single_step_tests("3a"); }
-// TEST(CPU, SST_RLA_AbsoluteY) { run_single_step_tests("3b"); }
-// TEST(CPU, SST_NOP_AbsoluteX_3C) { run_single_step_tests("3c"); }
-// TEST(CPU, SST_RLA_AbsoluteX) { run_single_step_tests("3f"); }
-// TEST(CPU, SST_KIL_42) { run_single_step_tests("42"); }
-// TEST(CPU, SST_SRE_IndexedIndirect) { run_single_step_tests("43"); }
-// TEST(CPU, SST_NOP_ZeroPage_44) { run_single_step_tests("44"); }
-// TEST(CPU, SST_SRE_ZeroPage) { run_single_step_tests("47"); }
-// TEST(CPU, SST_ALR_Immediate) { run_single_step_tests("4b"); }
-// TEST(CPU, SST_SRE_Absolute) { run_single_step_tests("4f"); }
-// TEST(CPU, SST_KIL_52) { run_single_step_tests("52"); }
-// TEST(CPU, SST_SRE_IndirectIndexed) { run_single_step_tests("53"); }
-// TEST(CPU, SST_NOP_ZeroPageX_54) { run_single_step_tests("54"); }
-// TEST(CPU, SST_SRE_ZeroPageX) { run_single_step_tests("57"); }
-// TEST(CPU, SST_NOP_5A) { run_single_step_tests("5a"); }
-// TEST(CPU, SST_SRE_AbsoluteY) { run_single_step_tests("5b"); }
-// TEST(CPU, SST_NOP_AbsoluteX_5C) { run_single_step_tests("5c"); }
-// TEST(CPU, SST_SRE_AbsoluteX) { run_single_step_tests("5f"); }
-// TEST(CPU, SST_KIL_62) { run_single_step_tests("62"); }
-// TEST(CPU, SST_RRA_IndexedIndirect) { run_single_step_tests("63"); }
-// TEST(CPU, SST_NOP_ZeroPage_64) { run_single_step_tests("64"); }
-// TEST(CPU, SST_RRA_ZeroPage) { run_single_step_tests("67"); }
-// TEST(CPU, SST_ARR_Immediate) { run_single_step_tests("6b"); }
-// TEST(CPU, SST_RRA_Absolute) { run_single_step_tests("6f"); }
-// TEST(CPU, SST_KIL_72) { run_single_step_tests("72"); }
-// TEST(CPU, SST_RRA_IndirectIndexed) { run_single_step_tests("73"); }
-// TEST(CPU, SST_NOP_ZeroPageX_74) { run_single_step_tests("74"); }
-// TEST(CPU, SST_RRA_ZeroPageX) { run_single_step_tests("77"); }
-// TEST(CPU, SST_NOP_7a) { run_single_step_tests("7a"); }
-// TEST(CPU, SST_RRA_AbsoluteY) { run_single_step_tests("7b"); }
-// TEST(CPU, SST_NOP_AbsoluteX_7c) { run_single_step_tests("7c"); }
-// TEST(CPU, SST_RRA_AbsoluteX) { run_single_step_tests("7f"); }
-// TEST(CPU, SST_NOP_Immediate) { run_single_step_tests("80"); }
-// TEST(CPU, SST_NOP_Immediate_82) { run_single_step_tests("82"); }
-// TEST(CPU, SST_SAX_IndexedIndirect) { run_single_step_tests("83"); }
-// TEST(CPU, SST_SAX_ZeroPage) { run_single_step_tests("87"); }
-// TEST(CPU, SST_NOP_Immediate_89) { run_single_step_tests("89"); }
-// TEST(CPU, SST_XAA_Immediate) { run_single_step_tests("8b"); }
-// TEST(CPU, SST_SAX_Absolute) { run_single_step_tests("8f"); }
-// TEST(CPU, SST_KIL_92) { run_single_step_tests("92"); }
-// TEST(CPU, SST_AHX_IndirectIndexed) { run_single_step_tests("93"); }
-// TEST(CPU, SST_SAX_ZeroPageY) { run_single_step_tests("97"); }
-// TEST(CPU, SST_TAS_AbsoluteY) { run_single_step_tests("9b"); }
-// TEST(CPU, SST_SHY_AbsoluteX) { run_single_step_tests("9c"); }
-// TEST(CPU, SST_SHX_AbsoluteY) { run_single_step_tests("9e"); }
-// TEST(CPU, SST_AHX_AbsoluteY) { run_single_step_tests("9f"); }
-// TEST(CPU, SST_LAX_IndexedIndirect) { run_single_step_tests("a3"); }
-// TEST(CPU, SST_LAX_ZeroPage) { run_single_step_tests("a7"); }
-// TEST(CPU, SST_LAX_Immediate) { run_single_step_tests("ab"); }
-// TEST(CPU, SST_LAX_Absolute) { run_single_step_tests("af"); }
-// TEST(CPU, SST_KIL_B2) { run_single_step_tests("b2"); }
-// TEST(CPU, SST_LAX_IndirectIndexed) { run_single_step_tests("b3"); }
-// TEST(CPU, SST_LAX_ZeroPageY) { run_single_step_tests("b7"); }
-// TEST(CPU, SST_LAS_AbsoluteY) { run_single_step_tests("bb"); }
-// TEST(CPU, SST_LAX_AbsoluteY) { run_single_step_tests("bf"); }
-// TEST(CPU, SST_NOP_Immediate_C2) { run_single_step_tests("c2"); }
-// TEST(CPU, SST_DCP_IndexedIndirect) { run_single_step_tests("c3"); }
-// TEST(CPU, SST_DCP_ZeroPage) { run_single_step_tests("c7"); }
-// TEST(CPU, SST_AXS_Immediate) { run_single_step_tests("cb"); }
-// TEST(CPU, SST_DCP_Absolute) { run_single_step_tests("cf"); }
-// TEST(CPU, SST_KIL_D2) { run_single_step_tests("d2"); }
-// TEST(CPU, SST_DCP_IndirectIndexed) { run_single_step_tests("d3"); }
-// TEST(CPU, SST_NOP_ZeroPageX_D4) { run_single_step_tests("d4"); }
-// TEST(CPU, SST_DCP_ZeroPageX) { run_single_step_tests("d7"); }
-// TEST(CPU, SST_NOP_DA) { run_single_step_tests("da"); }
-// TEST(CPU, SST_DCP_AbsoluteY) { run_single_step_tests("db"); }
-// TEST(CPU, SST_NOP_AbsoluteX_DC) { run_single_step_tests("dc"); }
-// TEST(CPU, SST_DCP_AbsoluteX) { run_single_step_tests("df"); }
-// TEST(CPU, SST_NOP_Immediate_E2) { run_single_step_tests("e2"); }
-// TEST(CPU, SST_ISC_IndexedIndirect) { run_single_step_tests("e3"); }
-// TEST(CPU, SST_ISC_ZeroPage) { run_single_step_tests("e7"); }
-// TEST(CPU, SST_SBC_Immediate_EB) { run_single_step_tests("eb"); }
-// TEST(CPU, SST_ISC_Absolute) { run_single_step_tests("ef"); }
-// TEST(CPU, SST_KIL_F2) { run_single_step_tests("f2"); }
-// TEST(CPU, SST_ISC_IndirectIndexed) { run_single_step_tests("f3"); }
-// TEST(CPU, SST_NOP_ZeroPageX_F4) { run_single_step_tests("f4"); }
-// TEST(CPU, SST_ISC_ZeroPageX) { run_single_step_tests("f7"); }
-// TEST(CPU, SST_NOP_FA) { run_single_step_tests("fa"); }
-// TEST(CPU, SST_ISC_AbsoluteY) { run_single_step_tests("fb"); }
-// TEST(CPU, SST_NOP_AbsoluteX_FC) { run_single_step_tests("fc"); }
-// TEST(CPU, SST_ISC_AbsoluteX) { run_single_step_tests("ff"); }
+TEST(CPU, SST_KIL) { run_single_step_tests("02"); }
+TEST(CPU, SST_SLO_IndexedIndirect) { run_single_step_tests("03"); }
+TEST(CPU, SST_NOP_ZeroPage) { run_single_step_tests("04"); }
+TEST(CPU, SST_SLO_ZeroPage) { run_single_step_tests("07"); }
+TEST(CPU, SST_ANC_Immediate) { run_single_step_tests("0b"); }
+TEST(CPU, SST_NOP_Absolute) { run_single_step_tests("0c"); }
+TEST(CPU, SST_SLO_Absolute) { run_single_step_tests("0f"); }
+TEST(CPU, SST_KIL_12) { run_single_step_tests("12"); }
+TEST(CPU, SST_SLO_IndirectIndexed) { run_single_step_tests("13"); }
+TEST(CPU, SST_NOP_ZeroPageX) { run_single_step_tests("14"); }
+TEST(CPU, SST_SLO_ZeroPageX) { run_single_step_tests("17"); }
+TEST(CPU, SST_NOP) { run_single_step_tests("1a"); }
+TEST(CPU, SST_SLO_AbsoluteY) { run_single_step_tests("1b"); }
+TEST(CPU, SST_NOP_AbsoluteX) { run_single_step_tests("1c"); }
+TEST(CPU, SST_SLO_AbsoluteX) { run_single_step_tests("1f"); }
+TEST(CPU, SST_KIL_22) { run_single_step_tests("22"); }
+TEST(CPU, SST_RLA_IndexedIndirect) { run_single_step_tests("23"); }
+TEST(CPU, SST_RLA_ZeroPage) { run_single_step_tests("27"); }
+TEST(CPU, SST_ANC_Immediate_2B) { run_single_step_tests("2b"); }
+TEST(CPU, SST_RLA_Absolute) { run_single_step_tests("2f"); }
+TEST(CPU, SST_KIL_32) { run_single_step_tests("32"); }
+TEST(CPU, SST_RLA_IndirectIndexed) { run_single_step_tests("33"); }
+TEST(CPU, SST_NOP_ZeroPageX_34) { run_single_step_tests("34"); }
+TEST(CPU, SST_RLA_ZeroPageX) { run_single_step_tests("37"); }
+TEST(CPU, SST_NOP_3A) { run_single_step_tests("3a"); }
+TEST(CPU, SST_RLA_AbsoluteY) { run_single_step_tests("3b"); }
+TEST(CPU, SST_NOP_AbsoluteX_3C) { run_single_step_tests("3c"); }
+TEST(CPU, SST_RLA_AbsoluteX) { run_single_step_tests("3f"); }
+TEST(CPU, SST_KIL_42) { run_single_step_tests("42"); }
+TEST(CPU, SST_SRE_IndexedIndirect) { run_single_step_tests("43"); }
+TEST(CPU, SST_NOP_ZeroPage_44) { run_single_step_tests("44"); }
+TEST(CPU, SST_SRE_ZeroPage) { run_single_step_tests("47"); }
+TEST(CPU, SST_ALR_Immediate) { run_single_step_tests("4b"); }
+TEST(CPU, SST_SRE_Absolute) { run_single_step_tests("4f"); }
+TEST(CPU, SST_KIL_52) { run_single_step_tests("52"); }
+TEST(CPU, SST_SRE_IndirectIndexed) { run_single_step_tests("53"); }
+TEST(CPU, SST_NOP_ZeroPageX_54) { run_single_step_tests("54"); }
+TEST(CPU, SST_SRE_ZeroPageX) { run_single_step_tests("57"); }
+TEST(CPU, SST_NOP_5A) { run_single_step_tests("5a"); }
+TEST(CPU, SST_SRE_AbsoluteY) { run_single_step_tests("5b"); }
+TEST(CPU, SST_NOP_AbsoluteX_5C) { run_single_step_tests("5c"); }
+TEST(CPU, SST_SRE_AbsoluteX) { run_single_step_tests("5f"); }
+TEST(CPU, SST_KIL_62) { run_single_step_tests("62"); }
+TEST(CPU, SST_RRA_IndexedIndirect) { run_single_step_tests("63"); }
+TEST(CPU, SST_NOP_ZeroPage_64) { run_single_step_tests("64"); }
+TEST(CPU, SST_RRA_ZeroPage) { run_single_step_tests("67"); }
+TEST(CPU, SST_ARR_Immediate) { run_single_step_tests("6b"); }
+TEST(CPU, SST_RRA_Absolute) { run_single_step_tests("6f"); }
+TEST(CPU, SST_KIL_72) { run_single_step_tests("72"); }
+TEST(CPU, SST_RRA_IndirectIndexed) { run_single_step_tests("73"); }
+TEST(CPU, SST_NOP_ZeroPageX_74) { run_single_step_tests("74"); }
+TEST(CPU, SST_RRA_ZeroPageX) { run_single_step_tests("77"); }
+TEST(CPU, SST_NOP_7a) { run_single_step_tests("7a"); }
+TEST(CPU, SST_RRA_AbsoluteY) { run_single_step_tests("7b"); }
+TEST(CPU, SST_NOP_AbsoluteX_7c) { run_single_step_tests("7c"); }
+TEST(CPU, SST_RRA_AbsoluteX) { run_single_step_tests("7f"); }
+TEST(CPU, SST_NOP_Immediate) { run_single_step_tests("80"); }
+TEST(CPU, SST_NOP_Immediate_82) { run_single_step_tests("82"); }
+TEST(CPU, SST_SAX_IndexedIndirect) { run_single_step_tests("83"); }
+TEST(CPU, SST_SAX_ZeroPage) { run_single_step_tests("87"); }
+TEST(CPU, SST_NOP_Immediate_89) { run_single_step_tests("89"); }
+TEST(CPU, SST_XAA_Immediate) { run_single_step_tests("8b"); }
+TEST(CPU, SST_SAX_Absolute) { run_single_step_tests("8f"); }
+TEST(CPU, SST_KIL_92) { run_single_step_tests("92"); }
+TEST(CPU, SST_AHX_IndirectIndexed) { run_single_step_tests("93"); }
+TEST(CPU, SST_SAX_ZeroPageY) { run_single_step_tests("97"); }
+TEST(CPU, SST_TAS_AbsoluteY) { run_single_step_tests("9b"); }
+TEST(CPU, SST_SHY_AbsoluteX) { run_single_step_tests("9c"); }
+TEST(CPU, SST_SHX_AbsoluteY) { run_single_step_tests("9e"); }
+TEST(CPU, SST_AHX_AbsoluteY) { run_single_step_tests("9f"); }
+TEST(CPU, SST_LAX_IndexedIndirect) { run_single_step_tests("a3"); }
+TEST(CPU, SST_LAX_ZeroPage) { run_single_step_tests("a7"); }
+TEST(CPU, SST_LAX_Immediate) { run_single_step_tests("ab"); }
+TEST(CPU, SST_LAX_Absolute) { run_single_step_tests("af"); }
+TEST(CPU, SST_KIL_B2) { run_single_step_tests("b2"); }
+TEST(CPU, SST_LAX_IndirectIndexed) { run_single_step_tests("b3"); }
+TEST(CPU, SST_LAX_ZeroPageY) { run_single_step_tests("b7"); }
+TEST(CPU, SST_LAS_AbsoluteY) { run_single_step_tests("bb"); }
+TEST(CPU, SST_LAX_AbsoluteY) { run_single_step_tests("bf"); }
+TEST(CPU, SST_NOP_Immediate_C2) { run_single_step_tests("c2"); }
+TEST(CPU, SST_DCP_IndexedIndirect) { run_single_step_tests("c3"); }
+TEST(CPU, SST_DCP_ZeroPage) { run_single_step_tests("c7"); }
+TEST(CPU, SST_AXS_Immediate) { run_single_step_tests("cb"); }
+TEST(CPU, SST_DCP_Absolute) { run_single_step_tests("cf"); }
+TEST(CPU, SST_KIL_D2) { run_single_step_tests("d2"); }
+TEST(CPU, SST_DCP_IndirectIndexed) { run_single_step_tests("d3"); }
+TEST(CPU, SST_NOP_ZeroPageX_D4) { run_single_step_tests("d4"); }
+TEST(CPU, SST_DCP_ZeroPageX) { run_single_step_tests("d7"); }
+TEST(CPU, SST_NOP_DA) { run_single_step_tests("da"); }
+TEST(CPU, SST_DCP_AbsoluteY) { run_single_step_tests("db"); }
+TEST(CPU, SST_NOP_AbsoluteX_DC) { run_single_step_tests("dc"); }
+TEST(CPU, SST_DCP_AbsoluteX) { run_single_step_tests("df"); }
+TEST(CPU, SST_NOP_Immediate_E2) { run_single_step_tests("e2"); }
+TEST(CPU, SST_ISC_IndexedIndirect) { run_single_step_tests("e3"); }
+TEST(CPU, SST_ISC_ZeroPage) { run_single_step_tests("e7"); }
+TEST(CPU, SST_SBC_Immediate_EB) { run_single_step_tests("eb"); }
+TEST(CPU, SST_ISC_Absolute) { run_single_step_tests("ef"); }
+TEST(CPU, SST_KIL_F2) { run_single_step_tests("f2"); }
+TEST(CPU, SST_ISC_IndirectIndexed) { run_single_step_tests("f3"); }
+TEST(CPU, SST_NOP_ZeroPageX_F4) { run_single_step_tests("f4"); }
+TEST(CPU, SST_ISC_ZeroPageX) { run_single_step_tests("f7"); }
+TEST(CPU, SST_NOP_FA) { run_single_step_tests("fa"); }
+TEST(CPU, SST_ISC_AbsoluteY) { run_single_step_tests("fb"); }
+TEST(CPU, SST_NOP_AbsoluteX_FC) { run_single_step_tests("fc"); }
+TEST(CPU, SST_ISC_AbsoluteX) { run_single_step_tests("ff"); }
