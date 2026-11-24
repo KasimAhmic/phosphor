@@ -1195,7 +1195,7 @@ std::uint8_t CPU::step() {
 
     this->write(addr, value);
 
-    const std::uint8_t result = static_cast<std::uint8_t>((value << 1) | old_carry);
+    const auto result = static_cast<std::uint8_t>((value << 1) | old_carry);
 
     this->write(addr, result);
 
@@ -1215,7 +1215,7 @@ std::uint8_t CPU::step() {
 
     this->write(addr, value);
 
-    const std::uint8_t result = static_cast<std::uint8_t>((value << 1) | old_carry);
+    const auto result = static_cast<std::uint8_t>((value << 1) | old_carry);
 
     this->write(addr, result);
 
@@ -1233,7 +1233,7 @@ std::uint8_t CPU::step() {
     const std::uint8_t old_carry = this->_registers.is_carry_set();
     const std::uint8_t new_carry = value & 0x80;
 
-    const std::uint8_t result = static_cast<std::uint8_t>((value << 1) | old_carry);
+    const auto result = static_cast<std::uint8_t>((value << 1) | old_carry);
 
     this->write(addr, value);
     this->write(addr, result);
@@ -1252,7 +1252,7 @@ std::uint8_t CPU::step() {
     const std::uint8_t old_carry = this->_registers.is_carry_set();
     const std::uint8_t new_carry = value & 0x80;
 
-    const std::uint8_t result = static_cast<std::uint8_t>((value << 1) | old_carry);
+    const auto result = static_cast<std::uint8_t>((value << 1) | old_carry);
 
     this->write(addr, value);
     this->write(addr, result);
@@ -1286,7 +1286,7 @@ std::uint8_t CPU::step() {
     const std::uint8_t old_carry = this->_registers.is_carry_set();
     const std::uint8_t new_carry = value & 0x01;
 
-    const std::uint8_t result = static_cast<std::uint8_t>((value >> 1) | (old_carry << 7));
+    const auto result = static_cast<std::uint8_t>((value >> 1) | (old_carry << 7));
 
     this->write(addr, value);
     this->write(addr, result);
@@ -1305,7 +1305,7 @@ std::uint8_t CPU::step() {
     const std::uint8_t old_carry = this->_registers.is_carry_set();
     const std::uint8_t new_carry = value & 0x01;
 
-    const std::uint8_t result = static_cast<std::uint8_t>((value >> 1) | (old_carry << 7));
+    const auto result = static_cast<std::uint8_t>((value >> 1) | (old_carry << 7));
 
     this->write(addr, value);
     this->write(addr, result);
@@ -1325,7 +1325,7 @@ std::uint8_t CPU::step() {
     const std::uint8_t old_carry = this->_registers.is_carry_set();
     const std::uint8_t new_carry = value & 0x01;
 
-    const std::uint8_t result = static_cast<std::uint8_t>((value >> 1) | (old_carry << 7));
+    const auto result = static_cast<std::uint8_t>((value >> 1) | (old_carry << 7));
 
     this->write(addr, value);
     this->write(addr, result);
@@ -1345,7 +1345,7 @@ std::uint8_t CPU::step() {
     const std::uint8_t old_carry = this->_registers.is_carry_set();
     const std::uint8_t new_carry = value & 0x01;
 
-    const std::uint8_t result = static_cast<std::uint8_t>((value >> 1) | (old_carry << 7));
+    const auto result = static_cast<std::uint8_t>((value >> 1) | (old_carry << 7));
 
     this->write(addr, value);
     this->write(addr, result);
@@ -1735,7 +1735,7 @@ std::uint8_t CPU::read_absolute_indexed(const std::uint8_t index) {
   std::uint8_t value = this->read(addr);
 
   if (indexed_low > 0xFF) {
-    const std::uint8_t fixed_high  = static_cast<std::uint8_t>(high + 1);
+    const auto fixed_high          = static_cast<std::uint8_t>(high + 1);
     const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
 
     value = this->read(fixed_addr);
@@ -1771,7 +1771,7 @@ std::uint16_t CPU::resolve_absolute_indexed(const std::uint8_t index) {
   (void)this->read(addr);
 
   if (indexed_low > 0xFF) {
-    const std::uint8_t fixed_high = static_cast<std::uint8_t>(high + 1);
+    const auto fixed_high = static_cast<std::uint8_t>(high + 1);
 
     addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
   }
@@ -1784,11 +1784,11 @@ std::uint16_t CPU::resolve_indexed_indirect() {
 
   (void)this->read(ptr);
 
-  const std::uint8_t indexed_ptr = static_cast<std::uint8_t>(ptr + this->_registers.x);
+  const auto indexed_ptr = static_cast<std::uint8_t>(ptr + this->_registers.x);
 
-  const std::uint8_t low   = this->read(indexed_ptr);
-  const std::uint8_t high  = this->read(static_cast<std::uint8_t>(indexed_ptr + 1));
-  const std::uint16_t addr = static_cast<std::uint16_t>((high << 8) | low);
+  const std::uint8_t low  = this->read(indexed_ptr);
+  const std::uint8_t high = this->read(static_cast<std::uint8_t>(indexed_ptr + 1));
+  const auto addr         = static_cast<std::uint16_t>((high << 8) | low);
 
   return addr;
 }
@@ -1821,7 +1821,7 @@ void CPU::bitwise_and(const std::uint8_t value) {
 }
 
 void CPU::branch_if(const bool condition) {
-  const std::int8_t offset = static_cast<std::int8_t>(this->read(this->_registers.pc++));
+  const auto offset = static_cast<std::int8_t>(this->read(this->_registers.pc++));
 
   if (condition) {
     const std::uint16_t target = static_cast<std::int32_t>(this->_registers.pc) + offset;
@@ -1862,8 +1862,8 @@ void CPU::bitwise_eor(const std::uint8_t value) {
 void CPU::subtract_with_carry(const std::uint8_t value) {
   const std::uint8_t a = this->_registers.a;
 
-  const std::int16_t result = static_cast<std::int16_t>(a) - static_cast<std::int16_t>(value) -
-                              !(this->_registers.is_carry_set());
+  const auto result = static_cast<std::int16_t>(a) - static_cast<std::int16_t>(value) -
+                      !(this->_registers.is_carry_set());
 
   this->_registers.a = static_cast<std::uint8_t>(result);
 
