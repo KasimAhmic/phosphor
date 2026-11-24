@@ -455,13 +455,11 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::DEC::ZeroPage: {
-    const std::uint8_t addr  = this->resolve_zero_page();
-    const std::uint8_t value = this->read(addr);
-
-    this->write(addr, value);
-
+    const std::uint8_t addr   = this->resolve_zero_page();
+    const std::uint8_t value  = this->read(addr);
     const std::uint8_t result = value - 1;
 
+    this->write(addr, value);
     this->write(addr, result);
 
     this->_registers.set_zero(result == 0);
@@ -471,14 +469,22 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::DEC::ZeroPageX: {
+    const std::uint16_t addr  = this->resolve_zero_page_indexed(this->_registers.x);
+    const std::uint8_t value  = this->read(addr);
+    const std::uint8_t result = value - 1;
+
+    this->write(addr, value);
+    this->write(addr, result);
+
+    this->_registers.set_zero(result == 0);
+    this->_registers.set_negative(result & 0x80);
+
     break;
   }
 
   case OpCode::DEC::Absolute: {
-    const std::uint16_t addr = this->resolve_absolute();
-
-    const std::uint8_t value = this->read(addr);
-
+    const std::uint16_t addr  = this->resolve_absolute();
+    const std::uint8_t value  = this->read(addr);
     const std::uint8_t result = value - 1;
 
     this->write(addr, value);
