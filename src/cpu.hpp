@@ -76,8 +76,9 @@ private:
   std::uint8_t read(std::uint16_t addr);
   void write(std::uint16_t addr, std::uint8_t value);
 
+  std::uint8_t read_stack();
   std::uint8_t pop_stack();
-  void push_stack();
+  void push_stack(std::uint8_t value);
 
   std::uint8_t read_zero_page();
   std::uint16_t resolve_zero_page();

@@ -248,9 +248,9 @@ std::uint8_t CPU::step() {
     const std::uint8_t pcl    = this->_registers.pc & 0xFF;
     const std::uint8_t status = this->_registers.p | 0x30;
 
-    this->write(0x0100 | this->_registers.sp--, pch);
-    this->write(0x0100 | this->_registers.sp--, pcl);
-    this->write(0x0100 | this->_registers.sp--, status);
+    this->push_stack(pch);
+    this->push_stack(pcl);
+    this->push_stack(status);
 
     this->_registers.set_interrupt_disable(true);
 
@@ -610,12 +610,12 @@ std::uint8_t CPU::step() {
 
   case OpCode::JSR::Absolute: {
     const std::uint8_t low = this->read(_registers.pc++);
-    (void)this->read(0x0100 | this->_registers.sp);
+    (void)this->read_stack();
 
     const std::uint16_t return_addr = this->_registers.pc;
 
-    this->write(0x0100 | this->_registers.sp--, static_cast<std::uint8_t>(return_addr >> 8));
-    this->write(0x0100 | this->_registers.sp--, static_cast<std::uint8_t>(return_addr & 0xFF));
+    this->push_stack(static_cast<std::uint8_t>(return_addr >> 8));
+    this->push_stack(static_cast<std::uint8_t>(return_addr & 0xFF));
 
     const auto high = this->read(_registers.pc++);
 
@@ -891,7 +891,7 @@ std::uint8_t CPU::step() {
   case OpCode::PHA::Implied: {
     (void)this->read(this->_registers.pc);
 
-    this->write(0x0100 | this->_registers.sp--, this->_registers.a);
+    this->push_stack(this->_registers.a);
 
     break;
   }
@@ -899,16 +899,16 @@ std::uint8_t CPU::step() {
   case OpCode::PHP::Implied: {
     (void)this->read(this->_registers.pc);
 
-    this->write(0x0100 | this->_registers.sp--, this->_registers.p | 0x30);
+    this->push_stack(this->_registers.p | 0x30);
 
     break;
   }
 
   case OpCode::PLA::Implied: {
     (void)this->read(this->_registers.pc);
-    (void)this->read(0x0100 | this->_registers.sp++);
+    (void)this->pop_stack();
 
-    this->_registers.a = this->read(0x0100 | this->_registers.sp);
+    this->_registers.a = this->read_stack();
 
     this->_registers.set_zero(this->_registers.a == 0);
     this->_registers.set_negative(this->_registers.a & 0x80);
@@ -918,9 +918,11 @@ std::uint8_t CPU::step() {
 
   case OpCode::PLP::Implied: {
     (void)this->read(this->_registers.pc);
-    (void)this->read(0x0100 | this->_registers.sp++);
+    (void)this->pop_stack();
 
-    this->_registers.p = (this->read(0x0100 | this->_registers.sp) & ~0x10) | 0x20;
+    const std::uint8_t value = this->read_stack();
+
+    this->_registers.p = (value & ~0x10) | 0x20;
 
     break;
   }
@@ -931,11 +933,13 @@ std::uint8_t CPU::step() {
     const std::uint8_t old_carry = this->_registers.is_carry_set();
     const std::uint8_t new_carry = this->_registers.a & 0x80;
 
-    this->_registers.a = static_cast<std::uint8_t>((this->_registers.a << 1) | old_carry);
+    const std::uint8_t result = (this->_registers.a << 1) | old_carry;
+
+    this->_registers.a = result;
 
     this->_registers.set_carry(new_carry);
-    this->_registers.set_zero(this->_registers.a == 0);
-    this->_registers.set_negative(this->_registers.a & 0x80);
+    this->_registers.set_zero(result == 0);
+    this->_registers.set_negative(result & 0x80);
 
     break;
   }
@@ -1113,11 +1117,11 @@ std::uint8_t CPU::step() {
 
   case OpCode::RTI::Implied: {
     (void)this->read(this->_registers.pc);
-    (void)this->read(0x0100 | this->_registers.sp++);
+    (void)this->pop_stack();
 
-    const std::uint8_t p    = this->read(0x0100 | this->_registers.sp++);
-    const std::uint8_t low  = this->read(0x0100 | this->_registers.sp++);
-    const std::uint8_t high = this->read(0x0100 | this->_registers.sp);
+    const std::uint8_t p    = this->pop_stack();
+    const std::uint8_t low  = this->pop_stack();
+    const std::uint8_t high = this->read_stack();
 
     this->_registers.pc = (high << 8) | low;
     this->_registers.p  = (p & ~0x10) | 0x20;
@@ -1128,10 +1132,10 @@ std::uint8_t CPU::step() {
   case OpCode::RTS::Implied: {
     (void)this->read(this->_registers.pc);
 
-    (void)this->read(0x0100 | this->_registers.sp++);
+    (void)this->pop_stack();
 
-    const std::uint8_t low  = this->read(0x0100 | this->_registers.sp++);
-    const std::uint8_t high = this->read(0x0100 | this->_registers.sp);
+    const std::uint8_t low  = this->pop_stack();
+    const std::uint8_t high = this->read_stack();
 
     this->_registers.pc = (high << 8) | low;
 
@@ -1474,6 +1478,20 @@ void CPU::write(const std::uint16_t addr, const std::uint8_t value) {
 
   this->tick();
 }
+
+std::uint8_t CPU::read_stack() {
+  const std::uint8_t value = this->read(0x0100 | this->_registers.sp);
+
+  return value;
+}
+
+std::uint8_t CPU::pop_stack() {
+  const std::uint8_t value = this->read(0x0100 | this->_registers.sp++);
+
+  return value;
+}
+
+void CPU::push_stack(const std::uint8_t value) { this->write(0x0100 | this->_registers.sp--, value); }
 
 std::uint8_t CPU::read_zero_page() {
   const std::uint8_t addr  = this->resolve_zero_page();
