@@ -1535,30 +1535,65 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::Unofficial::RRA::ZeroPage: {
+    const std::uint16_t addr = this->resolve_zero_page();
+    const std::uint8_t value = this->rotate_right(addr);
+
+    this->add_with_carry(value);
+
     break;
   }
 
   case OpCode::Unofficial::RRA::ZeroPageX: {
+    const std::uint16_t addr = this->resolve_zero_page_indexed(this->_registers.x);
+    const std::uint8_t value = this->rotate_right(addr);
+
+    this->add_with_carry(value);
+
     break;
   }
 
   case OpCode::Unofficial::RRA::Absolute: {
+    const std::uint16_t addr = this->resolve_absolute();
+    const std::uint8_t value = this->rotate_right(addr);
+
+    this->add_with_carry(value);
+
     break;
   }
 
   case OpCode::Unofficial::RRA::AbsoluteX: {
+    const std::uint16_t addr = this->resolve_absolute_indexed(this->_registers.x);
+    const std::uint8_t value = this->rotate_right(addr);
+
+    this->add_with_carry(value);
+
     break;
   }
 
   case OpCode::Unofficial::RRA::AbsoluteY: {
+    const std::uint16_t addr = this->resolve_absolute_indexed(this->_registers.y);
+    const std::uint8_t value = this->rotate_right(addr);
+
+    this->add_with_carry(value);
+
     break;
   }
 
   case OpCode::Unofficial::RRA::IndexedIndirect: {
+    const std::uint16_t addr = this->resolve_indexed_indirect();
+    const std::uint8_t value = this->rotate_right(addr);
+
+    this->add_with_carry(value);
+
     break;
   }
 
   case OpCode::Unofficial::RRA::IndirectIndexed: {
+    const std::uint16_t addr = this->resolve_indirect_indexed();
+    const std::uint8_t value = this->rotate_right(addr);
+
+    this->add_with_carry(value);
+
     break;
   }
 
