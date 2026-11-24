@@ -812,6 +812,13 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::LDX::AbsoluteY: {
+    const std::uint8_t value = this->read_absolute_indexed(this->_registers.y);
+
+    this->_registers.x = value;
+
+    this->_registers.set_zero(this->_registers.x == 0);
+    this->_registers.set_negative(this->_registers.x & 0x80);
+
     break;
   }
 
