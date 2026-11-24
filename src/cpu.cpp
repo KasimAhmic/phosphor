@@ -310,6 +310,23 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::BRK::Implied: {
+    (void)this->read(this->_registers.pc++);
+
+    const std::uint8_t pch    = this->_registers.pc >> 8;
+    const std::uint8_t pcl    = this->_registers.pc & 0xFF;
+    const std::uint8_t status = this->_registers.p | 0x30;
+
+    this->write(0x0100 | this->_registers.sp--, pch);
+    this->write(0x0100 | this->_registers.sp--, pcl);
+    this->write(0x0100 | this->_registers.sp--, status);
+
+    this->_registers.set_interrupt_disable(true);
+
+    const std::uint8_t low  = this->read(0xFFFE);
+    const std::uint8_t high = this->read(0xFFFF);
+
+    this->_registers.pc = (high << 8) | low;
+
     break;
   }
 
