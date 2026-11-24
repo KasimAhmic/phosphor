@@ -344,6 +344,10 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::CMP::ZeroPageX: {
+    const std::uint8_t value = this->read_zero_page_indexed(this->_registers.x);
+
+    this->compare(this->_registers.a, value);
+
     break;
   }
 
