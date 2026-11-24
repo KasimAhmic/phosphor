@@ -1415,6 +1415,10 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::STX::ZeroPageY: {
+    const std::uint16_t addr = this->resolve_zero_page_indexed(this->_registers.y);
+
+    this->write(addr, this->_registers.x);
+
     break;
   }
 
