@@ -1186,6 +1186,22 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::ROR::AbsoluteX: {
+    const std::uint16_t addr = this->resolve_absolute_indexed(this->_registers.x);
+
+    const std::uint8_t value = this->read(addr);
+
+    const std::uint8_t old_carry = this->_registers.is_carry_set();
+    const std::uint8_t new_carry = value & 0x01;
+
+    const std::uint8_t result = static_cast<std::uint8_t>((value >> 1) | (old_carry << 7));
+
+    this->write(addr, value);
+    this->write(addr, result);
+
+    this->_registers.set_carry(new_carry);
+    this->_registers.set_zero(result == 0);
+    this->_registers.set_negative(result & 0x80);
+
     break;
   }
 
