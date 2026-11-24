@@ -1609,6 +1609,25 @@ std::int8_t CPU::step() {
   }
 
   case OpCode::STA::AbsoluteY: {
+    const std::uint8_t low  = this->read(this->_registers.pc++);
+    const std::uint8_t high = this->read(this->_registers.pc++);
+
+    const std::uint16_t indexed_low = low + this->_registers.y;
+    const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
+
+    (void)this->read(addr);
+
+    this->write(addr, this->_registers.a);
+
+    if (indexed_low > 0xFF) {
+      const std::uint8_t fixed_high  = static_cast<std::uint8_t>(high + 1);
+      const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
+
+      (void)this->read(fixed_addr);
+
+      this->write(addr, this->_registers.a);
+    }
+
     break;
   }
 
