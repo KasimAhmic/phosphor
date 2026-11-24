@@ -959,10 +959,7 @@ std::uint8_t CPU::step() {
   case OpCode::ORA::Immediate: {
     const std::uint8_t value = this->read(_registers.pc++);
 
-    this->_registers.a |= value;
-
-    this->_registers.set_zero(this->_registers.a == 0);
-    this->_registers.set_negative(this->_registers.a & 0x80);
+    this->bitwise_or(value);
 
     break;
   }
@@ -970,10 +967,7 @@ std::uint8_t CPU::step() {
   case OpCode::ORA::ZeroPage: {
     const std::uint8_t value = this->read_zero_page();
 
-    this->_registers.a |= value;
-
-    this->_registers.set_zero(this->_registers.a == 0);
-    this->_registers.set_negative(this->_registers.a & 0x80);
+    this->bitwise_or(value);
 
     break;
   }
@@ -981,10 +975,7 @@ std::uint8_t CPU::step() {
   case OpCode::ORA::ZeroPageX: {
     const std::uint8_t value = this->read_zero_page_indexed(this->_registers.x);
 
-    this->_registers.a |= value;
-
-    this->_registers.set_zero(this->_registers.a == 0);
-    this->_registers.set_negative(this->_registers.a & 0x80);
+    this->bitwise_or(value);
 
     break;
   }
@@ -992,10 +983,7 @@ std::uint8_t CPU::step() {
   case OpCode::ORA::Absolute: {
     const std::uint8_t value = this->read_absolute();
 
-    this->_registers.a |= value;
-
-    this->_registers.set_zero(this->_registers.a == 0);
-    this->_registers.set_negative(this->_registers.a & 0x80);
+    this->bitwise_or(value);
 
     break;
   }
@@ -1003,10 +991,7 @@ std::uint8_t CPU::step() {
   case OpCode::ORA::AbsoluteX: {
     const std::uint8_t value = this->read_absolute_indexed(this->_registers.x);
 
-    this->_registers.a |= value;
-
-    this->_registers.set_zero(this->_registers.a == 0);
-    this->_registers.set_negative(this->_registers.a & 0x80);
+    this->bitwise_or(value);
 
     break;
   }
@@ -1014,10 +999,7 @@ std::uint8_t CPU::step() {
   case OpCode::ORA::AbsoluteY: {
     const std::uint8_t value = this->read_absolute_indexed(this->_registers.y);
 
-    this->_registers.a |= value;
-
-    this->_registers.set_zero(this->_registers.a == 0);
-    this->_registers.set_negative(this->_registers.a & 0x80);
+    this->bitwise_or(value);
 
     break;
   }
@@ -1025,10 +1007,7 @@ std::uint8_t CPU::step() {
   case OpCode::ORA::IndexedIndirect: {
     const std::uint8_t value = this->read_indexed_indirect();
 
-    this->_registers.a |= value;
-
-    this->_registers.set_zero(this->_registers.a == 0);
-    this->_registers.set_negative(this->_registers.a & 0x80);
+    this->bitwise_or(value);
 
     break;
   }
@@ -1036,10 +1015,7 @@ std::uint8_t CPU::step() {
   case OpCode::ORA::IndirectIndexed: {
     const std::uint8_t value = this->read_indirect_indexed();
 
-    this->_registers.a |= value;
-
-    this->_registers.set_zero(this->_registers.a == 0);
-    this->_registers.set_negative(this->_registers.a & 0x80);
+    this->bitwise_or(value);
 
     break;
   }
@@ -1797,6 +1773,20 @@ void CPU::bitwise_and(const std::uint8_t value) {
   this->_registers.set_negative(this->_registers.a & 0x80);
 }
 
+void CPU::bitwise_or(const std::uint8_t value) {
+  this->_registers.a |= value;
+
+  this->_registers.set_zero(this->_registers.a == 0);
+  this->_registers.set_negative(this->_registers.a & 0x80);
+}
+
+void CPU::bitwise_eor(const std::uint8_t value) {
+  this->_registers.a ^= value;
+
+  this->_registers.set_zero(this->_registers.a == 0);
+  this->_registers.set_negative(this->_registers.a & 0x80);
+}
+
 void CPU::branch_if(const bool condition) {
   const auto offset = static_cast<std::int8_t>(this->read(this->_registers.pc++));
 
@@ -1827,13 +1817,6 @@ void CPU::compare(const std::uint8_t reg, const std::uint8_t value) {
   this->_registers.set_carry(reg >= value);
   this->_registers.set_zero(result == 0);
   this->_registers.set_negative(result & 0x80);
-}
-
-void CPU::bitwise_eor(const std::uint8_t value) {
-  this->_registers.a ^= value;
-
-  this->_registers.set_zero(this->_registers.a == 0);
-  this->_registers.set_negative(this->_registers.a & 0x80);
 }
 
 void CPU::subtract_with_carry(const std::uint8_t value) {
