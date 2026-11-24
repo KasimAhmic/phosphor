@@ -396,11 +396,11 @@ enum class Instruction : std::uint8_t {
   TYA,
 
   /**
-   * @brief UNOFFICIAL OPCODE. A &= immediate, C becomes bit 7 of A.
+   * @brief UNOFFICIAL OPCODE. Store a masked combination of A, X, and address-high information.
    *
    * @see https://www.nesdev.org/wiki/CPU_unofficial_opcodes
    */
-  ANC,
+  AHX,
 
   /**
    * @brief UNOFFICIAL OPCODE. A &= immediate, then logical shift right.
@@ -408,6 +408,13 @@ enum class Instruction : std::uint8_t {
    * @see https://www.nesdev.org/wiki/CPU_unofficial_opcodes
    */
   ALR,
+
+  /**
+   * @brief UNOFFICIAL OPCODE. A &= immediate, C becomes bit 7 of A.
+   *
+   * @see https://www.nesdev.org/wiki/CPU_unofficial_opcodes
+   */
+  ANC,
 
   /**
    * @brief UNOFFICIAL OPCODE. A &= immediate, then rotate right through carry.
@@ -438,6 +445,13 @@ enum class Instruction : std::uint8_t {
   ISC,
 
   /**
+   * @brief UNOFFICIAL OPCODE. Load A, X, and SP from memory masked by the original SP.
+   *
+   * @see https://www.nesdev.org/wiki/CPU_unofficial_opcodes
+   */
+  LAS,
+
+  /**
    * @brief UNOFFICIAL OPCODE. Load A and X.
    *
    * @see https://www.nesdev.org/wiki/CPU_unofficial_opcodes
@@ -466,6 +480,20 @@ enum class Instruction : std::uint8_t {
   SAX,
 
   /**
+   * @brief UNOFFICIAL OPCODE. Store X masked by address-high information.
+   *
+   * @see https://www.nesdev.org/wiki/CPU_unofficial_opcodes
+   */
+  SHX,
+
+  /**
+   * @brief UNOFFICIAL OPCODE. Store Y masked by address-high information.
+   *
+   * @see https://www.nesdev.org/wiki/CPU_unofficial_opcodes
+   */
+  SHY,
+
+  /**
    * @brief UNOFFICIAL OPCODE. Equivalent to ASL + ORA.
    *
    * @see https://www.nesdev.org/wiki/CPU_unofficial_opcodes
@@ -478,4 +506,18 @@ enum class Instruction : std::uint8_t {
    * @see https://www.nesdev.org/wiki/CPU_unofficial_opcodes
    */
   SRE,
+
+  /**
+   * @brief UNOFFICIAL OPCODE. Set SP to A & X, then perform a masked store.
+   *
+   * @see https://www.nesdev.org/wiki/CPU_unofficial_opcodes
+   */
+  TAS,
+
+  /**
+   * @brief UNOFFICIAL OPCODE. Unstable operation involving A, X, the immediate operand, and internal bus state.
+   *
+   * @see https://www.nesdev.org/wiki/CPU_unofficial_opcodes
+   */
+  XAA,
 };

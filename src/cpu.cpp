@@ -1289,12 +1289,21 @@ std::uint8_t CPU::step() {
     break;
   }
 
-  case OpCode::Unofficial::ANC::Immediate1:
-  case OpCode::Unofficial::ANC::Immediate2: {
-    const std::uint8_t value = this->read(this->_registers.pc++);
+  case OpCode::Unofficial::AHX::AbsoluteY: {
+    const std::uint16_t value = this->resolve_absolute();
 
-    this->bitwise_and(value);
-    this->_registers.set_carry(this->_registers.a & 0x80);
+    this->write_masked_indexed(value, this->_registers.y, this->_registers.a & this->_registers.x);
+
+    break;
+  }
+
+  case OpCode::Unofficial::AHX::IndexedIndirect: {
+    const std::uint8_t ptr   = this->read(this->_registers.pc++);
+    const std::uint8_t low   = this->read(ptr);
+    const std::uint8_t high  = this->read(static_cast<std::uint8_t>(ptr + 1));
+    const std::uint16_t base = (high << 8) | low;
+
+    this->write_masked_indexed(base, this->_registers.y, this->_registers.a & this->_registers.x);
 
     break;
   }
@@ -1308,6 +1317,16 @@ std::uint8_t CPU::step() {
 
     this->_registers.set_carry(result & 0x01);
     this->assign_register(this->_registers.a, result >> 1);
+
+    break;
+  }
+
+  case OpCode::Unofficial::ANC::Immediate1:
+  case OpCode::Unofficial::ANC::Immediate2: {
+    const std::uint8_t value = this->read(this->_registers.pc++);
+
+    this->bitwise_and(value);
+    this->_registers.set_carry(this->_registers.a & 0x80);
 
     break;
   }
@@ -1404,6 +1423,13 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::Unofficial::LAX::Immediate: {
+    const std::uint8_t value  = this->read(this->_registers.pc++);
+    const std::uint8_t result = (this->_registers.a | CPU::UNSTABLE_MAGIC) & value;
+
+    this->_registers.a = result;
+
+    this->assign_register(this->_registers.x, result);
+
     break;
   }
 
@@ -1457,6 +1483,21 @@ std::uint8_t CPU::step() {
 
     this->_registers.a = value;
     this->assign_register(this->_registers.x, value);
+
+    break;
+  }
+
+  case OpCode::Unofficial::LAS::AbsoluteY: {
+    const std::uint8_t value = this->read_absolute_indexed(this->_registers.y);
+
+    const std::uint8_t result = value & this->_registers.sp;
+
+    this->_registers.a  = result;
+    this->_registers.x  = result;
+    this->_registers.sp = result;
+
+    this->_registers.set_zero(result == 0);
+    this->_registers.set_negative(result & 0x80);
 
     break;
   }
@@ -1743,6 +1784,22 @@ std::uint8_t CPU::step() {
     break;
   }
 
+  case OpCode::Unofficial::SHY::AbsoluteX: {
+    const std::uint16_t base = this->resolve_absolute();
+
+    this->write_masked_indexed(base, this->_registers.x, this->_registers.y);
+
+    break;
+  }
+
+  case OpCode::Unofficial::SHX::AbsoluteY: {
+    const std::uint16_t base = this->resolve_absolute();
+
+    this->write_masked_indexed(base, this->_registers.y, this->_registers.x);
+
+    break;
+  }
+
   case OpCode::Unofficial::SLO::ZeroPage: {
     const std::uint16_t addr = this->resolve_zero_page();
     const std::uint8_t value = this->shift_left(addr);
@@ -1865,6 +1922,25 @@ std::uint8_t CPU::step() {
     const std::uint8_t value = this->shift_right(addr);
 
     this->bitwise_eor(value);
+
+    break;
+  }
+
+  case OpCode::Unofficial::TAS::AbsoluteY: {
+    const std::uint16_t base = this->resolve_absolute();
+
+    this->_registers.sp = this->_registers.a & this->_registers.x;
+
+    write_masked_indexed(base, this->_registers.y, this->_registers.sp);
+
+    break;
+  }
+
+  case OpCode::Unofficial::XAA::Immediate: {
+    const std::uint8_t operand = this->read(this->_registers.pc++);
+    const std::uint8_t result  = (this->_registers.a | CPU::UNSTABLE_MAGIC) & this->_registers.x & operand;
+
+    this->assign_register(this->_registers.a, result);
 
     break;
   }
@@ -2247,3 +2323,19 @@ void CPU::assign_register(std::uint8_t& reg, const std::uint8_t value) {
   this->_registers.set_zero(reg == 0);
   this->_registers.set_negative(reg & 0x80);
 }
+
+void CPU::write_masked_indexed(std::uint16_t base, std::uint8_t index, std::uint8_t data) {
+  const std::uint16_t indexed_low = (base & 0xFF) + index;
+
+  const auto low = static_cast<std::uint8_t>(indexed_low);
+
+  const std::uint16_t provisional = (base & 0xFF00) | low;
+  (void)this->read(provisional);
+
+  const auto mask = static_cast<std::uint8_t>((base >> 8) + 1);
+
+  const std::uint8_t value = data & mask;
+  const std::uint16_t addr = indexed_low > 0xFF ? ((value << 8) | low) : provisional;
+
+  this->write(addr, value);
+};

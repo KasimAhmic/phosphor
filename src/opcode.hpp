@@ -350,14 +350,19 @@ namespace OpCode {
   } // namespace TYA
 
   namespace Unofficial {
-    namespace ANC {
-      inline constexpr Definition Immediate1 = {0x0B, Instruction::ANC, AddressingMode::Immediate};
-      inline constexpr Definition Immediate2 = {0x2B, Instruction::ANC, AddressingMode::Immediate};
-    } // namespace ANC
+    namespace AHX {
+      inline constexpr Definition AbsoluteY       = {0x9F, Instruction::AHX, AddressingMode::AbsoluteY};
+      inline constexpr Definition IndexedIndirect = {0x93, Instruction::AHX, AddressingMode::IndexedIndirect};
+    } // namespace AHX
 
     namespace ALR {
       inline constexpr Definition Immediate = {0x4B, Instruction::ALR, AddressingMode::Immediate};
     } // namespace ALR
+
+    namespace ANC {
+      inline constexpr Definition Immediate1 = {0x0B, Instruction::ANC, AddressingMode::Immediate};
+      inline constexpr Definition Immediate2 = {0x2B, Instruction::ANC, AddressingMode::Immediate};
+    } // namespace ANC
 
     namespace ARR {
       inline constexpr Definition Immediate = {0x6B, Instruction::ARR, AddressingMode::Immediate};
@@ -386,6 +391,10 @@ namespace OpCode {
       inline constexpr Definition IndexedIndirect = {0xE3, Instruction::ISC, AddressingMode::IndexedIndirect};
       inline constexpr Definition IndirectIndexed = {0xF3, Instruction::ISC, AddressingMode::IndirectIndexed};
     } // namespace ISC
+
+    namespace LAS {
+      inline constexpr Definition AbsoluteY = {0xBB, Instruction::LAS, AddressingMode::AbsoluteY};
+    } // namespace LAS
 
     namespace LAX {
       inline constexpr Definition Immediate       = {0xAB, Instruction::LAX, AddressingMode::Immediate};
@@ -459,6 +468,14 @@ namespace OpCode {
       inline constexpr Definition IndexedIndirect = {0x83, Instruction::SAX, AddressingMode::IndexedIndirect};
     } // namespace SAX
 
+    namespace SHY {
+      inline constexpr Definition AbsoluteX = {0x9C, Instruction::SHY, AddressingMode::AbsoluteX};
+    } // namespace SHY
+
+    namespace SHX {
+      inline constexpr Definition AbsoluteY = {0x9E, Instruction::SHX, AddressingMode::AbsoluteY};
+    } // namespace SHX
+
     namespace SBC {
       inline constexpr Definition Immediate = {0xEB, Instruction::SBC, AddressingMode::Immediate};
     } // namespace SBC
@@ -482,5 +499,13 @@ namespace OpCode {
       inline constexpr Definition IndexedIndirect = {0x43, Instruction::SRE, AddressingMode::IndexedIndirect};
       inline constexpr Definition IndirectIndexed = {0x53, Instruction::SRE, AddressingMode::IndirectIndexed};
     } // namespace SRE
+
+    namespace TAS {
+      inline constexpr Definition AbsoluteY = {0x9B, Instruction::TAS, AddressingMode::Absolute};
+    } // namespace TAS
+
+    namespace XAA {
+      inline constexpr Definition Immediate = {0x8B, Instruction::XAA, AddressingMode::Immediate};
+    } // namespace XAA
   } // namespace Unofficial
 } // namespace OpCode

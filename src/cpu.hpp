@@ -74,6 +74,8 @@ public:
   [[nodiscard]] Registers get_registers() const { return this->_registers; }
 
 private:
+  static constexpr std::uint8_t UNSTABLE_MAGIC = 0xEE;
+
   Registers _registers;
   std::uint64_t _total_cycle_count;
   std::uint8_t _current_cycle_count;
@@ -121,4 +123,6 @@ private:
   std::uint8_t increment(std::uint16_t addr);
   std::uint8_t decrement(std::uint16_t addr);
   void assign_register(std::uint8_t& reg, std::uint8_t value);
+
+  void write_masked_indexed(std::uint16_t base, std::uint8_t index, std::uint8_t data);
 };
