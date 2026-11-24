@@ -352,7 +352,7 @@ namespace OpCode {
   namespace Unofficial {
     namespace AHX {
       inline constexpr Definition AbsoluteY       = {0x9F, Instruction::AHX, AddressingMode::AbsoluteY};
-      inline constexpr Definition IndexedIndirect = {0x93, Instruction::AHX, AddressingMode::IndexedIndirect};
+      inline constexpr Definition IndirectIndexed = {0x93, Instruction::AHX, AddressingMode::IndirectIndexed};
     } // namespace AHX
 
     namespace ALR {

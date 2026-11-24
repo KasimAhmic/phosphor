@@ -231,6 +231,67 @@ TEST(CPU_SST, SBC_AbsoluteY) { run_single_step_tests("f9"); }
 TEST(CPU_SST, SBC_AbsoluteX) { run_single_step_tests("fd"); }
 TEST(CPU_SST, INC_AbsoluteX) { run_single_step_tests("fe"); }
 
+// Unofficial AHX OpCodes
+TEST(CPU_SST, Unofficial_AHX_AbsoluteY) { run_single_step_tests("9f"); }
+TEST(CPU_SST, Unofficial_AHX_IndirectIndexed) { run_single_step_tests("93"); }
+
+// Unofficial ALR OpCodes
+TEST(CPU_SST, Unofficial_ALR_Immediate) { run_single_step_tests("4b"); }
+
+// Unofficial ANC OpCodes
+TEST(CPU_SST, Unofficial_ANC_Immediate1) { run_single_step_tests("0b"); }
+TEST(CPU_SST, Unofficial_ANC_Immediate2) { run_single_step_tests("2b"); }
+
+// Unofficial ARR OpCodes
+TEST(CPU_SST, Unofficial_ARR_Immediate) { run_single_step_tests("6b"); }
+
+// Unofficial AXS OpCodes
+TEST(CPU_SST, Unofficial_AXS_Immediate) { run_single_step_tests("cb"); }
+
+// Unofficial DCP OpCodes
+TEST(CPU_SST, Unofficial_DCP_ZeroPage) { run_single_step_tests("c7"); }
+TEST(CPU_SST, Unofficial_DCP_ZeroPageX) { run_single_step_tests("d7"); }
+TEST(CPU_SST, Unofficial_DCP_Absolute) { run_single_step_tests("cf"); }
+TEST(CPU_SST, Unofficial_DCP_AbsoluteX) { run_single_step_tests("df"); }
+TEST(CPU_SST, Unofficial_DCP_AbsoluteY) { run_single_step_tests("db"); }
+TEST(CPU_SST, Unofficial_DCP_IndexedIndirect) { run_single_step_tests("c3"); }
+TEST(CPU_SST, Unofficial_DCP_IndirectIndexed) { run_single_step_tests("d3"); }
+
+// Unofficial ISC OpCodes
+TEST(CPU_SST, Unofficial_ISC_ZeroPage) { run_single_step_tests("e7"); }
+TEST(CPU_SST, Unofficial_ISC_ZeroPageX) { run_single_step_tests("f7"); }
+TEST(CPU_SST, Unofficial_ISC_Absolute) { run_single_step_tests("ef"); }
+TEST(CPU_SST, Unofficial_ISC_AbsoluteX) { run_single_step_tests("ff"); }
+TEST(CPU_SST, Unofficial_ISC_AbsoluteY) { run_single_step_tests("fb"); }
+TEST(CPU_SST, Unofficial_ISC_IndexedIndirect) { run_single_step_tests("e3"); }
+TEST(CPU_SST, Unofficial_ISC_IndirectIndexed) { run_single_step_tests("f3"); }
+
+// Unofficial KIL OpCodes
+TEST(CPU_SST, Unofficial_KIL_Implied1) { run_single_step_tests("02"); }
+TEST(CPU_SST, Unofficial_KIL_Implied2) { run_single_step_tests("12"); }
+TEST(CPU_SST, Unofficial_KIL_Implied3) { run_single_step_tests("22"); }
+TEST(CPU_SST, Unofficial_KIL_Implied4) { run_single_step_tests("32"); }
+TEST(CPU_SST, Unofficial_KIL_Implied5) { run_single_step_tests("42"); }
+TEST(CPU_SST, Unofficial_KIL_Implied6) { run_single_step_tests("52"); }
+TEST(CPU_SST, Unofficial_KIL_Implied7) { run_single_step_tests("62"); }
+TEST(CPU_SST, Unofficial_KIL_Implied8) { run_single_step_tests("72"); }
+TEST(CPU_SST, Unofficial_KIL_Implied9) { run_single_step_tests("92"); }
+TEST(CPU_SST, Unofficial_KIL_Implied10) { run_single_step_tests("b2"); }
+TEST(CPU_SST, Unofficial_KIL_Implied11) { run_single_step_tests("d2"); }
+TEST(CPU_SST, Unofficial_KIL_Implied12) { run_single_step_tests("f2"); }
+
+// Unofficial LAS OpCodes
+TEST(CPU_SST, Unofficial_LAS_AbsoluteY) { run_single_step_tests("bb"); }
+
+// Unofficial LAX OpCodes
+TEST(CPU_SST, Unofficial_LAX_Immediate) { run_single_step_tests("ab"); }
+TEST(CPU_SST, Unofficial_LAX_ZeroPage) { run_single_step_tests("a7"); }
+TEST(CPU_SST, Unofficial_LAX_ZeroPageY) { run_single_step_tests("b7"); }
+TEST(CPU_SST, Unofficial_LAX_Absolute) { run_single_step_tests("af"); }
+TEST(CPU_SST, Unofficial_LAX_AbsoluteY) { run_single_step_tests("bf"); }
+TEST(CPU_SST, Unofficial_LAX_IndexedIndirect) { run_single_step_tests("a3"); }
+TEST(CPU_SST, Unofficial_LAX_IndirectIndexed) { run_single_step_tests("b3"); }
+
 // Unofficial NOP OpCodes
 TEST(CPU_SST, Unofficial_NOP_ZeroPage1) { run_single_step_tests("04"); }
 TEST(CPU_SST, Unofficial_NOP_ZeroPage2) { run_single_step_tests("44"); }
@@ -260,81 +321,59 @@ TEST(CPU_SST, Unofficial_NOP_AbsoluteX4) { run_single_step_tests("7c"); }
 TEST(CPU_SST, Unofficial_NOP_AbsoluteX5) { run_single_step_tests("dc"); }
 TEST(CPU_SST, Unofficial_NOP_AbsoluteX6) { run_single_step_tests("fc"); }
 
-TEST(CPU_SST, Unofficial_KIL) { run_single_step_tests("02"); }
-TEST(CPU_SST, Unofficial_SLO_IndexedIndirect) { run_single_step_tests("03"); }
-TEST(CPU_SST, Unofficial_SLO_ZeroPage) { run_single_step_tests("07"); }
-TEST(CPU_SST, Unofficial_ANC_Immediate) { run_single_step_tests("0b"); }
-TEST(CPU_SST, Unofficial_SLO_Absolute) { run_single_step_tests("0f"); }
-TEST(CPU_SST, Unofficial_KIL_12) { run_single_step_tests("12"); }
-TEST(CPU_SST, Unofficial_SLO_IndirectIndexed) { run_single_step_tests("13"); }
-TEST(CPU_SST, Unofficial_SLO_ZeroPageX) { run_single_step_tests("17"); }
-TEST(CPU_SST, Unofficial_SLO_AbsoluteY) { run_single_step_tests("1b"); }
-TEST(CPU_SST, Unofficial_SLO_AbsoluteX) { run_single_step_tests("1f"); }
-TEST(CPU_SST, Unofficial_KIL_22) { run_single_step_tests("22"); }
-TEST(CPU_SST, Unofficial_RLA_IndexedIndirect) { run_single_step_tests("23"); }
+// Unofficial RLA OpCodes
 TEST(CPU_SST, Unofficial_RLA_ZeroPage) { run_single_step_tests("27"); }
-TEST(CPU_SST, Unofficial_ANC_Immediate_2B) { run_single_step_tests("2b"); }
-TEST(CPU_SST, Unofficial_RLA_Absolute) { run_single_step_tests("2f"); }
-TEST(CPU_SST, Unofficial_KIL_32) { run_single_step_tests("32"); }
-TEST(CPU_SST, Unofficial_RLA_IndirectIndexed) { run_single_step_tests("33"); }
 TEST(CPU_SST, Unofficial_RLA_ZeroPageX) { run_single_step_tests("37"); }
-TEST(CPU_SST, Unofficial_RLA_AbsoluteY) { run_single_step_tests("3b"); }
+TEST(CPU_SST, Unofficial_RLA_Absolute) { run_single_step_tests("2f"); }
 TEST(CPU_SST, Unofficial_RLA_AbsoluteX) { run_single_step_tests("3f"); }
-TEST(CPU_SST, Unofficial_KIL_42) { run_single_step_tests("42"); }
-TEST(CPU_SST, Unofficial_SRE_IndexedIndirect) { run_single_step_tests("43"); }
-TEST(CPU_SST, Unofficial_SRE_ZeroPage) { run_single_step_tests("47"); }
-TEST(CPU_SST, Unofficial_ALR_Immediate) { run_single_step_tests("4b"); }
-TEST(CPU_SST, Unofficial_SRE_Absolute) { run_single_step_tests("4f"); }
-TEST(CPU_SST, Unofficial_KIL_52) { run_single_step_tests("52"); }
-TEST(CPU_SST, Unofficial_SRE_IndirectIndexed) { run_single_step_tests("53"); }
-TEST(CPU_SST, Unofficial_SRE_ZeroPageX) { run_single_step_tests("57"); }
-TEST(CPU_SST, Unofficial_SRE_AbsoluteY) { run_single_step_tests("5b"); }
-TEST(CPU_SST, Unofficial_SRE_AbsoluteX) { run_single_step_tests("5f"); }
-TEST(CPU_SST, Unofficial_KIL_62) { run_single_step_tests("62"); }
-TEST(CPU_SST, Unofficial_RRA_IndexedIndirect) { run_single_step_tests("63"); }
+TEST(CPU_SST, Unofficial_RLA_AbsoluteY) { run_single_step_tests("3b"); }
+TEST(CPU_SST, Unofficial_RLA_IndexedIndirect) { run_single_step_tests("23"); }
+TEST(CPU_SST, Unofficial_RLA_IndirectIndexed) { run_single_step_tests("33"); }
+
+// Unofficial RRA OpCodes
 TEST(CPU_SST, Unofficial_RRA_ZeroPage) { run_single_step_tests("67"); }
-TEST(CPU_SST, Unofficial_ARR_Immediate) { run_single_step_tests("6b"); }
-TEST(CPU_SST, Unofficial_RRA_Absolute) { run_single_step_tests("6f"); }
-TEST(CPU_SST, Unofficial_KIL_72) { run_single_step_tests("72"); }
-TEST(CPU_SST, Unofficial_RRA_IndirectIndexed) { run_single_step_tests("73"); }
 TEST(CPU_SST, Unofficial_RRA_ZeroPageX) { run_single_step_tests("77"); }
-TEST(CPU_SST, Unofficial_RRA_AbsoluteY) { run_single_step_tests("7b"); }
+TEST(CPU_SST, Unofficial_RRA_Absolute) { run_single_step_tests("6f"); }
 TEST(CPU_SST, Unofficial_RRA_AbsoluteX) { run_single_step_tests("7f"); }
-TEST(CPU_SST, Unofficial_SAX_IndexedIndirect) { run_single_step_tests("83"); }
+TEST(CPU_SST, Unofficial_RRA_AbsoluteY) { run_single_step_tests("7b"); }
+TEST(CPU_SST, Unofficial_RRA_IndexedIndirect) { run_single_step_tests("63"); }
+TEST(CPU_SST, Unofficial_RRA_IndirectIndexed) { run_single_step_tests("73"); }
+
+// Unofficial SAX OpCodes
 TEST(CPU_SST, Unofficial_SAX_ZeroPage) { run_single_step_tests("87"); }
-TEST(CPU_SST, Unofficial_XAA_Immediate) { run_single_step_tests("8b"); }
-TEST(CPU_SST, Unofficial_SAX_Absolute) { run_single_step_tests("8f"); }
-TEST(CPU_SST, Unofficial_KIL_92) { run_single_step_tests("92"); }
-TEST(CPU_SST, Unofficial_AHX_IndirectIndexed) { run_single_step_tests("93"); }
 TEST(CPU_SST, Unofficial_SAX_ZeroPageY) { run_single_step_tests("97"); }
-TEST(CPU_SST, Unofficial_TAS_AbsoluteY) { run_single_step_tests("9b"); }
+TEST(CPU_SST, Unofficial_SAX_Absolute) { run_single_step_tests("8f"); }
+TEST(CPU_SST, Unofficial_SAX_IndexedIndirect) { run_single_step_tests("83"); }
+
+// Unofficial SHY OpCodes
 TEST(CPU_SST, Unofficial_SHY_AbsoluteX) { run_single_step_tests("9c"); }
+
+// Unofficial SHX OpCodes
 TEST(CPU_SST, Unofficial_SHX_AbsoluteY) { run_single_step_tests("9e"); }
-TEST(CPU_SST, Unofficial_AHX_AbsoluteY) { run_single_step_tests("9f"); }
-TEST(CPU_SST, Unofficial_LAX_IndexedIndirect) { run_single_step_tests("a3"); }
-TEST(CPU_SST, Unofficial_LAX_ZeroPage) { run_single_step_tests("a7"); }
-TEST(CPU_SST, Unofficial_LAX_Immediate) { run_single_step_tests("ab"); }
-TEST(CPU_SST, Unofficial_LAX_Absolute) { run_single_step_tests("af"); }
-TEST(CPU_SST, Unofficial_KIL_B2) { run_single_step_tests("b2"); }
-TEST(CPU_SST, Unofficial_LAX_IndirectIndexed) { run_single_step_tests("b3"); }
-TEST(CPU_SST, Unofficial_LAX_ZeroPageY) { run_single_step_tests("b7"); }
-TEST(CPU_SST, Unofficial_LAS_AbsoluteY) { run_single_step_tests("bb"); }
-TEST(CPU_SST, Unofficial_LAX_AbsoluteY) { run_single_step_tests("bf"); }
-TEST(CPU_SST, Unofficial_DCP_IndexedIndirect) { run_single_step_tests("c3"); }
-TEST(CPU_SST, Unofficial_DCP_ZeroPage) { run_single_step_tests("c7"); }
-TEST(CPU_SST, Unofficial_AXS_Immediate) { run_single_step_tests("cb"); }
-TEST(CPU_SST, Unofficial_DCP_Absolute) { run_single_step_tests("cf"); }
-TEST(CPU_SST, Unofficial_KIL_D2) { run_single_step_tests("d2"); }
-TEST(CPU_SST, Unofficial_DCP_IndirectIndexed) { run_single_step_tests("d3"); }
-TEST(CPU_SST, Unofficial_DCP_ZeroPageX) { run_single_step_tests("d7"); }
-TEST(CPU_SST, Unofficial_DCP_AbsoluteY) { run_single_step_tests("db"); }
-TEST(CPU_SST, Unofficial_DCP_AbsoluteX) { run_single_step_tests("df"); }
-TEST(CPU_SST, Unofficial_ISC_IndexedIndirect) { run_single_step_tests("e3"); }
-TEST(CPU_SST, Unofficial_ISC_ZeroPage) { run_single_step_tests("e7"); }
-TEST(CPU_SST, Unofficial_SBC_Immediate_EB) { run_single_step_tests("eb"); }
-TEST(CPU_SST, Unofficial_ISC_Absolute) { run_single_step_tests("ef"); }
-TEST(CPU_SST, Unofficial_KIL_F2) { run_single_step_tests("f2"); }
-TEST(CPU_SST, Unofficial_ISC_IndirectIndexed) { run_single_step_tests("f3"); }
-TEST(CPU_SST, Unofficial_ISC_ZeroPageX) { run_single_step_tests("f7"); }
-TEST(CPU_SST, Unofficial_ISC_AbsoluteY) { run_single_step_tests("fb"); }
-TEST(CPU_SST, Unofficial_ISC_AbsoluteX) { run_single_step_tests("ff"); }
+
+// Unofficial SBC OpCodes
+TEST(CPU_SST, Unofficial_SBC_Immediate) { run_single_step_tests("eb"); }
+
+// Unofficial SLO OpCodes
+TEST(CPU_SST, Unofficial_SLO_ZeroPage) { run_single_step_tests("07"); }
+TEST(CPU_SST, Unofficial_SLO_ZeroPageX) { run_single_step_tests("17"); }
+TEST(CPU_SST, Unofficial_SLO_Absolute) { run_single_step_tests("0f"); }
+TEST(CPU_SST, Unofficial_SLO_AbsoluteX) { run_single_step_tests("1f"); }
+TEST(CPU_SST, Unofficial_SLO_AbsoluteY) { run_single_step_tests("1b"); }
+TEST(CPU_SST, Unofficial_SLO_IndexedIndirect) { run_single_step_tests("03"); }
+TEST(CPU_SST, Unofficial_SLO_IndirectIndexed) { run_single_step_tests("13"); }
+
+// Unofficial SRE OpCodes
+TEST(CPU_SST, Unofficial_SRE_ZeroPage) { run_single_step_tests("47"); }
+TEST(CPU_SST, Unofficial_SRE_ZeroPageX) { run_single_step_tests("57"); }
+TEST(CPU_SST, Unofficial_SRE_Absolute) { run_single_step_tests("4f"); }
+TEST(CPU_SST, Unofficial_SRE_AbsoluteX) { run_single_step_tests("5f"); }
+TEST(CPU_SST, Unofficial_SRE_AbsoluteY) { run_single_step_tests("5b"); }
+TEST(CPU_SST, Unofficial_SRE_IndexedIndirect) { run_single_step_tests("43"); }
+TEST(CPU_SST, Unofficial_SRE_IndirectIndexed) { run_single_step_tests("53"); }
+
+// Unofficial TAS OpCodes
+TEST(CPU_SST, Unofficial_TAS_AbsoluteY) { run_single_step_tests("9b"); }
+
+// Unofficial XAA OpCodes
+TEST(CPU_SST, Unofficial_XAA_Immediate) { run_single_step_tests("8b"); }

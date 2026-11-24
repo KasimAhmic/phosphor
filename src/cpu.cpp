@@ -1297,7 +1297,7 @@ std::uint8_t CPU::step() {
     break;
   }
 
-  case OpCode::Unofficial::AHX::IndexedIndirect: {
+  case OpCode::Unofficial::AHX::IndirectIndexed: {
     const std::uint8_t ptr   = this->read(this->_registers.pc++);
     const std::uint8_t low   = this->read(ptr);
     const std::uint8_t high  = this->read(static_cast<std::uint8_t>(ptr + 1));
