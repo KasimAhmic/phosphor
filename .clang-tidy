@@ -1,6 +1,5 @@
 # Generated from CLion Inspection settings
 ---
-Standard: Cpp23
 Checks: >
   -*,
   bugprone-argument-comment,

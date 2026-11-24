@@ -10,7 +10,7 @@ CPU::CPU(std::array<std::uint8_t, 65536> mem)
 
 CPU::~CPU() = default;
 
-std::int8_t CPU::step() {
+std::uint8_t CPU::step() {
   this->_current_cycle_count = 0;
 
   const auto opcode = this->read(this->_registers.pc++);
@@ -1691,7 +1691,7 @@ void CPU::subtract_with_carry(const std::uint8_t value) {
   const std::uint8_t a = this->_registers.a;
 
   const std::int16_t result = static_cast<std::int16_t>(a) - static_cast<std::int16_t>(value) -
-                              !this->_registers.is_carry_set();
+                              !(this->_registers.is_carry_set());
 
   this->_registers.a = static_cast<std::uint8_t>(result);
 

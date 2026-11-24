@@ -1,4 +1,5 @@
 {
   "cmake.ctest.allowParallelJobs": true,
-  "cmake.ctest.parallelJobs": 4
+  "cmake.ctest.parallelJobs": 4,
+  "clang-tidy.buildPath": "cmake-build-debug"
 }
