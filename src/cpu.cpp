@@ -1044,7 +1044,8 @@ std::uint8_t CPU::step() {
     break;
   }
 
-  case OpCode::SBC::Immediate: {
+  case OpCode::SBC::Immediate:
+  case OpCode::Unofficial::SBC::Immediate: {
     const std::uint8_t value = this->read(this->_registers.pc++);
 
     this->subtract_with_carry(value);
