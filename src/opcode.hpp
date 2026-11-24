@@ -435,6 +435,13 @@ namespace OpCode {
       inline constexpr Definition IndirectIndexed = {0x73, Instruction::RRA, AddressingMode::IndirectIndexed};
     } // namespace RRA
 
+    namespace SAX {
+      inline constexpr Definition ZeroPage        = {0x87, Instruction::SAX, AddressingMode::ZeroPage};
+      inline constexpr Definition ZeroPageY       = {0x97, Instruction::SAX, AddressingMode::ZeroPageY};
+      inline constexpr Definition Absolute        = {0x8F, Instruction::SAX, AddressingMode::Absolute};
+      inline constexpr Definition IndexedIndirect = {0x83, Instruction::SAX, AddressingMode::IndexedIndirect};
+    } // namespace SAX
+
     namespace SLO {
       inline constexpr Definition ZeroPage        = {0x07, Instruction::SLO, AddressingMode::ZeroPage};
       inline constexpr Definition ZeroPageX       = {0x17, Instruction::SLO, AddressingMode::ZeroPageX};

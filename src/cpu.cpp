@@ -1655,6 +1655,42 @@ std::uint8_t CPU::step() {
     break;
   }
 
+  case OpCode::Unofficial::SAX::ZeroPage: {
+    const std::uint16_t addr = this->resolve_zero_page();
+    const std::uint8_t value = this->_registers.a & this->_registers.x;
+
+    this->write(addr, value);
+
+    break;
+  }
+
+  case OpCode::Unofficial::SAX::ZeroPageY: {
+    const std::uint16_t addr = this->resolve_zero_page_indexed(this->_registers.y);
+    const std::uint8_t value = this->_registers.a & this->_registers.x;
+
+    this->write(addr, value);
+
+    break;
+  }
+
+  case OpCode::Unofficial::SAX::Absolute: {
+    const std::uint16_t addr = this->resolve_absolute();
+    const std::uint8_t value = this->_registers.a & this->_registers.x;
+
+    this->write(addr, value);
+
+    break;
+  }
+
+  case OpCode::Unofficial::SAX::IndexedIndirect: {
+    const std::uint16_t addr = this->resolve_indexed_indirect();
+    const std::uint8_t value = this->_registers.a & this->_registers.x;
+
+    this->write(addr, value);
+
+    break;
+  }
+
   case OpCode::Unofficial::SLO::ZeroPage: {
     const std::uint16_t addr = this->resolve_zero_page();
     const std::uint8_t value = this->shift_left(addr);
