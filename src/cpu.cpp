@@ -1288,6 +1288,97 @@ std::uint8_t CPU::step() {
     break;
   }
 
+  case OpCode::Unofficial::DCP::ZeroPage: {
+    const std::uint16_t addr = this->resolve_zero_page();
+    const std::uint8_t value = this->decrement(addr);
+
+    this->compare(this->_registers.a, value);
+
+    break;
+  }
+
+  case OpCode::Unofficial::DCP::ZeroPageX: {
+    const std::uint16_t addr = this->resolve_zero_page_indexed(this->_registers.x);
+    const std::uint8_t value = this->decrement(addr);
+
+    this->compare(this->_registers.a, value);
+
+    break;
+  }
+
+  case OpCode::Unofficial::DCP::Absolute: {
+    const std::uint16_t addr = this->resolve_absolute();
+    const std::uint8_t value = this->decrement(addr);
+
+    this->compare(this->_registers.a, value);
+
+    break;
+  }
+
+  case OpCode::Unofficial::DCP::AbsoluteX: {
+    const std::uint16_t addr = this->resolve_absolute_indexed(this->_registers.x);
+    const std::uint8_t value = this->decrement(addr);
+
+    this->compare(this->_registers.a, value);
+
+    break;
+  }
+
+  case OpCode::Unofficial::DCP::AbsoluteY: {
+    const std::uint16_t addr = this->resolve_absolute_indexed(this->_registers.y);
+    const std::uint8_t value = this->decrement(addr);
+
+    this->compare(this->_registers.a, value);
+
+    break;
+  }
+
+  case OpCode::Unofficial::DCP::IndexedIndirect: {
+    const std::uint16_t addr = this->resolve_indexed_indirect();
+    const std::uint8_t value = this->decrement(addr);
+
+    this->compare(this->_registers.a, value);
+
+    break;
+  }
+
+  case OpCode::Unofficial::DCP::IndirectIndexed: {
+    const std::uint16_t addr = this->resolve_indirect_indexed();
+    const std::uint8_t value = this->decrement(addr);
+
+    this->compare(this->_registers.a, value);
+
+    break;
+  }
+
+  case OpCode::Unofficial::ISC::ZeroPage: {
+    break;
+  }
+
+  case OpCode::Unofficial::ISC::ZeroPageX: {
+    break;
+  }
+
+  case OpCode::Unofficial::ISC::Absolute: {
+    break;
+  }
+
+  case OpCode::Unofficial::ISC::AbsoluteX: {
+    break;
+  }
+
+  case OpCode::Unofficial::ISC::AbsoluteY: {
+    break;
+  }
+
+  case OpCode::Unofficial::ISC::IndexedIndirect: {
+    break;
+  }
+
+  case OpCode::Unofficial::ISC::IndirectIndexed: {
+    break;
+  }
+
   case OpCode::Unofficial::NOP::ZeroPage1:
   case OpCode::Unofficial::NOP::ZeroPage2:
   case OpCode::Unofficial::NOP::ZeroPage3: {
@@ -1342,6 +1433,118 @@ std::uint8_t CPU::step() {
   case OpCode::Unofficial::NOP::AbsoluteX6: {
     (void)this->read_absolute_indexed(this->_registers.x);
 
+    break;
+  }
+
+  case OpCode::Unofficial::RLA::ZeroPage: {
+    break;
+  }
+
+  case OpCode::Unofficial::RLA::ZeroPageX: {
+    break;
+  }
+
+  case OpCode::Unofficial::RLA::Absolute: {
+    break;
+  }
+
+  case OpCode::Unofficial::RLA::AbsoluteX: {
+    break;
+  }
+
+  case OpCode::Unofficial::RLA::AbsoluteY: {
+    break;
+  }
+
+  case OpCode::Unofficial::RLA::IndexedIndirect: {
+    break;
+  }
+
+  case OpCode::Unofficial::RLA::IndirectIndexed: {
+    break;
+  }
+
+  case OpCode::Unofficial::RRA::ZeroPage: {
+    break;
+  }
+
+  case OpCode::Unofficial::RRA::ZeroPageX: {
+    break;
+  }
+
+  case OpCode::Unofficial::RRA::Absolute: {
+    break;
+  }
+
+  case OpCode::Unofficial::RRA::AbsoluteX: {
+    break;
+  }
+
+  case OpCode::Unofficial::RRA::AbsoluteY: {
+    break;
+  }
+
+  case OpCode::Unofficial::RRA::IndexedIndirect: {
+    break;
+  }
+
+  case OpCode::Unofficial::RRA::IndirectIndexed: {
+    break;
+  }
+
+  case OpCode::Unofficial::SLO::ZeroPage: {
+    break;
+  }
+
+  case OpCode::Unofficial::SLO::ZeroPageX: {
+    break;
+  }
+
+  case OpCode::Unofficial::SLO::Absolute: {
+    break;
+  }
+
+  case OpCode::Unofficial::SLO::AbsoluteX: {
+    break;
+  }
+
+  case OpCode::Unofficial::SLO::AbsoluteY: {
+    break;
+  }
+
+  case OpCode::Unofficial::SLO::IndexedIndirect: {
+    break;
+  }
+
+  case OpCode::Unofficial::SLO::IndirectIndexed: {
+    break;
+  }
+
+  case OpCode::Unofficial::SRE::ZeroPage: {
+    break;
+  }
+
+  case OpCode::Unofficial::SRE::ZeroPageX: {
+    break;
+  }
+
+  case OpCode::Unofficial::SRE::Absolute: {
+    break;
+  }
+
+  case OpCode::Unofficial::SRE::AbsoluteX: {
+    break;
+  }
+
+  case OpCode::Unofficial::SRE::AbsoluteY: {
+    break;
+  }
+
+  case OpCode::Unofficial::SRE::IndexedIndirect: {
+    break;
+  }
+
+  case OpCode::Unofficial::SRE::IndirectIndexed: {
     break;
   }
   }
@@ -1559,7 +1762,7 @@ void CPU::bitwise_eor(const std::uint8_t value) {
   this->_registers.set_negative(this->_registers.a & 0x80);
 }
 
-void CPU::shift_left(const std::uint16_t addr) {
+std::uint8_t CPU::shift_left(const std::uint16_t addr) {
   const std::uint8_t value  = this->read(addr);
   const std::uint8_t result = value << 1;
 
@@ -1569,9 +1772,11 @@ void CPU::shift_left(const std::uint16_t addr) {
   this->_registers.set_carry(value & 0x80);
   this->_registers.set_zero(result == 0);
   this->_registers.set_negative(result & 0x80);
+
+  return result;
 }
 
-void CPU::shift_right(const std::uint16_t addr) {
+std::uint8_t CPU::shift_right(const std::uint16_t addr) {
   const std::uint8_t value  = this->read(addr);
   const std::uint8_t carry  = value & 0x01;
   const std::uint8_t result = value >> 1;
@@ -1582,9 +1787,11 @@ void CPU::shift_right(const std::uint16_t addr) {
   this->_registers.set_carry(carry);
   this->_registers.set_zero(result == 0);
   this->_registers.set_negative(false);
+
+  return result;
 }
 
-void CPU::rotate_left(std::uint16_t addr) {
+std::uint8_t CPU::rotate_left(std::uint16_t addr) {
   const std::uint8_t value = this->read(addr);
 
   const std::uint8_t old_carry = this->_registers.is_carry_set();
@@ -1598,9 +1805,11 @@ void CPU::rotate_left(std::uint16_t addr) {
   this->_registers.set_carry(new_carry);
   this->_registers.set_zero(result == 0);
   this->_registers.set_negative(result & 0x80);
+
+  return result;
 }
 
-void CPU::rotate_right(const std::uint16_t addr) {
+std::uint8_t CPU::rotate_right(const std::uint16_t addr) {
   const std::uint8_t value = this->read(addr);
 
   const std::uint8_t old_carry = this->_registers.is_carry_set();
@@ -1614,6 +1823,8 @@ void CPU::rotate_right(const std::uint16_t addr) {
   this->_registers.set_carry(new_carry);
   this->_registers.set_zero(result == 0);
   this->_registers.set_negative(result & 0x80);
+
+  return result;
 }
 
 void CPU::branch_if(const bool condition) {
@@ -1683,7 +1894,7 @@ void CPU::subtract_with_carry(const std::uint8_t value) {
   this->_registers.set_negative(this->_registers.a & 0x80);
 }
 
-void CPU::increment(const std::uint16_t addr) {
+std::uint8_t CPU::increment(const std::uint16_t addr) {
   const std::uint8_t value  = this->read(addr);
   const std::uint8_t result = value + 1;
 
@@ -1692,9 +1903,11 @@ void CPU::increment(const std::uint16_t addr) {
 
   this->_registers.set_zero(result == 0);
   this->_registers.set_negative(result & 0x80);
+
+  return result;
 }
 
-void CPU::decrement(const std::uint16_t addr) {
+std::uint8_t CPU::decrement(const std::uint16_t addr) {
   const std::uint8_t value  = this->read(addr);
   const std::uint8_t result = value - 1;
 
@@ -1703,6 +1916,8 @@ void CPU::decrement(const std::uint16_t addr) {
 
   this->_registers.set_zero(result == 0);
   this->_registers.set_negative(result & 0x80);
+
+  return result;
 }
 
 void CPU::assign_register(std::uint8_t& reg, const std::uint8_t value) {

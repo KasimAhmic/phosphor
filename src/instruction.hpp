@@ -4,13 +4,6 @@
 
 enum class Instruction : std::uint8_t {
   /**
-   * @brief Instruction not implemented
-   *
-   * This instruction is used as a placeholder for instructions that have not been implemented yet.
-   */
-  Unimplemented,
-
-  /**
    * @brief Add with Carry
    *
    * @see https://www.nesdev.org/wiki/Instruction_reference#ADC
@@ -401,4 +394,46 @@ enum class Instruction : std::uint8_t {
    * @see https://www.nesdev.org/wiki/Instruction_reference#TYA
    */
   TYA,
+
+  /**
+   * @brief UNOFFICIAL OPCODE. Equivalent to DEC + CMP.
+   *
+   * @see https://www.nesdev.org/wiki/CPU_unofficial_opcodes
+   */
+  DCP,
+
+  /**
+   * @brief UNOFFICIAL OPCODE. Equivalent to INC + SBC.
+   *
+   * @see https://www.nesdev.org/wiki/CPU_unofficial_opcodes
+   */
+  ISC,
+
+  /**
+   * @brief UNOFFICIAL OPCODE. Equivalent to ROL + AND.
+   *
+   * @see https://www.nesdev.org/wiki/CPU_unofficial_opcodes
+   */
+  RLA,
+
+  /**
+   * @brief UNOFFICIAL OPCODE. Equivalent to ROR + ADC.
+   *
+   * @see https://www.nesdev.org/wiki/CPU_unofficial_opcodes
+   */
+  RRA,
+
+  /**
+   * @brief UNOFFICIAL OPCODE. Equivalent to ASL + ORA.
+   *
+   * @see https://www.nesdev.org/wiki/CPU_unofficial_opcodes
+   */
+  SLO,
+
+  /**
+   * @brief UNOFFICIAL OPCODE. Equivalent to LSR + EOR.
+   *
+   * @see https://www.nesdev.org/wiki/CPU_unofficial_opcodes
+   */
+  SRE,
 };

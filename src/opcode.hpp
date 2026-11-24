@@ -350,6 +350,26 @@ namespace OpCode {
   } // namespace TYA
 
   namespace Unofficial {
+    namespace DCP {
+      inline constexpr Definition ZeroPage        = {0xC7, Instruction::DCP, AddressingMode::ZeroPage};
+      inline constexpr Definition ZeroPageX       = {0xD7, Instruction::DCP, AddressingMode::ZeroPageX};
+      inline constexpr Definition Absolute        = {0xCF, Instruction::DCP, AddressingMode::Absolute};
+      inline constexpr Definition AbsoluteX       = {0xDF, Instruction::DCP, AddressingMode::AbsoluteX};
+      inline constexpr Definition AbsoluteY       = {0xDB, Instruction::DCP, AddressingMode::AbsoluteY};
+      inline constexpr Definition IndexedIndirect = {0xC3, Instruction::DCP, AddressingMode::IndexedIndirect};
+      inline constexpr Definition IndirectIndexed = {0xD3, Instruction::DCP, AddressingMode::IndirectIndexed};
+    } // namespace DCP
+
+    namespace ISC {
+      inline constexpr Definition ZeroPage        = {0xE7, Instruction::ISC, AddressingMode::ZeroPage};
+      inline constexpr Definition ZeroPageX       = {0xF7, Instruction::ISC, AddressingMode::ZeroPageX};
+      inline constexpr Definition Absolute        = {0xEF, Instruction::ISC, AddressingMode::Absolute};
+      inline constexpr Definition AbsoluteX       = {0xFF, Instruction::ISC, AddressingMode::AbsoluteX};
+      inline constexpr Definition AbsoluteY       = {0xFB, Instruction::ISC, AddressingMode::AbsoluteY};
+      inline constexpr Definition IndexedIndirect = {0xE3, Instruction::ISC, AddressingMode::IndexedIndirect};
+      inline constexpr Definition IndirectIndexed = {0xF3, Instruction::ISC, AddressingMode::IndirectIndexed};
+    } // namespace ISC
+
     namespace NOP {
       inline constexpr Definition ZeroPage1 = {0x04, Instruction::NOP, AddressingMode::ZeroPage};
       inline constexpr Definition ZeroPage2 = {0x44, Instruction::NOP, AddressingMode::ZeroPage};
@@ -384,5 +404,45 @@ namespace OpCode {
       inline constexpr Definition AbsoluteX5 = {0xDC, Instruction::NOP, AddressingMode::AbsoluteX};
       inline constexpr Definition AbsoluteX6 = {0xFC, Instruction::NOP, AddressingMode::AbsoluteX};
     } // namespace NOP
+
+    namespace RLA {
+      inline constexpr Definition ZeroPage        = {0x27, Instruction::RLA, AddressingMode::ZeroPage};
+      inline constexpr Definition ZeroPageX       = {0x37, Instruction::RLA, AddressingMode::ZeroPageX};
+      inline constexpr Definition Absolute        = {0x2F, Instruction::RLA, AddressingMode::Absolute};
+      inline constexpr Definition AbsoluteX       = {0x3F, Instruction::RLA, AddressingMode::AbsoluteX};
+      inline constexpr Definition AbsoluteY       = {0x3B, Instruction::RLA, AddressingMode::AbsoluteY};
+      inline constexpr Definition IndexedIndirect = {0x23, Instruction::RLA, AddressingMode::IndexedIndirect};
+      inline constexpr Definition IndirectIndexed = {0x33, Instruction::RLA, AddressingMode::IndirectIndexed};
+    } // namespace RLA
+
+    namespace RRA {
+      inline constexpr Definition ZeroPage        = {0x67, Instruction::RRA, AddressingMode::ZeroPage};
+      inline constexpr Definition ZeroPageX       = {0x77, Instruction::RRA, AddressingMode::ZeroPageX};
+      inline constexpr Definition Absolute        = {0x6F, Instruction::RRA, AddressingMode::Absolute};
+      inline constexpr Definition AbsoluteX       = {0x7F, Instruction::RRA, AddressingMode::AbsoluteX};
+      inline constexpr Definition AbsoluteY       = {0x7B, Instruction::RRA, AddressingMode::AbsoluteY};
+      inline constexpr Definition IndexedIndirect = {0x63, Instruction::RRA, AddressingMode::IndexedIndirect};
+      inline constexpr Definition IndirectIndexed = {0x73, Instruction::RRA, AddressingMode::IndirectIndexed};
+    } // namespace RRA
+
+    namespace SLO {
+      inline constexpr Definition ZeroPage        = {0x07, Instruction::SLO, AddressingMode::ZeroPage};
+      inline constexpr Definition ZeroPageX       = {0x17, Instruction::SLO, AddressingMode::ZeroPageX};
+      inline constexpr Definition Absolute        = {0x0F, Instruction::SLO, AddressingMode::Absolute};
+      inline constexpr Definition AbsoluteX       = {0x1F, Instruction::SLO, AddressingMode::AbsoluteX};
+      inline constexpr Definition AbsoluteY       = {0x1B, Instruction::SLO, AddressingMode::AbsoluteY};
+      inline constexpr Definition IndexedIndirect = {0x03, Instruction::SLO, AddressingMode::IndexedIndirect};
+      inline constexpr Definition IndirectIndexed = {0x13, Instruction::SLO, AddressingMode::IndirectIndexed};
+    } // namespace SLO
+
+    namespace SRE {
+      inline constexpr Definition ZeroPage        = {0x47, Instruction::SRE, AddressingMode::ZeroPage};
+      inline constexpr Definition ZeroPageX       = {0x57, Instruction::SRE, AddressingMode::ZeroPageX};
+      inline constexpr Definition Absolute        = {0x4F, Instruction::SRE, AddressingMode::Absolute};
+      inline constexpr Definition AbsoluteX       = {0x5F, Instruction::SRE, AddressingMode::AbsoluteX};
+      inline constexpr Definition AbsoluteY       = {0x5B, Instruction::SRE, AddressingMode::AbsoluteY};
+      inline constexpr Definition IndexedIndirect = {0x43, Instruction::SRE, AddressingMode::IndexedIndirect};
+      inline constexpr Definition IndirectIndexed = {0x53, Instruction::SRE, AddressingMode::IndirectIndexed};
+    } // namespace SRE
   } // namespace Unofficial
 } // namespace OpCode
