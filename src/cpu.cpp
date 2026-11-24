@@ -900,6 +900,19 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::LSR::ZeroPageX: {
+    const std::uint8_t addr  = this->resolve_zero_page_indexed(this->_registers.x);
+    const std::uint8_t value = this->read(addr);
+
+    const std::uint8_t carry  = value & 0x01;
+    const std::uint8_t result = value >> 1;
+
+    this->write(addr, value);
+    this->write(addr, result);
+
+    this->_registers.set_carry(carry);
+    this->_registers.set_zero(result == 0);
+    this->_registers.set_negative(false);
+
     break;
   }
 
