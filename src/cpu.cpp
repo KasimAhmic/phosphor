@@ -954,6 +954,13 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::ORA::ZeroPageX: {
+    const std::uint8_t value = this->read_zero_page_indexed(this->_registers.x);
+
+    this->_registers.a |= value;
+
+    this->_registers.set_zero(this->_registers.a == 0);
+    this->_registers.set_negative(this->_registers.a & 0x80);
+
     break;
   }
 
