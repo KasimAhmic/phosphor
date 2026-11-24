@@ -101,8 +101,10 @@ private:
   void bitwise_and(std::uint8_t value);
   void bitwise_or(std::uint8_t value);
   void bitwise_eor(std::uint8_t value);
-  void shift_left(std::uint16_t addr, std::uint8_t value);
-  void shift_right(std::uint16_t addr, std::uint8_t value);
+  void shift_left(std::uint16_t addr);
+  void shift_right(std::uint16_t addr);
+  void rotate_left(std::uint16_t addr);
+  void rotate_right(std::uint16_t addr);
   void branch_if(bool condition);
   void bit_test(std::uint8_t value);
   void compare(std::uint8_t reg, std::uint8_t value);

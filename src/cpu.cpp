@@ -160,37 +160,33 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::ASL::ZeroPage: {
-    const std::uint8_t addr  = this->resolve_zero_page();
-    const std::uint8_t value = this->read(addr);
+    const std::uint8_t addr = this->resolve_zero_page();
 
-    this->shift_left(addr, value);
+    this->shift_left(addr);
 
     break;
   }
 
   case OpCode::ASL::ZeroPageX: {
-    const std::uint8_t addr  = this->resolve_zero_page_indexed(this->_registers.x);
-    const std::uint8_t value = this->read(addr);
+    const std::uint8_t addr = this->resolve_zero_page_indexed(this->_registers.x);
 
-    this->shift_left(addr, value);
+    this->shift_left(addr);
 
     break;
   }
 
   case OpCode::ASL::Absolute: {
     const std::uint16_t addr = this->resolve_absolute();
-    const std::uint8_t value = this->read(addr);
 
-    this->shift_left(addr, value);
+    this->shift_left(addr);
 
     break;
   }
 
   case OpCode::ASL::AbsoluteX: {
     const std::uint16_t addr = this->resolve_absolute_indexed(this->_registers.x);
-    const std::uint8_t value = this->read(addr);
 
-    this->shift_left(addr, value);
+    this->shift_left(addr);
 
     break;
   }
@@ -783,37 +779,33 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::LSR::ZeroPage: {
-    const std::uint8_t addr  = this->resolve_zero_page();
-    const std::uint8_t value = this->read(addr);
+    const std::uint8_t addr = this->resolve_zero_page();
 
-    this->shift_right(addr, value);
+    this->shift_right(addr);
 
     break;
   }
 
   case OpCode::LSR::ZeroPageX: {
-    const std::uint8_t addr  = this->resolve_zero_page_indexed(this->_registers.x);
-    const std::uint8_t value = this->read(addr);
+    const std::uint8_t addr = this->resolve_zero_page_indexed(this->_registers.x);
 
-    this->shift_right(addr, value);
+    this->shift_right(addr);
 
     break;
   }
 
   case OpCode::LSR::Absolute: {
     const std::uint16_t addr = this->resolve_absolute();
-    const std::uint8_t value = this->read(addr);
 
-    this->shift_right(addr, value);
+    this->shift_right(addr);
 
     break;
   }
 
   case OpCode::LSR::AbsoluteX: {
     const std::uint16_t addr = this->resolve_absolute_indexed(this->_registers.x);
-    const std::uint8_t value = this->read(addr);
 
-    this->shift_right(addr, value);
+    this->shift_right(addr);
 
     break;
   }
@@ -945,79 +937,33 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::ROL::ZeroPage: {
-    const std::uint8_t addr  = this->resolve_zero_page();
-    const std::uint8_t value = this->read(addr);
+    const std::uint8_t addr = this->resolve_zero_page();
 
-    const std::uint8_t old_carry = this->_registers.is_carry_set();
-    const std::uint8_t new_carry = value & 0x80;
-
-    this->write(addr, value);
-
-    const auto result = static_cast<std::uint8_t>((value << 1) | old_carry);
-
-    this->write(addr, result);
-
-    this->_registers.set_carry(new_carry);
-    this->_registers.set_zero(result == 0);
-    this->_registers.set_negative(result & 0x80);
+    this->rotate_left(addr);
 
     break;
   }
 
   case OpCode::ROL::ZeroPageX: {
-    const std::uint8_t addr  = this->resolve_zero_page_indexed(this->_registers.x);
-    const std::uint8_t value = this->read(addr);
+    const std::uint8_t addr = this->resolve_zero_page_indexed(this->_registers.x);
 
-    const std::uint8_t old_carry = this->_registers.is_carry_set();
-    const std::uint8_t new_carry = value & 0x80;
-
-    this->write(addr, value);
-
-    const auto result = static_cast<std::uint8_t>((value << 1) | old_carry);
-
-    this->write(addr, result);
-
-    this->_registers.set_carry(new_carry);
-    this->_registers.set_zero(result == 0);
-    this->_registers.set_negative(result & 0x80);
+    this->rotate_left(addr);
 
     break;
   }
 
   case OpCode::ROL::Absolute: {
     const std::uint16_t addr = this->resolve_absolute();
-    const std::uint8_t value = this->read(addr);
 
-    const std::uint8_t old_carry = this->_registers.is_carry_set();
-    const std::uint8_t new_carry = value & 0x80;
-
-    const auto result = static_cast<std::uint8_t>((value << 1) | old_carry);
-
-    this->write(addr, value);
-    this->write(addr, result);
-
-    this->_registers.set_carry(new_carry);
-    this->_registers.set_zero(result == 0);
-    this->_registers.set_negative(result & 0x80);
+    this->rotate_left(addr);
 
     break;
   }
 
   case OpCode::ROL::AbsoluteX: {
     const std::uint16_t addr = this->resolve_absolute_indexed(this->_registers.x);
-    const std::uint8_t value = this->read(addr);
 
-    const std::uint8_t old_carry = this->_registers.is_carry_set();
-    const std::uint8_t new_carry = value & 0x80;
-
-    const auto result = static_cast<std::uint8_t>((value << 1) | old_carry);
-
-    this->write(addr, value);
-    this->write(addr, result);
-
-    this->_registers.set_carry(new_carry);
-    this->_registers.set_zero(result == 0);
-    this->_registers.set_negative(result & 0x80);
+    this->rotate_left(addr);
 
     break;
   }
@@ -1038,39 +984,17 @@ std::uint8_t CPU::step() {
   }
 
   case OpCode::ROR::ZeroPage: {
-    const std::uint8_t addr  = this->resolve_zero_page();
-    const std::uint8_t value = this->read(addr);
+    const std::uint8_t addr = this->resolve_zero_page();
 
-    const std::uint8_t old_carry = this->_registers.is_carry_set();
-    const std::uint8_t new_carry = value & 0x01;
-
-    const auto result = static_cast<std::uint8_t>((value >> 1) | (old_carry << 7));
-
-    this->write(addr, value);
-    this->write(addr, result);
-
-    this->_registers.set_carry(new_carry);
-    this->_registers.set_zero(result == 0);
-    this->_registers.set_negative(result & 0x80);
+    this->rotate_right(addr);
 
     break;
   }
 
   case OpCode::ROR::ZeroPageX: {
-    const std::uint8_t addr  = this->resolve_zero_page_indexed(this->_registers.x);
-    const std::uint8_t value = this->read(addr);
+    const std::uint8_t addr = this->resolve_zero_page_indexed(this->_registers.x);
 
-    const std::uint8_t old_carry = this->_registers.is_carry_set();
-    const std::uint8_t new_carry = value & 0x01;
-
-    const auto result = static_cast<std::uint8_t>((value >> 1) | (old_carry << 7));
-
-    this->write(addr, value);
-    this->write(addr, result);
-
-    this->_registers.set_carry(new_carry);
-    this->_registers.set_zero(result == 0);
-    this->_registers.set_negative(result & 0x80);
+    this->rotate_right(addr);
 
     break;
   }
@@ -1078,19 +1002,7 @@ std::uint8_t CPU::step() {
   case OpCode::ROR::Absolute: {
     const std::uint16_t addr = this->resolve_absolute();
 
-    const std::uint8_t value = this->read(addr);
-
-    const std::uint8_t old_carry = this->_registers.is_carry_set();
-    const std::uint8_t new_carry = value & 0x01;
-
-    const auto result = static_cast<std::uint8_t>((value >> 1) | (old_carry << 7));
-
-    this->write(addr, value);
-    this->write(addr, result);
-
-    this->_registers.set_carry(new_carry);
-    this->_registers.set_zero(result == 0);
-    this->_registers.set_negative(result & 0x80);
+    this->rotate_right(addr);
 
     break;
   }
@@ -1098,19 +1010,7 @@ std::uint8_t CPU::step() {
   case OpCode::ROR::AbsoluteX: {
     const std::uint16_t addr = this->resolve_absolute_indexed(this->_registers.x);
 
-    const std::uint8_t value = this->read(addr);
-
-    const std::uint8_t old_carry = this->_registers.is_carry_set();
-    const std::uint8_t new_carry = value & 0x01;
-
-    const auto result = static_cast<std::uint8_t>((value >> 1) | (old_carry << 7));
-
-    this->write(addr, value);
-    this->write(addr, result);
-
-    this->_registers.set_carry(new_carry);
-    this->_registers.set_zero(result == 0);
-    this->_registers.set_negative(result & 0x80);
+    this->rotate_right(addr);
 
     break;
   }
@@ -1523,6 +1423,21 @@ std::uint16_t CPU::resolve_zero_page_indexed(std::uint8_t index) {
   return indexed_addr;
 }
 
+std::uint8_t CPU::read_absolute() {
+  const std::uint16_t addr = this->resolve_absolute();
+  const std::uint8_t value = this->read(addr);
+
+  return value;
+}
+
+std::uint16_t CPU::resolve_absolute() {
+  const std::uint8_t low   = this->read(this->_registers.pc++);
+  const std::uint8_t high  = this->read(this->_registers.pc++);
+  const std::uint16_t addr = (high << 8) | low;
+
+  return addr;
+}
+
 std::uint8_t CPU::read_absolute_indexed(const std::uint8_t index) {
   const std::uint8_t low  = this->read(this->_registers.pc++);
   const std::uint8_t high = this->read(this->_registers.pc++);
@@ -1541,21 +1456,6 @@ std::uint8_t CPU::read_absolute_indexed(const std::uint8_t index) {
   }
 
   return value;
-}
-
-std::uint8_t CPU::read_absolute() {
-  const std::uint16_t addr = this->resolve_absolute();
-  const std::uint8_t value = this->read(addr);
-
-  return value;
-}
-
-std::uint16_t CPU::resolve_absolute() {
-  const std::uint8_t low   = this->read(this->_registers.pc++);
-  const std::uint8_t high  = this->read(this->_registers.pc++);
-  const std::uint16_t addr = (high << 8) | low;
-
-  return addr;
 }
 
 std::uint16_t CPU::resolve_absolute_indexed(const std::uint8_t index) {
@@ -1659,7 +1559,8 @@ void CPU::bitwise_eor(const std::uint8_t value) {
   this->_registers.set_negative(this->_registers.a & 0x80);
 }
 
-void CPU::shift_left(const std::uint16_t addr, const std::uint8_t value) {
+void CPU::shift_left(const std::uint16_t addr) {
+  const std::uint8_t value  = this->read(addr);
   const std::uint8_t result = value << 1;
 
   this->write(addr, value);
@@ -1670,7 +1571,8 @@ void CPU::shift_left(const std::uint16_t addr, const std::uint8_t value) {
   this->_registers.set_negative(result & 0x80);
 }
 
-void CPU::shift_right(const std::uint16_t addr, const std::uint8_t value) {
+void CPU::shift_right(const std::uint16_t addr) {
+  const std::uint8_t value  = this->read(addr);
   const std::uint8_t carry  = value & 0x01;
   const std::uint8_t result = value >> 1;
 
@@ -1680,6 +1582,38 @@ void CPU::shift_right(const std::uint16_t addr, const std::uint8_t value) {
   this->_registers.set_carry(carry);
   this->_registers.set_zero(result == 0);
   this->_registers.set_negative(false);
+}
+
+void CPU::rotate_left(std::uint16_t addr) {
+  const std::uint8_t value = this->read(addr);
+
+  const std::uint8_t old_carry = this->_registers.is_carry_set();
+  const std::uint8_t new_carry = value & 0x80;
+
+  const auto result = static_cast<std::uint8_t>((value << 1) | old_carry);
+
+  this->write(addr, value);
+  this->write(addr, result);
+
+  this->_registers.set_carry(new_carry);
+  this->_registers.set_zero(result == 0);
+  this->_registers.set_negative(result & 0x80);
+}
+
+void CPU::rotate_right(const std::uint16_t addr) {
+  const std::uint8_t value = this->read(addr);
+
+  const std::uint8_t old_carry = this->_registers.is_carry_set();
+  const std::uint8_t new_carry = value & 0x01;
+
+  const auto result = static_cast<std::uint8_t>((value >> 1) | (old_carry << 7));
+
+  this->write(addr, value);
+  this->write(addr, result);
+
+  this->_registers.set_carry(new_carry);
+  this->_registers.set_zero(result == 0);
+  this->_registers.set_negative(result & 0x80);
 }
 
 void CPU::branch_if(const bool condition) {
