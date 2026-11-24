@@ -109,18 +109,16 @@ std::int8_t CPU::step() {
     const std::uint16_t indexed_low = low + this->_registers.y;
     const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
 
-    const std::uint8_t value = this->read(addr);
-
-    this->add_with_carry(value);
+    std::uint8_t value = this->read(addr);
 
     if (indexed_low > 0xFF) {
       const std::uint8_t fixed_high  = high + 1;
       const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
 
-      const std::uint8_t value = this->read(fixed_addr);
-
-      this->add_with_carry(value);
+      value = this->read(fixed_addr);
     }
+
+    this->add_with_carry(value);
 
     break;
   }
@@ -217,18 +215,16 @@ std::int8_t CPU::step() {
     const std::uint16_t indexed_low = low + this->_registers.y;
     const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
 
-    const std::uint8_t value = this->read(addr);
-
-    this->bitwise_and(value);
+    std::uint8_t value = this->read(addr);
 
     if (indexed_low > 0xFF) {
       const std::uint8_t fixed_high  = high + 1;
       const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
 
-      const std::uint8_t value = this->read(fixed_addr);
-
-      this->bitwise_and(value);
+      value = this->read(fixed_addr);
     }
+
+    this->bitwise_and(value);
 
     break;
   }
@@ -485,18 +481,16 @@ std::int8_t CPU::step() {
     const std::uint16_t indexed_low = low + this->_registers.y;
     const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
 
-    const std::uint8_t value = this->read(addr);
-
-    this->compare(this->_registers.a, value);
+    std::uint8_t value = this->read(addr);
 
     if (indexed_low > 0xFF) {
       const std::uint8_t fixed_high  = high + 1;
       const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
 
-      const std::uint8_t value = this->read(fixed_addr);
-
-      this->compare(this->_registers.a, value);
+      value = this->read(fixed_addr);
     }
+
+    this->compare(this->_registers.a, value);
 
     break;
   }
@@ -712,18 +706,16 @@ std::int8_t CPU::step() {
     const std::uint16_t indexed_low = low + this->_registers.y;
     const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
 
-    const std::uint8_t value = this->read(addr);
-
-    this->bitwise_eor(value);
+    std::uint8_t value = this->read(addr);
 
     if (indexed_low > 0xFF) {
       const std::uint8_t fixed_high  = high + 1;
       const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
 
-      const std::uint8_t value = this->read(fixed_addr);
-
-      this->bitwise_eor(value);
+      value = this->read(fixed_addr);
     }
+
+    this->bitwise_eor(value);
 
     break;
   }
@@ -936,14 +928,16 @@ std::int8_t CPU::step() {
     const std::uint16_t indexed_low = low + this->_registers.y;
     const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
 
-    this->_registers.a = this->read(addr);
+    std::uint8_t value = this->read(addr);
 
     if (indexed_low > 0xFF) {
       const std::uint8_t fixed_high  = high + 1;
       const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
 
-      this->_registers.a = this->read(fixed_addr);
+      value = this->read(fixed_addr);
     }
+
+    this->_registers.a = value;
 
     this->_registers.set_zero(this->_registers.a == 0);
     this->_registers.set_negative(this->_registers.a & 0x80);
@@ -1220,18 +1214,16 @@ std::int8_t CPU::step() {
     const std::uint16_t indexed_low = low + this->_registers.y;
     const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
 
-    const std::uint8_t value = this->read(addr);
-
-    this->_registers.a |= value;
+    std::uint8_t value = this->read(addr);
 
     if (indexed_low > 0xFF) {
       const std::uint8_t fixed_high  = high + 1;
       const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
 
-      const std::uint8_t value = this->read(fixed_addr);
-
-      this->_registers.a |= value;
+      value = this->read(fixed_addr);
     }
+
+    this->_registers.a |= value;
 
     this->_registers.set_zero(this->_registers.a == 0);
     this->_registers.set_negative(this->_registers.a & 0x80);
@@ -1524,18 +1516,16 @@ std::int8_t CPU::step() {
     const std::uint16_t indexed_low = low + this->_registers.y;
     const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
 
-    const std::uint8_t value = this->read(addr);
-
-    this->subtract_with_carry(value);
+    std::uint8_t value = this->read(addr);
 
     if (indexed_low > 0xFF) {
       const std::uint8_t fixed_high  = high + 1;
       const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
 
-      const std::uint8_t value = this->read(fixed_addr);
-
-      this->subtract_with_carry(value);
+      value = this->read(fixed_addr);
     }
+
+    this->subtract_with_carry(value);
 
     break;
   }
@@ -1677,18 +1667,18 @@ std::int8_t CPU::step() {
     const std::uint8_t high = this->read(static_cast<std::uint8_t>(ptr + 1));
 
     const std::uint16_t indexed_low = low + this->_registers.y;
-    const std::uint16_t addr        = (high << 8) | static_cast<std::uint8_t>(indexed_low);
+
+    std::uint16_t addr = (high << 8) | static_cast<std::uint8_t>(indexed_low);
 
     (void)this->read(addr);
 
-    this->write(addr, this->_registers.a);
-
     if (indexed_low > 0xFF) {
-      const std::uint8_t fixed_high  = high + 1;
-      const std::uint16_t fixed_addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
+      const std::uint8_t fixed_high = high + 1;
 
-      this->write(fixed_addr, this->_registers.a);
+      addr = (fixed_high << 8) | static_cast<std::uint8_t>(indexed_low);
     }
+
+    this->write(addr, this->_registers.a);
 
     break;
   }
