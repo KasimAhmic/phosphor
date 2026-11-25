@@ -8,10 +8,11 @@
 
 #include "cpu.hpp"
 #include "opcode.hpp"
+#include "test_bus.hpp"
 
 const char* opcode_to_string(std::uint8_t code);
 
-TEST(CPU_Nestest, NESTest) {
+TEST(CPU_NESTest, NESTest) {
   std::ifstream rom_file("../tests/data/nestest/nestest.nes", std::ios::binary | std::ios::ate);
   std::ifstream log_file("../tests/data/nestest/nestest.log");
 
@@ -42,7 +43,6 @@ TEST(CPU_Nestest, NESTest) {
   }
 
   const std::size_t prg_size = data[4] * 16'384;
-  const std::size_t chr_size = data[5] * 8'192;
   const bool has_trainer     = (data[6] & 0x04) != 0;
 
   const std::size_t prg_offset = 16 + (has_trainer ? 512 : 0);
@@ -61,29 +61,26 @@ TEST(CPU_Nestest, NESTest) {
     FAIL() << "Only Mapper 0 is supported";
   }
 
-  std::array<std::uint8_t, 65'536> memory{};
-
-  std::copy_n(data.begin() + prg_offset, prg_size, memory.begin() + 0x8000);
-
-  if (prg_size == 16'384) {
-    std::copy_n(memory.begin() + 0x8000, 16'384, memory.begin() + 0xC000);
-  }
-
   const std::regex pattern(
       R"(^([0-9A-F]{4})\s+.([0-9A-F]{2})\s+.*A:([0-9A-F]{2})\s+X:([0-9A-F]{2})\s+Y:([0-9A-F]{2})\s+P:([0-9A-F]{2})\s+SP:([0-9A-F]{2}).*CYC:\s*(\d+))");
 
-  CPU cpu{memory};
+  TestBus bus{};
 
-  const CPU::Registers registers{
-      .pc = 0xC000,
-      .a  = 0x00,
-      .x  = 0x00,
-      .y  = 0x00,
-      .p  = 0x24,
-      .sp = 0xFD,
-  };
+  for (std::size_t i = 0; i < 0x8000; ++i) {
+    bus.write(static_cast<std::uint16_t>(0x8000 + i), data[prg_offset + (i % prg_size)]);
+  }
 
-  cpu.set_test_state(registers, memory, 7);
+  CPU cpu{bus};
+
+  cpu.set_state(CPU::State{
+      .pc     = 0xC000,
+      .a      = 0,
+      .x      = 0,
+      .y      = 0,
+      .p      = 0x24,
+      .sp     = 0xFD,
+      .cycles = 7,
+  });
 
   std::string line;
   std::size_t instruction = 0;
@@ -99,18 +96,16 @@ TEST(CPU_Nestest, NESTest) {
       return static_cast<std::uint32_t>(std::stoul(match[index].str(), nullptr, 16));
     };
 
-    const CPU::Registers actual   = cpu.get_registers();
-    const CPU::Registers expected = {
-        .pc = static_cast<std::uint16_t>(hex(1)),
-        .a  = static_cast<std::uint8_t>(hex(3)),
-        .x  = static_cast<std::uint8_t>(hex(4)),
-        .y  = static_cast<std::uint8_t>(hex(5)),
-        .p  = static_cast<std::uint8_t>(hex(6)),
-        .sp = static_cast<std::uint8_t>(hex(7)),
+    const CPU::State actual   = cpu.get_state();
+    const CPU::State expected = {
+        .pc     = static_cast<std::uint16_t>(hex(1)),
+        .a      = static_cast<std::uint8_t>(hex(3)),
+        .x      = static_cast<std::uint8_t>(hex(4)),
+        .y      = static_cast<std::uint8_t>(hex(5)),
+        .p      = static_cast<std::uint8_t>(hex(6)),
+        .sp     = static_cast<std::uint8_t>(hex(7)),
+        .cycles = std::stoull(match[8].str(), nullptr, 10),
     };
-
-    const std::uint64_t actual_cycles   = cpu.get_cycle_count();
-    const std::uint64_t expected_cycles = std::stoull(match[8].str());
 
     SCOPED_TRACE("Line #" + std::to_string(instruction + 1) + ": " + line);
 
@@ -119,20 +114,19 @@ TEST(CPU_Nestest, NESTest) {
     ASSERT_EQ(actual.x, expected.x) << "X register mismatch";
     ASSERT_EQ(actual.y, expected.y) << "Y register mismatch";
 
-    ASSERT_EQ(actual.is_carry_set(), expected.is_carry_set()) << "Carry flag mismatch";
-    ASSERT_EQ(actual.is_zero_set(), expected.is_zero_set()) << "Zero flag mismatch";
-    ASSERT_EQ(actual.is_interrupt_disable_set(), expected.is_interrupt_disable_set())
-        << "Interrupt Disable flag mismatch";
-    ASSERT_EQ(actual.is_decimal_mode_set(), expected.is_decimal_mode_set()) << "Decimal Mode flag mismatch";
-    ASSERT_EQ(actual.is_break_command_set(), expected.is_break_command_set()) << "Break Command flag mismatch";
-    ASSERT_EQ(actual.is_unused_set(), expected.is_unused_set()) << "Unused flag mismatch";
-    ASSERT_EQ(actual.is_overflow_set(), expected.is_overflow_set()) << "Overflow flag mismatch";
-    ASSERT_EQ(actual.is_negative_set(), expected.is_negative_set()) << "Negative flag mismatch";
+    ASSERT_EQ(actual.p & 0x01, expected.p & 0x01) << "Carry flag mismatch";
+    ASSERT_EQ(actual.p & 0x02, expected.p & 0x02) << "Zero flag mismatch";
+    ASSERT_EQ(actual.p & 0x04, expected.p & 0x04) << "Interrupt Disable flag mismatch";
+    ASSERT_EQ(actual.p & 0x08, expected.p & 0x08) << "Decimal Mode flag mismatch";
+    ASSERT_EQ(actual.p & 0x10, expected.p & 0x10) << "Break Command flag mismatch";
+    ASSERT_EQ(actual.p & 0x20, expected.p & 0x20) << "Unused flag mismatch";
+    ASSERT_EQ(actual.p & 0x40, expected.p & 0x40) << "Overflow flag mismatch";
+    ASSERT_EQ(actual.p & 0x80, expected.p & 0x80) << "Negative flag mismatch";
 
     ASSERT_EQ(actual.p, expected.p) << "Processor status mismatch";
 
     ASSERT_EQ(actual.sp, expected.sp) << "Stack pointer mismatch";
-    ASSERT_EQ(actual_cycles, expected_cycles) << "Cycle count mismatch";
+    ASSERT_EQ(actual.cycles, expected.cycles) << "Cycle count mismatch";
 
     if (cpu.step() < 2) {
       FAIL() << "Unhandled OpCode on line " << instruction + 1 << ": " << opcode_to_string(hex(2));

@@ -7,10 +7,9 @@
 #include <nlohmann/json.hpp>
 
 #include "cpu.hpp"
+#include "test_bus.hpp"
 
 using nlohmann::json;
-
-constexpr std::size_t MEMORY_SIZE = 65536;
 
 // B and unused are not conventional persistent hardware flags
 constexpr std::uint8_t STATUS_MASK = 0xCF;
@@ -32,28 +31,29 @@ void run_single_step_tests(const std::string& filename) {
     const auto& expected = test.at("final");
     const auto& cycles   = test.at("cycles");
 
-    std::array<std::uint8_t, MEMORY_SIZE> memory{};
+    TestBus bus{};
 
     for (const auto& entry : initial.at("ram")) {
       const auto addr  = entry.at(0).get<std::uint16_t>();
       const auto value = entry.at(1).get<std::uint8_t>();
 
-      memory[addr] = value;
+      bus.write(addr, value);
     }
 
-    CPU::Registers registers{};
-    registers.pc = initial.at("pc").get<std::uint16_t>();
-    registers.sp = initial.at("s").get<std::uint8_t>();
-    registers.a  = initial.at("a").get<std::uint8_t>();
-    registers.x  = initial.at("x").get<std::uint8_t>();
-    registers.y  = initial.at("y").get<std::uint8_t>();
-    registers.p  = initial.at("p").get<std::uint8_t>();
+    CPU cpu{bus};
 
-    CPU cpu{memory};
-    cpu.set_test_state(registers, memory, 0);
+    cpu.set_state({
+        .pc     = initial.at("pc").get<std::uint16_t>(),
+        .a      = initial.at("a").get<std::uint8_t>(),
+        .x      = initial.at("x").get<std::uint8_t>(),
+        .y      = initial.at("y").get<std::uint8_t>(),
+        .p      = initial.at("p").get<std::uint8_t>(),
+        .sp     = initial.at("s").get<std::uint8_t>(),
+        .cycles = 0,
+    });
 
     const int executed_cycles = cpu.step();
-    const auto actual         = cpu.get_registers();
+    const auto actual         = cpu.get_state();
 
     EXPECT_EQ(actual.pc, expected.at("pc").get<std::uint16_t>()) << "PC mismatch";
     EXPECT_EQ(actual.sp, expected.at("s").get<std::uint8_t>()) << "SP mismatch";
@@ -67,13 +67,11 @@ void run_single_step_tests(const std::string& filename) {
 
     ASSERT_EQ(executed_cycles, static_cast<int>(cycles.size())) << "Cycle count mismatch";
 
-    const auto& actual_memory = cpu.get_memory();
-
     for (const auto& entry : expected.at("ram")) {
       const auto addr  = entry.at(0).get<std::uint16_t>();
       const auto value = entry.at(1).get<std::uint8_t>();
 
-      EXPECT_EQ(actual_memory[addr], value) << "Memory mismatch at " << addr;
+      EXPECT_EQ(bus.read(addr), value) << "Memory mismatch at " << addr;
     }
   }
 }
