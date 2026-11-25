@@ -4,6 +4,7 @@ project(phosphor LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # spdlog configuration
 set(SPDLOG_BUILD_EXAMPLE        OFF CACHE BOOL "" FORCE)
@@ -74,7 +75,9 @@ add_library(libnes
   src/apu.cpp
   src/ppu.cpp
   src/nes.cpp
-  src/bus.cpp
+  src/cartridge.cpp
+  src/controller.cpp
+  src/nes_bus.cpp
 )
 
 target_include_directories(libnes
@@ -105,6 +108,7 @@ if (BUILD_TESTING)
   add_subdirectory(external/googletest ${CMAKE_CURRENT_BINARY_DIR}/googletest EXCLUDE_FROM_ALL)
 
   add_executable(${PROJECT_NAME}_tests
+      src/test_bus.cpp
       tests/test_main.cpp
       tests/nestest.cpp
       tests/sst.cpp

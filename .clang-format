@@ -6,7 +6,7 @@ ColumnLimit: 120
 BreakAfterReturnType: None
 BreakTemplateDeclarations: Yes
 
-AlignAfterOpenBracket: true
+AlignAfterOpenBracket: Align
 AlignConsecutiveAssignments:
   Enabled: true
   AcrossEmptyLines: false
@@ -14,10 +14,11 @@ AlignConsecutiveAssignments:
   AlignCompound: false
   PadOperators: true
 BinPackArguments: false
-BinPackParameters: false
+BinPackParameters: OnePerLine
 AllowAllArgumentsOnNextLine: false
 AllowAllParametersOfDeclarationOnNextLine: false
 PointerAlignment: Left
+PackConstructorInitializers: Never
 
 PenaltyBreakAssignment: 1000000
 PenaltyBreakBeforeFirstCallParameter: 1000000
@@ -26,7 +27,11 @@ PenaltyReturnTypeOnItsOwnLine: 1000000
 
 NamespaceIndentation: All
 
-SortIncludes: true
+BasedOnStyle: LLVM
+SortIncludes:
+  Enabled: true
+  IgnoreCase: false
+IncludeBlocks: Regroup
 IncludeCategories:
   # Standard-library-style, single-component headers
   - Regex: "^<[a-z][a-z0-9_]*>$"
