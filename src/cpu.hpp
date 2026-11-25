@@ -1,12 +1,23 @@
 #pragma once
 
-#include <array>
 #include <cstdint>
+
+#include "bus.hpp"
 
 class CPU {
 public:
-  explicit CPU(std::array<std::uint8_t, 65536> memory);
+  explicit CPU(Bus& bus);
   ~CPU();
+
+  struct State {
+    std::uint16_t pc{};
+    std::uint8_t a{};
+    std::uint8_t x{};
+    std::uint8_t y{};
+    std::uint8_t p{};
+    std::uint8_t sp{};
+    std::uint64_t cycles{};
+  };
 
   struct Registers {
     std::uint16_t pc{};
@@ -61,25 +72,36 @@ public:
   };
 
   std::uint8_t step();
+  [[nodiscard]] State get_state() const {
+    return {
+        .pc     = this->_registers.pc,
+        .a      = this->_registers.a,
+        .x      = this->_registers.x,
+        .y      = this->_registers.y,
+        .p      = this->_registers.p,
+        .sp     = this->_registers.sp,
+        .cycles = this->_total_cycle_count,
+    };
+  }
 
-  void set_test_state(const Registers& registers,
-                      std::array<std::uint8_t, 65536>& memory,
-                      std::uint64_t total_cycle_count);
-
-  [[nodiscard]] std::uint16_t get_program_counter() const { return this->_registers.pc; }
-  void set_program_counter(std::uint16_t pc) { this->_registers.pc = pc; }
-
-  [[nodiscard]] std::uint64_t get_cycle_count() const { return this->_total_cycle_count; }
-  [[nodiscard]] std::array<std::uint8_t, 65536> get_memory() const { return this->_memory; }
-  [[nodiscard]] Registers get_registers() const { return this->_registers; }
+  void set_state(const State& state) {
+    this->_registers.a         = state.a;
+    this->_registers.x         = state.x;
+    this->_registers.y         = state.y;
+    this->_registers.pc        = state.pc;
+    this->_registers.sp        = state.sp;
+    this->_registers.p         = state.p;
+    this->_total_cycle_count   = state.cycles;
+    this->_current_cycle_count = 0;
+  }
 
 private:
   static constexpr std::uint8_t UNSTABLE_MAGIC = 0xEE;
 
-  Registers _registers;
-  std::uint64_t _total_cycle_count;
-  std::uint8_t _current_cycle_count;
-  std::array<std::uint8_t, 65536> _memory;
+  Bus& _bus;
+  Registers _registers{};
+  std::uint64_t _total_cycle_count{};
+  std::uint8_t _current_cycle_count{};
 
   void tick();
 

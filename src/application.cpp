@@ -2,7 +2,10 @@
 
 #include <spdlog/spdlog.h>
 
-Application::Application() : _window(nullptr), _renderer(nullptr), _nes() {}
+Application::Application()
+    : _window(nullptr),
+      _renderer(nullptr),
+      _nes() {}
 
 Application::~Application() {
   if (this->_renderer) {

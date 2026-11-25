@@ -1,5 +1,5 @@
 #include "ppu.hpp"
 
-PPU::PPU() {}
+PPU::PPU() = default;
 
-PPU::~PPU() {}
+PPU::~PPU() = default;

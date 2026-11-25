@@ -1,12 +1,10 @@
 #pragma once
 
-#include <filesystem>
-#include <span>
-#include <cstdint>
-#include <vector>
-
 #include "apu.hpp"
+#include "cartridge.hpp"
+#include "controller.hpp"
 #include "cpu.hpp"
+#include "nes_bus.hpp"
 #include "ppu.hpp"
 
 class NES {
@@ -14,12 +12,18 @@ public:
   NES();
   ~NES();
 
-  std::vector<std::uint8_t> load_rom(const std::filesystem::path& path);
-  void reset();
-  void test();
+  NES(const NES&) = delete;
+  NES(NES&&)      = delete;
+
+  NES& operator=(const NES&) = delete;
+  NES& operator=(NES&&)      = delete;
 
 private:
-  CPU _cpu;
   PPU _ppu;
   APU _apu;
+  Cartridge _cartridge;
+  Controller _controller1;
+  Controller _controller2;
+  NESBus _bus;
+  CPU _cpu;
 };

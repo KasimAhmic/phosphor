@@ -1,5 +1,5 @@
 #include "apu.hpp"
 
-APU::APU() {}
+APU::APU() = default;
 
-APU::~APU() {}
+APU::~APU() = default;

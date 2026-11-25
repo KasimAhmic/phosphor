@@ -5,8 +5,8 @@
 
 #include "opcode.hpp"
 
-CPU::CPU(std::array<std::uint8_t, 65536> mem)
-    : _registers(), _total_cycle_count{0}, _current_cycle_count{0}, _memory{mem} {}
+CPU::CPU(Bus& bus)
+    : _bus{bus} {}
 
 CPU::~CPU() = default;
 
@@ -1974,23 +1974,13 @@ std::uint8_t CPU::step() {
   return this->_current_cycle_count;
 }
 
-void CPU::set_test_state(const Registers& registers,
-                         std::array<std::uint8_t, 65536>& memory,
-                         const std::uint64_t total_cycle_count) {
-  this->_registers           = registers;
-  this->_memory              = memory;
-  this->_current_cycle_count = 0;
-  this->_total_cycle_count   = total_cycle_count;
-}
-
 void CPU::tick() {
   this->_current_cycle_count++;
   this->_total_cycle_count++;
 }
 
 std::uint8_t CPU::read(const std::uint16_t addr) {
-  // TODO: Replace with bus call when implemented
-  const std::uint8_t value = this->_memory[addr];
+  const std::uint8_t value = this->_bus.read(addr);
 
   this->tick();
 
@@ -1998,8 +1988,7 @@ std::uint8_t CPU::read(const std::uint16_t addr) {
 }
 
 void CPU::write(const std::uint16_t addr, const std::uint8_t value) {
-  // TODO: Replace with bus call when implemented
-  this->_memory[addr] = value;
+  this->_bus.write(addr, value);
 
   this->tick();
 }
