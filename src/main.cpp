@@ -56,7 +56,7 @@ SDL_AppResult SDL_AppInit(void** appstate, int argc, char** argv) {
 }
 
 SDL_AppResult SDL_AppIterate(void* appstate) {
-  AppState* context = static_cast<AppState*>(appstate);
+  auto* context = static_cast<AppState*>(appstate);
 
   const uint64_t now        = SDL_GetPerformanceCounter();
   const double delta_time   = static_cast<double>(now - context->last_update_time) /
