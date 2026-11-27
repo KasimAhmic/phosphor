@@ -17,11 +17,11 @@ public:
   void write(std::uint16_t addr, std::uint8_t value) override;
 
 private:
-  PPU& _ppu;
-  APU& _apu;
-  Cartridge& _cartridge;
-  Controller& _controller1;
-  Controller& _controller2;
+  PPU& ppu_;
+  APU& apu_;
+  Cartridge& cartridge_;
+  Controller& controller1_;
+  Controller& controller2_;
 
-  std::array<std::uint8_t, 2048> _ram{};
+  std::array<std::uint8_t, 2048> ram_{};
 };

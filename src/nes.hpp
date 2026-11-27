@@ -19,11 +19,11 @@ public:
   NES& operator=(NES&&)      = delete;
 
 private:
-  PPU _ppu;
-  APU _apu;
-  Cartridge _cartridge;
-  Controller _controller1;
-  Controller _controller2;
-  NESBus _bus;
-  CPU _cpu;
+  PPU ppu_;
+  APU apu_;
+  Cartridge cartridge_;
+  Controller controller1_;
+  Controller controller2_;
+  NESBus bus_;
+  CPU cpu_;
 };

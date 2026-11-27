@@ -1,18 +1,18 @@
 #include "nes.hpp"
 
 NES::NES()
-    : _ppu{},
-      _apu{},
-      _cartridge{},
-      _controller1{},
-      _controller2{},
-      _bus{
-          _ppu,
-          _apu,
-          _cartridge,
-          _controller1,
-          _controller2,
+    : ppu_{},
+      apu_{},
+      cartridge_{},
+      controller1_{},
+      controller2_{},
+      bus_{
+          this->ppu_,
+          this->apu_,
+          this->cartridge_,
+          this->controller1_,
+          this->controller2_,
       },
-      _cpu{_bus} {}
+      cpu_{bus_} {}
 
 NES::~NES() = default;

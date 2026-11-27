@@ -74,34 +74,34 @@ public:
   std::uint8_t step();
   [[nodiscard]] State get_state() const {
     return {
-        .pc     = this->_registers.pc,
-        .a      = this->_registers.a,
-        .x      = this->_registers.x,
-        .y      = this->_registers.y,
-        .p      = this->_registers.p,
-        .sp     = this->_registers.sp,
-        .cycles = this->_total_cycle_count,
+        .pc     = this->registers_.pc,
+        .a      = this->registers_.a,
+        .x      = this->registers_.x,
+        .y      = this->registers_.y,
+        .p      = this->registers_.p,
+        .sp     = this->registers_.sp,
+        .cycles = this->total_cycle_count_,
     };
   }
 
   void set_state(const State& state) {
-    this->_registers.a         = state.a;
-    this->_registers.x         = state.x;
-    this->_registers.y         = state.y;
-    this->_registers.pc        = state.pc;
-    this->_registers.sp        = state.sp;
-    this->_registers.p         = state.p;
-    this->_total_cycle_count   = state.cycles;
-    this->_current_cycle_count = 0;
+    this->registers_.a         = state.a;
+    this->registers_.x         = state.x;
+    this->registers_.y         = state.y;
+    this->registers_.pc        = state.pc;
+    this->registers_.sp        = state.sp;
+    this->registers_.p         = state.p;
+    this->total_cycle_count_   = state.cycles;
+    this->current_cycle_count_ = 0;
   }
 
 private:
   static constexpr std::uint8_t UNSTABLE_MAGIC = 0xEE;
 
-  Bus& _bus;
-  Registers _registers{};
-  std::uint64_t _total_cycle_count{};
-  std::uint8_t _current_cycle_count{};
+  Bus& bus_;
+  Registers registers_{};
+  std::uint64_t total_cycle_count_{};
+  std::uint8_t current_cycle_count_{};
 
   void tick();
 
